@@ -11,4 +11,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserAccountService extends IService<UserAccount> {
 
+    /**
+     * 创建会员账号
+     * @param userAccount
+     */
+    public void createUserAccount(UserAccount userAccount);
 }

@@ -3,7 +3,7 @@
 <mapper namespace="org.jeecg.modules.user.mapper.UserAccountMapper">
 
     <!-- 获取最大UserId -->
-    <select id="getUserMaxId" resultType="org.jeecg.modules.user.entity.UserAccount">
+    <select id="getUserMaxAccountId" resultType="org.jeecg.modules.user.entity.UserAccount">
 		select max(user_id) from  user_account
 	</select>
 

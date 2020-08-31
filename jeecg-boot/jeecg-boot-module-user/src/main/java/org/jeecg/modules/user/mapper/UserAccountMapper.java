@@ -2,6 +2,7 @@ package org.jeecg.modules.user.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.user.entity.UserAccount;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -14,4 +15,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserAccountMapper extends BaseMapper<UserAccount> {
 
+    /**
+     *  获取会员账号最大值
+     * @return
+     */
+    public Integer getUserMaxAccountId();
 }

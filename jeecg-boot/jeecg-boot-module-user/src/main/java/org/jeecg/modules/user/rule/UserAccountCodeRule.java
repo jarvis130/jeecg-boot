@@ -54,7 +54,7 @@ public class UserAccountCodeRule implements IFillRuleHandler {
             value = value + 1;
         }else{
             //从数据库中获取最大值
-            Integer iValue = userAccountMapper.getUserMaxId();
+            Integer iValue = userAccountMapper.getUserMaxAccountId();
             value = iValue + 1;
             redisUtil.set(gKey, value);
         }
