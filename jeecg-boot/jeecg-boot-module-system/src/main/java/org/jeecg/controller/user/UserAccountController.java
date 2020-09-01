@@ -82,7 +82,7 @@ public class UserAccountController extends JeecgController<UserAccount, IUserAcc
 	@ApiOperation(value="user_account-添加", notes="user_account-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody UserAccount userAccount) {
-		userAccountService.save(userAccount);
+		userAccountService.createUserAccount(userAccount);
 		return Result.ok("添加成功！");
 	}
 	
