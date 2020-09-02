@@ -1,5 +1,6 @@
 package org.jeecg.modules.user.service.impl;
 
+import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.user.entity.UserAccount;
 import org.jeecg.modules.user.mapper.UserAccountMapper;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import java.util.Date;
 
 /**
  * @Description: user_account
@@ -42,8 +45,10 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     @Override
     public void createUserAccount(UserAccount userAccount){
 
+        //userId
         userAccount.setUserId(createUserAccountCode());
-
+        userAccount.setCreateTime(DateUtils.getDate());
+        userAccount.setUpdateTime(DateUtils.getDate());
         userAccountMapper.insert(userAccount);
     }
 }
