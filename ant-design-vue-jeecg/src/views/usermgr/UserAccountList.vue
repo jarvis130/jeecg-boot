@@ -110,7 +110,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -130,21 +130,6 @@
             dataIndex: 'userName'
           },
           {
-            title:'用户密码',
-            align:"center",
-            dataIndex: 'password'
-          },
-          {
-            title:'salt',
-            align:"center",
-            dataIndex: 'salt'
-          },
-          {
-            title:'昵称',
-            align:"center",
-            dataIndex: 'nickname'
-          },
-          {
             title:'手机',
             align:"center",
             dataIndex: 'mobile'
@@ -155,52 +140,9 @@
             dataIndex: 'email'
           },
           {
-            title:'证件类型 1：身份证',
-            align:"center",
-            dataIndex: 'idType'
-          },
-          {
-            title:'证件号',
-            align:"center",
-            dataIndex: 'idCode'
-          },
-          {
-            title:'性别，0，保密；1，男；2，女',
+            title:'性别',
             align:"center",
             dataIndex: 'sex'
-          },
-          {
-            title:'生日日期',
-            align:"center",
-            dataIndex: 'birthday',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
-            title:'用户现有资金',
-            align:"center",
-            dataIndex: 'userMoney'
-          },
-          {
-            title:'用户冻结资金',
-            align:"center",
-            dataIndex: 'frozenMoney'
-          },
-          {
-            title:'消费积分',
-            align:"center",
-            dataIndex: 'payPoints'
-          },
-          {
-            title:'会员等级积分',
-            align:"center",
-            dataIndex: 'rankPoints'
-          },
-          {
-            title:'收货信息id，取值表user_address ',
-            align:"center",
-            dataIndex: 'addressId'
           },
           {
             title:'最后一次登录时间',
@@ -211,50 +153,9 @@
             }
           },
           {
-            title:'最后一次登录ip',
-            align:"center",
-            dataIndex: 'lastIp'
-          },
-          {
-            title:'登录次数',
-            align:"center",
-            dataIndex: 'loginCount'
-          },
-          {
-            title:'会员等级id，取值user_rank',
-            align:"center",
-            dataIndex: 'userRank'
-          },
-          {
-            title:'状态（0停用 1正常）',
+            title:'状态',
             align:"center",
             dataIndex: 'status'
-          },
-          {
-            title:'创建时间',
-            align:"center",
-            dataIndex: 'createTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
-            title:'创建人',
-            align:"center",
-            dataIndex: 'createBy'
-          },
-          {
-            title:'更新时间',
-            align:"center",
-            dataIndex: 'updateTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
-            title:'更新人',
-            align:"center",
-            dataIndex: 'updateBy'
           },
           {
             title: '操作',

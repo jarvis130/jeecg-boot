@@ -14,120 +14,56 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="用户密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['password', validatorRules.password]" placeholder="请输入用户密码"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="salt" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['salt', validatorRules.salt]" placeholder="请输入salt"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="昵称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['nickname', validatorRules.nickname]" placeholder="请输入昵称"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
             <a-form-item label="手机" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['mobile', validatorRules.mobile]" placeholder="请输入手机"></a-input>
             </a-form-item>
           </a-col>
+          
+          <a-divider/>
+
           <a-col :span="12">
-            <a-form-item label="会员邮箱" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['email', validatorRules.email]" placeholder="请输入会员邮箱"></a-input>
+            <a-form-item label="真实姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input placeholder="请输入会员真实姓名"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="证件类型 1：身份证" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['idType', validatorRules.idType]" placeholder="请输入证件类型 1：身份证" style="width: 100%"/>
+            <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag placeholder="请输入用户性别" dictCode="sex" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+
+          
+          <a-col :span="12">
+            <a-form-item label="证件类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number placeholder="请输入证件类型" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="证件号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['idCode', validatorRules.idCode]" placeholder="请输入证件号"></a-input>
+              <a-input placeholder="请输入证件号"></a-input>
             </a-form-item>
           </a-col>
+
           <a-col :span="12">
-            <a-form-item label="性别，0，保密；1，男；2，女" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['sex', validatorRules.sex]" placeholder="请输入性别，0，保密；1，男；2，女" style="width: 100%"/>
+            <a-form-item label="出生日期" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-date placeholder="请选择出生日期" :trigger-change="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
+
           <a-col :span="12">
-            <a-form-item label="生日日期" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择生日日期" v-decorator="['birthday', validatorRules.birthday]" :trigger-change="true" style="width: 100%"/>
+            <a-form-item label="会员邮箱" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input placeholder="请输入会员邮箱"></a-input>
             </a-form-item>
           </a-col>
+          
+          <a-divider/>
+
           <a-col :span="12">
-            <a-form-item label="用户现有资金" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['userMoney', validatorRules.userMoney]" placeholder="请输入用户现有资金" style="width: 100%"/>
+            <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['user_status', validatorRules.status]" placeholder="请输入会员状态" dictCode="user_status"  :triggerChange="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="用户冻结资金" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['frozenMoney', validatorRules.frozenMoney]" placeholder="请输入用户冻结资金" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="消费积分" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['payPoints', validatorRules.payPoints]" placeholder="请输入消费积分" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="会员等级积分" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['rankPoints', validatorRules.rankPoints]" placeholder="请输入会员等级积分" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="收货信息id，取值表user_address " :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['addressId', validatorRules.addressId]" placeholder="请输入收货信息id，取值表user_address " style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="最后一次登录时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择最后一次登录时间" v-decorator="['lastLogin', validatorRules.lastLogin]" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="最后一次登录ip" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['lastIp', validatorRules.lastIp]" placeholder="请输入最后一次登录ip"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="登录次数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['loginCount', validatorRules.loginCount]" placeholder="请输入登录次数" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="会员等级id，取值user_rank" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['userRank', validatorRules.userRank]" placeholder="请输入会员等级id，取值user_rank" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="状态（0停用 1正常）" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['status']" placeholder="请输入状态（0停用 1正常）"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="创建时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择创建时间" v-decorator="['createTime']" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="创建人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['createBy']" placeholder="请输入创建人"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="更新时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择更新时间" v-decorator="['updateTime']" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="更新人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['updateBy']" placeholder="请输入更新人"></a-input>
-            </a-form-item>
-          </a-col>
+
           <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
             <a-button @click="submitForm">提 交</a-button>
           </a-col>
@@ -195,21 +131,6 @@
               { required: true, message: '请输入用户名!'},
             ]
           },
-          password: {
-            rules: [
-              { required: true, message: '请输入用户密码!'},
-            ]
-          },
-          salt: {
-            rules: [
-              { required: true, message: '请输入salt!'},
-            ]
-          },
-          nickname: {
-            rules: [
-              { required: true, message: '请输入昵称!'},
-            ]
-          },
           mobile: {
             rules: [
               { required: true, message: '请输入手机!'},
@@ -222,7 +143,7 @@
           },
           idType: {
             rules: [
-              { required: true, message: '请输入证件类型 1：身份证!'},
+              { required: true, message: '请输入证件类型!'},
             ]
           },
           idCode: {
@@ -232,59 +153,19 @@
           },
           sex: {
             rules: [
-              { required: true, message: '请输入性别，0，保密；1，男；2，女!'},
+              { required: true, message: '请输入用户性别!'},
             ]
           },
           birthday: {
             rules: [
-              { required: true, message: '请输入生日日期!'},
+              { required: true, message: '请输入出生日期!'},
             ]
           },
-          userMoney: {
+          status: {
             rules: [
-              { required: true, message: '请输入用户现有资金!'},
+              { required: true, message: '请输入会员状态!'},
             ]
-          },
-          frozenMoney: {
-            rules: [
-              { required: true, message: '请输入用户冻结资金!'},
-            ]
-          },
-          payPoints: {
-            rules: [
-              { required: true, message: '请输入消费积分!'},
-            ]
-          },
-          rankPoints: {
-            rules: [
-              { required: true, message: '请输入会员等级积分!'},
-            ]
-          },
-          addressId: {
-            rules: [
-              { required: true, message: '请输入收货信息id，取值表user_address !'},
-            ]
-          },
-          lastLogin: {
-            rules: [
-              { required: true, message: '请输入最后一次登录时间!'},
-            ]
-          },
-          lastIp: {
-            rules: [
-              { required: true, message: '请输入最后一次登录ip!'},
-            ]
-          },
-          loginCount: {
-            rules: [
-              { required: true, message: '请输入登录次数!'},
-            ]
-          },
-          userRank: {
-            rules: [
-              { required: true, message: '请输入会员等级id，取值user_rank!'},
-            ]
-          },
+          }
         },
         url: {
           add: "/user/userAccount/add",

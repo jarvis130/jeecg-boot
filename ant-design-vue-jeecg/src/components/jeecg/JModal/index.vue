@@ -76,7 +76,7 @@
       _attrs() {
         let attrs = { ...this.$attrs }
         // 如果全屏就将宽度设为 100%
-        if (this.innerFullscreen) {
+        if (this.innerFullscreen) { 
           attrs['width'] = '100%'
         }
         return attrs
