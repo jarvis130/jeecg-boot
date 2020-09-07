@@ -5,14 +5,14 @@
         <a-row>
           <a-col :span="12">
             <a-form-item label="会员编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['userId', validatorRules.userId]" placeholder="请输入会员编号" style="width: 100%"/>
+              <a-input v-decorator="['userId', validatorRules.userId]" placeholder="系统自动生成" style="width: 100%; background-color: bisque;" readOnly/>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <a-form-item label="用户名" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['userName', validatorRules.userName]" placeholder="请输入用户名"></a-input>
             </a-form-item>
-          </a-col>
+          </a-col> -->
           <a-col :span="12">
             <a-form-item label="手机" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['mobile', validatorRules.mobile]" placeholder="请输入手机"></a-input>
@@ -23,19 +23,19 @@
 
           <a-col :span="12">
             <a-form-item label="真实姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input placeholder="请输入会员真实姓名"></a-input>
+              <a-input v-decorator="['realName', validatorRules.realName]" placeholder="请输入会员真实姓名"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag placeholder="请输入用户性别" dictCode="sex" style="width: 100%"/>
+              <j-dict-select-tag v-decorator="['sex', validatorRules.sex]" placeholder="请输入用户性别" dictCode="sex" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
 
           
           <a-col :span="12">
             <a-form-item label="证件类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number placeholder="请输入证件类型" style="width: 100%"/>
+              <j-dict-select-tag placeholder="请输入证件类型" dictCode="id_type" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -60,7 +60,7 @@
 
           <a-col :span="12">
             <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-decorator="['user_status', validatorRules.status]" placeholder="请输入会员状态" dictCode="user_status"  :triggerChange="true" style="width: 100%"/>
+              <j-dict-select-tag v-decorator="['status', validatorRules.status]" placeholder="请输入会员状态" dictCode="user_status"  :triggerChange="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
 
@@ -123,17 +123,22 @@
         validatorRules: {
           userId: {
             rules: [
-              { required: true, message: '请输入会员编号!'},
+              { required: false, message: '请输入会员编号!'},
             ]
           },
           userName: {
             rules: [
-              { required: true, message: '请输入用户名!'},
+              { required: false, message: '请输入用户名!'},
             ]
           },
           mobile: {
             rules: [
               { required: true, message: '请输入手机!'},
+            ]
+          },
+          realName: {
+            rules: [
+              { required: true, message: '请输入会员真实姓名!'},
             ]
           },
           email: {
@@ -153,7 +158,7 @@
           },
           sex: {
             rules: [
-              { required: true, message: '请输入用户性别!'},
+              { required: false, message: '请输入用户性别!'},
             ]
           },
           birthday: {
@@ -163,7 +168,7 @@
           },
           status: {
             rules: [
-              { required: true, message: '请输入会员状态!'},
+              { required: false, message: '请输入会员状态!'},
             ]
           }
         },
@@ -206,7 +211,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'userId','userName','password','salt','nickname','mobile','email','idType','idCode','sex','birthday','userMoney','frozenMoney','payPoints','rankPoints','addressId','lastLogin','lastIp','loginCount','userRank','status','createTime','createBy','updateTime','updateBy'))
+          this.form.setFieldsValue(pick(this.model,'userId','userName','password','salt','nickname','mobile','realName','email','idType','idCode','sex','birthday','userMoney','frozenMoney','payPoints','rankPoints','addressId','lastLogin','lastIp','loginCount','userRank','status','createTime','createBy','updateTime','updateBy'))
         })
       },
       //渲染流程表单数据
@@ -228,14 +233,14 @@
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
-            if(!this.model.id){
-              httpurl+=this.url.add;
+            if(!that.model.userId){
+              httpurl+=that.url.add;
               method = 'post';
             }else{
-              httpurl+=this.url.edit;
+              httpurl+=that.url.edit;
                method = 'put';
             }
-            let formData = Object.assign(this.model, values);
+            let formData = Object.assign(that.model, values);
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

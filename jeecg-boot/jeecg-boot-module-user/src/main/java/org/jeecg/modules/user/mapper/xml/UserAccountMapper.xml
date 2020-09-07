@@ -2,9 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.user.mapper.UserAccountMapper">
 
-    <!-- 获取最大UserId -->
-    <select id="getUserMaxAccountId" resultType="org.jeecg.modules.user.entity.UserAccount">
-		select max(user_id) from  user_account
-	</select>
+    <resultMap type="UserAccount" id="UserAccountResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="password"    column="password"    />
+        <result property="salt"    column="salt"    />
+        <result property="realName"    column="real_name"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="email"    column="email"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idCode"    column="id_code"    />
+        <result property="sex"    column="sex"    />
+    </resultMap>
+
+    <sql id="selectUserAccount">
+        select id, user_id, user_name, password, salt, real_name, nickname, mobile, email, id_type, id_code, sex from user_account
+    </sql>
+
+<!--    <select id="selectUserAccountList" parameterType="Goods" resultMap="GoodsResult">-->
+<!--        <include refid="selectUserAccount"/>-->
+<!--        <where>-->
+<!--            <if test="catId != null "> and cat_id = #{catId}</if>-->
+<!--            <if test="goodsSn != null  and goodsSn != ''"> and goods_sn = #{goodsSn}</if>-->
+<!--            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>-->
+<!--            <if test="brandId != null "> and brand_id = #{brandId}</if>-->
+<!--            <if test="keywords != null  and keywords != ''"> and keywords = #{keywords}</if>-->
+<!--            <if test="isReal != null "> and is_real = #{isReal}</if>-->
+<!--            <if test="extensionCode != null  and extensionCode != ''"> and extension_code = #{extensionCode}</if>-->
+<!--            <if test="isOnSale != null "> and is_on_sale = #{isOnSale}</if>-->
+<!--            <if test="isBest != null "> and is_best = #{isBest}</if>-->
+<!--            <if test="isNew != null "> and is_new = #{isNew}</if>-->
+<!--            <if test="isHot != null "> and is_hot = #{isHot}</if>-->
+<!--            <if test="isPromote != null "> and is_promote = #{isPromote}</if>-->
+<!--            <if test="subjectId != null "> and subject_id = #{subjectId}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+<!--    <select id="selectGoodsById" parameterType="Integer" resultMap="GoodsResult">-->
+<!--        <include refid="selectGoodsVo"/>-->
+<!--        where goods_id = #{goodsId}-->
+<!--    </select>-->
+
+        <select id="selectUserAccountByMobile" parameterType="String" resultMap="UserAccountResult">
+            <include refid="selectUserAccount"/>
+            where mobile = #{mobile}
+        </select>
 
 </mapper>

@@ -20,4 +20,10 @@ public interface UserAccountMapper extends BaseMapper<UserAccount> {
      * @return
      */
     public Integer getUserMaxAccountId();
+
+    /**
+     *  根据手机号获取会员账号信息
+     * @return
+     */
+    public UserAccount selectUserAccountByMobile(String mobile);
 }

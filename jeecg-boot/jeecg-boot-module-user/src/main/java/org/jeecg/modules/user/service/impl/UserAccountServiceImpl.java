@@ -44,11 +44,24 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
      */
     @Override
     public void createUserAccount(UserAccount userAccount){
+        try {
+            //从redis获取值
+            userAccount.setUserId(createUserAccountCode());
+            userAccount.setUserName(userAccount.getMobile());
+            userAccount.setCreateTime(DateUtils.getDate());
+            userAccount.setUpdateTime(DateUtils.getDate());
+            userAccountMapper.insert(userAccount);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 
-        //userId
-        userAccount.setUserId(createUserAccountCode());
-        userAccount.setCreateTime(DateUtils.getDate());
-        userAccount.setUpdateTime(DateUtils.getDate());
-        userAccountMapper.insert(userAccount);
+    /**
+     *  根据手机号获取会员账号信息
+     * @return
+     */
+    @Override
+    public UserAccount getUserAccountByMobile(String mobile){
+        return userAccountMapper.selectUserAccountByMobile(mobile);
     }
 }

@@ -142,20 +142,20 @@
           {
             title:'性别',
             align:"center",
-            dataIndex: 'sex'
+            dataIndex: 'sex_dictText',
           },
           {
-            title:'最后一次登录时间',
+            title:'注册时间',
             align:"center",
-            dataIndex: 'lastLogin',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
+            dataIndex: 'createTime',
+            // customRender:function (text) {
+            //   return !text?"":(text.length>10?text.substr(0,10):text)
+            // }
           },
           {
             title:'状态',
             align:"center",
-            dataIndex: 'status'
+            dataIndex: 'status_dictText'
           },
           {
             title: '操作',
