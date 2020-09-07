@@ -17,6 +17,7 @@
 		<module>jeecg-boot-base-common</module>
 		<module>jeecg-boot-module-system</module>
         <module>jeecg-boot-module-user</module>
+        <module>jeecg-boot-module-customer</module>
     </modules>
 
 	<distributionManagement>
@@ -351,6 +352,12 @@
 			<dependency>
 				<groupId>org.jeecgframework.boot</groupId>
 				<artifactId>jeecg-boot-module-user</artifactId>
+				<version>${jeecgboot.version}</version>
+			</dependency>
+			<!-- jeecg-boot-module-customer -->
+			<dependency>
+				<groupId>org.jeecgframework.boot</groupId>
+				<artifactId>jeecg-boot-module-customer</artifactId>
 				<version>${jeecgboot.version}</version>
 			</dependency>
 	    	<!-- 七牛云SDK -->

@@ -1,4 +1,4 @@
-package org.jeecg.modules.customer.controller;
+package org.jeecg.modules.controller.customer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,12 +39,12 @@ import org.jeecg.common.aspect.annotation.AutoLog;
  /**
  * @Description: crm_customer
  * @Author: jeecg-boot
- * @Date:   2020-08-28
+ * @Date:   2020-09-07
  * @Version: V1.0
  */
 @Api(tags="crm_customer")
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customer/customer")
 @Slf4j
 public class CustomerController extends JeecgController<Customer, ICustomerService> {
 	@Autowired

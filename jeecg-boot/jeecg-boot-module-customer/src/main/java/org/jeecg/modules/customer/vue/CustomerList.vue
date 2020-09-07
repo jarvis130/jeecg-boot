@@ -110,7 +110,7 @@
         // 表头
         columns: [
           {
-            title: '序号',
+            title: '#',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -120,7 +120,7 @@
             }
           },
           {
-            title:'客户账号',
+            title:'会员账号',
             align:"center",
             dataIndex: 'userId'
           },
@@ -130,7 +130,7 @@
             dataIndex: 'customerName'
           },
           {
-            title:'客户类型',
+            title:'客户类型；0=个人；1=公司',
             align:"center",
             dataIndex: 'customerType'
           },
@@ -160,6 +160,11 @@
             dataIndex: 'handleId'
           },
           {
+            title:'创建人',
+            align:"center",
+            dataIndex: 'createBy'
+          },
+          {
             title:'创建时间',
             align:"center",
             dataIndex: 'createTime',
@@ -168,9 +173,32 @@
             }
           },
           {
+            title:'更新人',
+            align:"center",
+            dataIndex: 'updateBy'
+          },
+          {
+            title:'更新时间',
+            align:"center",
+            dataIndex: 'updateTime',
+            customRender:function (text) {
+              return !text?"":(text.length>10?text.substr(0,10):text)
+            }
+          },
+          {
             title:'来源',
             align:"center",
             dataIndex: 'source'
+          },
+          {
+            title:'介绍人会员账号',
+            align:"center",
+            dataIndex: 'introducerId'
+          },
+          {
+            title:'主体编号',
+            align:"center",
+            dataIndex: 'subjectId'
           },
           {
             title:'状态',
