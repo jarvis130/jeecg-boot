@@ -35,66 +35,82 @@ public class Customer implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "客户主键")
     private java.lang.String id;
+
 	/**会员账号*/
 	@Excel(name = "会员账号", width = 15)
     @ApiModelProperty(value = "会员账号")
     private java.lang.Integer userId;
+
 	/**客户名称*/
 	@Excel(name = "客户名称", width = 15)
     @ApiModelProperty(value = "客户名称")
     private java.lang.String customerName;
+
 	/**客户类型；0=个人；1=公司*/
 	@Excel(name = "客户类型；0=个人；1=公司", width = 15)
     @ApiModelProperty(value = "客户类型；0=个人；1=公司")
     private java.lang.String customerType;
+
 	/**手机号*/
 	@Excel(name = "手机号", width = 15)
     @ApiModelProperty(value = "手机号")
     private java.lang.String mobile;
+
 	/**公司名称*/
 	@Excel(name = "公司名称", width = 15)
     @ApiModelProperty(value = "公司名称")
     private java.lang.String companyName;
+
 	/**公司地址*/
 	@Excel(name = "公司地址", width = 15)
     @ApiModelProperty(value = "公司地址")
     private java.lang.String companyAddress;
+
 	/**行业类型*/
 	@Excel(name = "行业类型", width = 15)
     @ApiModelProperty(value = "行业类型")
     private java.lang.String industryType;
+
 	/**客户经理编号*/
 	@Excel(name = "客户经理编号", width = 15)
     @ApiModelProperty(value = "客户经理编号")
     private java.lang.Integer handleId;
+
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
     private java.lang.Integer createBy;
+
 	/**创建时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "创建时间")
     private java.util.Date createTime;
+
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.Integer updateBy;
+
 	/**更新时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "更新时间")
     private java.util.Date updateTime;
+
 	/**来源*/
 	@Excel(name = "来源", width = 15)
     @ApiModelProperty(value = "来源")
     private java.lang.String source;
+
 	/**介绍人会员账号*/
 	@Excel(name = "介绍人会员账号", width = 15)
     @ApiModelProperty(value = "介绍人会员账号")
     private java.lang.Integer introducerId;
+
 	/**主体编号*/
 	@Excel(name = "主体编号", width = 15)
     @ApiModelProperty(value = "主体编号")
     private java.lang.Integer subjectId;
+
 	/**状态*/
 	@Excel(name = "状态", width = 15)
     @ApiModelProperty(value = "状态")

@@ -3,82 +3,92 @@
     <j-form-container :disabled="formDisabled">
       <a-form :form="form" slot="detail">
         <a-row>
-          <a-col :span="24">
-            <a-form-item label="会员账号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['userId']" placeholder="请输入会员账号" style="width: 100%"/>
+          <a-col :span="6">
+            <a-form-item label="客户编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['userId']" placeholder="系统自动生成" style="width: 100%; background-color: bisque;" readOnly/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="客户名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['customerName']" placeholder="请输入客户名称"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="客户类型；0=个人；1=公司" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['customerType']" placeholder="请输入客户类型；0=个人；1=公司"></a-input>
+          <a-col :span="6">
+            <a-form-item label="客户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['customerType']"  placeholder="请输入客户类型" dictCode="customer_type" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="手机号" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['mobile']" placeholder="请输入手机号"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+
+          <a-divider/>
+
+          <a-col :span="6">
             <a-form-item label="公司名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['companyName']" placeholder="请输入公司名称"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="公司地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['companyAddress']" placeholder="请输入公司地址"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="行业类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['industryType']" placeholder="请输入行业类型"></a-input>
+              <j-dict-select-tag v-decorator="['industryType']"  placeholder="请输入行业类型" dictCode="industry_type" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="客户经理编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['handleId']" placeholder="请输入客户经理编号" style="width: 100%"/>
+
+          <a-divider/>
+
+          <a-col :span="6">
+            <a-form-item label="客户经理" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-select-user-by-dep v-decorator="['handleId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+
+          <a-divider/>
+
+          <a-col :span="6">
             <a-form-item label="创建人" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['createBy']" placeholder="请输入创建人" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="创建时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-date placeholder="请选择创建时间" v-decorator="['createTime']" :trigger-change="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="更新人" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['updateBy']" placeholder="请输入更新人" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col :span="6">
             <a-form-item label="更新时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-date placeholder="请选择更新时间" v-decorator="['updateTime']" :trigger-change="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+
+          <a-divider/>
+
+          <a-col :span="6">
             <a-form-item label="来源" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['source']" placeholder="请输入来源"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="介绍人会员账号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-col :span="6">
+            <a-form-item label="介绍人" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['introducerId']" placeholder="请输入介绍人会员账号" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="主体编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['subjectId']" placeholder="请输入主体编号" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="24">
+
+          <a-divider/>
+
+          <a-col :span="6">
             <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['status']" placeholder="请输入状态" style="width: 100%"/>
             </a-form-item>
@@ -99,12 +109,14 @@
   import { validateDuplicateValue } from '@/utils/util'
   import JFormContainer from '@/components/jeecg/JFormContainer'
   import JDate from '@/components/jeecg/JDate'  
+  import JSelectUserByDep from '@/components/jeecgbiz/JSelectUserByDep'
 
   export default {
     name: 'CustomerForm',
     components: {
       JFormContainer,
       JDate,
+      JSelectUserByDep,
     },
     props: {
       //流程表单data
@@ -128,6 +140,7 @@
     },
     data () {
       return {
+        handleId: '',
         form: this.$form.createForm(this),
         model: {},
         labelCol: {

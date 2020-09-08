@@ -175,7 +175,7 @@
           {
             title:'状态',
             align:"center",
-            dataIndex: 'status'
+            dataIndex: 'status_dictText'
           },
           {
             title: '操作',
