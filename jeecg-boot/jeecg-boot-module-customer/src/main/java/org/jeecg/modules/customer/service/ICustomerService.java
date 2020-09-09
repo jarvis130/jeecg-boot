@@ -11,4 +11,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICustomerService extends IService<Customer> {
 
+    /**
+     * 保存客户信息
+     * @param customer
+     */
+    public void saveCustomer(Customer customer);
 }

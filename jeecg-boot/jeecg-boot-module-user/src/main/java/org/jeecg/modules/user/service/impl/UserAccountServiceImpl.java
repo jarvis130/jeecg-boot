@@ -45,8 +45,6 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     @Override
     public void createUserAccount(UserAccount userAccount){
         try {
-            //从redis获取值
-            userAccount.setUserId(createUserAccountCode());
             userAccount.setUserName(userAccount.getMobile());
             userAccount.setCreateTime(DateUtils.getDate());
             userAccount.setUpdateTime(DateUtils.getDate());

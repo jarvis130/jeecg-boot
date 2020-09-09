@@ -42,7 +42,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
  * @Date:   2020-09-07
  * @Version: V1.0
  */
-@Api(tags="crm_customer")
+@Api(tags="客户管理")
 @RestController
 @RequestMapping("/customer/customer")
 @Slf4j
@@ -59,8 +59,8 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "crm_customer-分页列表查询")
-	@ApiOperation(value="crm_customer-分页列表查询", notes="crm_customer-分页列表查询")
+	@AutoLog(value = "分页列表查询")
+	@ApiOperation(value="分页列表查询", notes="分页列表查询")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(Customer customer,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -78,8 +78,8 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	 * @param customer
 	 * @return
 	 */
-	@AutoLog(value = "crm_customer-添加")
-	@ApiOperation(value="crm_customer-添加", notes="crm_customer-添加")
+	@AutoLog(value = "添加")
+	@ApiOperation(value="添加", notes="添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Customer customer) {
 		customerService.save(customer);
@@ -92,8 +92,8 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	 * @param customer
 	 * @return
 	 */
-	@AutoLog(value = "crm_customer-编辑")
-	@ApiOperation(value="crm_customer-编辑", notes="crm_customer-编辑")
+	@AutoLog(value = "编辑")
+	@ApiOperation(value="编辑", notes="编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody Customer customer) {
 		customerService.updateById(customer);

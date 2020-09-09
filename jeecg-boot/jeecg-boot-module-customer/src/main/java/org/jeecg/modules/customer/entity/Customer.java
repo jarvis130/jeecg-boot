@@ -34,12 +34,12 @@ public class Customer implements Serializable {
 	/**客户主键*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "客户主键")
-    private java.lang.String id;
+    private java.lang.Long id;
 
 	/**会员账号*/
 	@Excel(name = "会员账号", width = 15)
     @ApiModelProperty(value = "会员账号")
-    private java.lang.Integer userId;
+    private java.lang.Long userId;
 
 	/**客户名称*/
 	@Excel(name = "客户名称", width = 15)
@@ -48,7 +48,7 @@ public class Customer implements Serializable {
 
 	/**客户类型；0=个人；1=公司*/
 	@Excel(name = "客户类型；0=个人；1=公司", width = 15)
-    @ApiModelProperty(value = "客户类型；0=个人；1=公司")
+    @ApiModelProperty(value = "客户类型；1=个人；2=公司")
     private java.lang.String customerType;
 
 	/**手机号*/
@@ -72,9 +72,9 @@ public class Customer implements Serializable {
     private java.lang.String industryType;
 
 	/**客户经理编号*/
-	@Excel(name = "客户经理编号", width = 15)
+	@Excel(name = "客户经理编号", width = 20)
     @ApiModelProperty(value = "客户经理编号")
-    private java.lang.Integer handleId;
+    private java.lang.String customerManagerId;
 
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
@@ -101,10 +101,15 @@ public class Customer implements Serializable {
     @ApiModelProperty(value = "来源")
     private java.lang.String source;
 
-	/**介绍人会员账号*/
+	/**介绍人姓名*/
 	@Excel(name = "介绍人会员账号", width = 15)
     @ApiModelProperty(value = "介绍人会员账号")
-    private java.lang.Integer introducerId;
+    private java.lang.String introducerName;
+
+    /**介绍人电话*/
+    @Excel(name = "介绍人会员账号", width = 15)
+    @ApiModelProperty(value = "介绍人会员账号")
+    private java.lang.String introducerMobile;
 
 	/**主体编号*/
 	@Excel(name = "主体编号", width = 15)

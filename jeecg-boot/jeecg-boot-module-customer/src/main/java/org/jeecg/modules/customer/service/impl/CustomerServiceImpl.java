@@ -16,4 +16,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements ICustomerService {
 
+    /**
+     * 保存客户信息
+     * @param customer
+     */
+    @Override
+    public void saveCustomer(Customer customer){
+        //创建会员
+    }
 }
