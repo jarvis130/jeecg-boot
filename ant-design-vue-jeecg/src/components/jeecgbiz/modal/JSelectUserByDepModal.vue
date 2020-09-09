@@ -264,7 +264,7 @@
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (this.selectedRowKeys.includes(dataSource[i].id)) {
             this.selectUserRows.push(dataSource[i]);
-            userIds = userIds + "," + dataSource[i].username
+            userIds = userIds + "," + dataSource[i].id
           }
         }
         this.selectUserIds = userIds.substring(1);
