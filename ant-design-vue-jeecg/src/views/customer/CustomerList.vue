@@ -120,11 +120,6 @@
             }
           },
           {
-            title:'客户账号',
-            align:"center",
-            dataIndex: 'userId'
-          },
-          {
             title:'客户名称',
             align:"center",
             dataIndex: 'customerName'
@@ -155,9 +150,9 @@
             dataIndex: 'industryType'
           },
           {
-            title:'客户经理编号',
+            title:'客户经理',
             align:"center",
-            dataIndex: 'handleId'
+            dataIndex: 'customerManagerName'
           },
           {
             title:'创建时间',

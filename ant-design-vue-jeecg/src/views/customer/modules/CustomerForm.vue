@@ -3,11 +3,7 @@
     <j-form-container :disabled="formDisabled">
       <a-form :form="form" slot="detail">
         <a-row>
-          <a-col :span="6">
-            <a-form-item label="客户编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['userId']" placeholder="系统自动生成" style="width: 100%; background-color: bisque;" readOnly/>
-            </a-form-item>
-          </a-col>
+
           <a-col :span="6">
             <a-form-item label="客户名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['customerName']" placeholder="请输入客户名称"></a-input>
@@ -46,7 +42,7 @@
 
           <a-col :span="6">
             <a-form-item label="客户经理" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-user-by-dep v-decorator="['handleId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
+              <j-select-user-by-dep v-decorator="['customerManagerId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
             </a-form-item>
           </a-col>
 
@@ -81,8 +77,13 @@
             </a-form-item>
           </a-col>
           <a-col :span="6">
-            <a-form-item label="介绍人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['introducerId']" placeholder="请输入介绍人会员账号" style="width: 100%"/>
+            <a-form-item label="介绍人姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['introducerName']" placeholder="请输入介绍人姓名" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="介绍人电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['introducerMobile']" placeholder="请输入介绍人电话" style="width: 100%"/>
             </a-form-item>
           </a-col>
 
@@ -193,7 +194,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'userId','customerName','customerType','mobile','companyName','companyAddress','industryType','handleId','createBy','createTime','updateBy','updateTime','source','introducerId','subjectId','status'))
+          this.form.setFieldsValue(pick(this.model,'id','customerName','customerType','mobile','companyName','companyAddress','industryType','customerManagerId','createBy','createTime','updateBy','updateTime','source','introducerName','introducerMobile','subjectId','status'))
         })
       },
       //渲染流程表单数据
