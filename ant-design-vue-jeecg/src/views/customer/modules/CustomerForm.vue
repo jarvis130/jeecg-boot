@@ -6,17 +6,17 @@
 
           <a-col :span="6">
             <a-form-item label="客户名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['customerName']" placeholder="请输入客户名称"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="6">
-            <a-form-item label="客户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-decorator="['customerType']"  placeholder="请输入客户类型" dictCode="customer_type" :triggerChange="true"  style="width: 100%"/>
+              <a-input v-decorator="['customerName', validatorRules.customerName]" placeholder="请输入客户名称"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item label="手机号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['mobile']" placeholder="请输入手机号"></a-input>
+              <a-input v-decorator="['customerMobile', validatorRules.customerMobile]" placeholder="请输入手机号"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="客户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['customerType', validatorRules.customerType]"  placeholder="请输入客户类型" dictCode="customer_type" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
 
@@ -41,48 +41,17 @@
           <a-divider/>
 
           <a-col :span="6">
-            <a-form-item label="客户经理" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-user-by-dep v-decorator="['customerManagerId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
-            </a-form-item>
-          </a-col>
-
-          <a-divider/>
-
-          <a-col :span="6">
-            <a-form-item label="创建人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['createBy']" placeholder="请输入创建人" style="width: 100%"/>
+            <a-form-item label="客户来源" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['customerSource']"  placeholder="请输入来源" dictCode="customer_source" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="6">
-            <a-form-item label="创建时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择创建时间" v-decorator="['createTime']" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="6">
-            <a-form-item label="更新人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['updateBy']" placeholder="请输入更新人" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="6">
-            <a-form-item label="更新时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择更新时间" v-decorator="['updateTime']" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-
-          <a-divider/>
-
-          <a-col :span="6">
-            <a-form-item label="来源" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['source']" placeholder="请输入来源"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :span="6">
-            <a-form-item label="介绍人姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="介绍人" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['introducerName']" placeholder="请输入介绍人姓名" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="6">
-            <a-form-item label="介绍人电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="联系电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['introducerMobile']" placeholder="请输入介绍人电话" style="width: 100%"/>
             </a-form-item>
           </a-col>
@@ -90,10 +59,40 @@
           <a-divider/>
 
           <a-col :span="6">
-            <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['status']" placeholder="请输入状态" style="width: 100%"/>
+            <a-form-item label="客户经理" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-select-user-by-dep v-decorator="['customerManagerId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
             </a-form-item>
           </a-col>
+
+          <a-col :span="6">
+            <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['status', validatorRules.status]" placeholder="请输入客户状态" dictCode="user_status"  :triggerChange="true" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+
+          <a-divider/>
+
+          <a-col :span="6">
+            <a-form-item label="创建人" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['createBy']" placeholder="系统自动生成" style="width: 100%; background-color: bisque;" readOnly/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="创建时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-date placeholder="系统自动生成" v-decorator="['createTime']" :trigger-change="true" style="width: 100%; background-color: bisque;" readOnly/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="更新人" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['updateBy']" placeholder="系统自动生成" style="width: 100%; background-color: bisque;" readOnly/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="更新时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-date placeholder="系统自动生成" v-decorator="['updateTime']" :trigger-change="true" style="width: 100%; background-color: bisque;" readOnly/>
+            </a-form-item>
+          </a-col>
+
           <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
             <a-button @click="submitForm">提 交</a-button>
           </a-col>
@@ -141,12 +140,11 @@
     },
     data () {
       return {
-        handleId: '',
         form: this.$form.createForm(this),
         model: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 6 },
         },
         wrapperCol: {
           xs: { span: 24 },
@@ -154,6 +152,26 @@
         },
         confirmLoading: false,
         validatorRules: {
+          customerName: {
+            rules: [
+              { required: true, message: '请输入客户名称!'},
+            ]
+          },
+          customerMobile: {
+            rules: [
+              { required: true, message: '请输入客户手机号码!'},
+            ]
+          },
+          customerType: {
+            rules: [
+              { required: true, message: '请输入客户类型!'},
+            ]
+          },
+          status: {
+            rules: [
+              { required: true, message: '请输入客户状态!'},
+            ]
+          }
         },
         url: {
           add: "/customer/customer/add",
@@ -194,7 +212,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'id','customerName','customerType','mobile','companyName','companyAddress','industryType','customerManagerId','createBy','createTime','updateBy','updateTime','source','introducerName','introducerMobile','subjectId','status'))
+          this.form.setFieldsValue(pick(this.model,'id','customerName','customerType','customerMobile','companyName','companyAddress','industryType','customerManagerId','createBy','createTime','updateBy','updateTime','customerSource','introducerName','introducerMobile','subjectId','status'))
         })
       },
       //渲染流程表单数据
@@ -240,7 +258,7 @@
         })
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'userId','customerName','customerType','mobile','companyName','companyAddress','industryType','handleId','createBy','createTime','updateBy','updateTime','source','introducerId','subjectId','status'))
+        this.form.setFieldsValue(pick(row,'userId','customerName','customerType','customer_mobile','companyName','companyAddress','industryType','handleId','createBy','createTime','updateBy','updateTime','source','introducerId','subjectId','status'))
       },
     }
   }

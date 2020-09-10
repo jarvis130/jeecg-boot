@@ -157,7 +157,7 @@
           // 这里最后加一个 , 的原因是因为无论如何都要使用 in 查询，防止后台进行了模糊匹配，导致查询结果不准确
           let values = this.userIds.split(',') + ','
           getUserList({
-            username: values,
+            id: values,
             pageNo: 1,
             pageSize: values.length
           }).then((res) => {

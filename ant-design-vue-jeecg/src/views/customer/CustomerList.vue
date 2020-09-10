@@ -127,12 +127,12 @@
           {
             title:'客户类型',
             align:"center",
-            dataIndex: 'customerType'
+            dataIndex: 'customerType_dictText'
           },
           {
             title:'手机号',
             align:"center",
-            dataIndex: 'mobile'
+            dataIndex: 'customerMobile'
           },
           {
             title:'公司名称',
@@ -147,7 +147,7 @@
           {
             title:'行业类型',
             align:"center",
-            dataIndex: 'industryType'
+            dataIndex: 'industryType_dictText'
           },
           {
             title:'客户经理',
@@ -165,7 +165,7 @@
           {
             title:'来源',
             align:"center",
-            dataIndex: 'source'
+            dataIndex: 'customerSource_dictText'
           },
           {
             title:'状态',

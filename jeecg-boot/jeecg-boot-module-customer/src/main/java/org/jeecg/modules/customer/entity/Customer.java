@@ -49,12 +49,13 @@ public class Customer implements Serializable {
 	/**客户类型；0=个人；1=公司*/
 	@Excel(name = "客户类型；0=个人；1=公司", width = 15)
     @ApiModelProperty(value = "客户类型；1=个人；2=公司")
+    @Dict(dicCode = "customer_type")
     private java.lang.String customerType;
 
 	/**手机号*/
 	@Excel(name = "手机号", width = 15)
     @ApiModelProperty(value = "手机号")
-    private java.lang.String mobile;
+    private java.lang.String customerMobile;
 
 	/**公司名称*/
 	@Excel(name = "公司名称", width = 15)
@@ -69,6 +70,7 @@ public class Customer implements Serializable {
 	/**行业类型*/
 	@Excel(name = "行业类型", width = 15)
     @ApiModelProperty(value = "行业类型")
+    @Dict(dicCode = "industry_type")
     private java.lang.String industryType;
 
 	/**客户经理编号*/
@@ -97,9 +99,10 @@ public class Customer implements Serializable {
     private java.util.Date updateTime;
 
 	/**来源*/
-	@Excel(name = "来源", width = 15)
-    @ApiModelProperty(value = "来源")
-    private java.lang.String source;
+	@Excel(name = "客户来源", width = 15)
+    @ApiModelProperty(value = "客户来源")
+    @Dict(dicCode = "customer_source")
+    private java.lang.String customerSource;
 
 	/**介绍人姓名*/
 	@Excel(name = "介绍人会员账号", width = 15)
@@ -116,8 +119,10 @@ public class Customer implements Serializable {
     @ApiModelProperty(value = "主体编号")
     private java.lang.Integer subjectId;
 
-	/**状态*/
-	@Excel(name = "状态", width = 15)
-    @ApiModelProperty(value = "状态")
+    /**
+     * 状态(1：正常  2：冻结 ）
+     */
+    @Excel(name = "状态", width = 15,dicCode="user_status")
+    @Dict(dicCode = "user_status")
     private java.lang.Integer status;
 }

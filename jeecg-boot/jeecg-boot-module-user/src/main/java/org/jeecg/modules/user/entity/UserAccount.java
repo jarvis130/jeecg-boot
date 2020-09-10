@@ -38,11 +38,6 @@ public class UserAccount implements Serializable {
     @ApiModelProperty(value = "主键")
     private String id;
 
-	/**会员编号*/
-	@Excel(name = "会员编号", width = 15)
-    @ApiModelProperty(value = "会员编号")
-    private java.lang.Long userId;
-
 	/**用户名*/
 	@Excel(name = "用户名", width = 15)
     @ApiModelProperty(value = "用户名")

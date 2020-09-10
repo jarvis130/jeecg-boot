@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.user.service.IUserAccountService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -82,7 +83,8 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	@ApiOperation(value="添加", notes="添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Customer customer) {
-		customerService.save(customer);
+
+		customerService.saveCustomer(customer);
 		return Result.ok("添加成功！");
 	}
 	

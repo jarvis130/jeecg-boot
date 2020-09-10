@@ -4,7 +4,6 @@
 
     <resultMap type="UserAccount" id="UserAccountResult">
         <result property="id"    column="id"    />
-        <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="password"    column="password"    />
         <result property="salt"    column="salt"    />
@@ -18,7 +17,7 @@
     </resultMap>
 
     <sql id="selectUserAccount">
-        select id, user_id, user_name, password, salt, real_name, nickname, mobile, email, id_type, id_code, sex from user_account
+        select id, user_name, password, salt, real_name, nickname, mobile, email, id_type, id_code, sex from user_account
     </sql>
 
 <!--    <select id="selectUserAccountList" parameterType="Goods" resultMap="GoodsResult">-->
