@@ -152,7 +152,7 @@
           {
             title:'客户经理',
             align:"center",
-            dataIndex: 'customerManagerName'
+            dataIndex: 'customerManager'
           },
           {
             title:'创建时间',

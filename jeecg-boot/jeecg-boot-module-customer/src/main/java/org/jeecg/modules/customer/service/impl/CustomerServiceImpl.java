@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Description: crm_customer
@@ -35,6 +36,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
      * @param customer
      */
     @Override
+    @Transactional
     public void saveCustomer(Customer customer){
 
         //手机号校验
@@ -51,9 +53,29 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         userAccount.setCreateTime(DateUtils.getDate());
         userAccount.setUpdateTime(DateUtils.getDate());
         userAccountService.createUserAccount(userAccount);
+        String userAccountId = userAccount.getId();
         //创建客户数据
+        customer.setUserId(userAccountId);
         customer.setCreateTime(DateUtils.getDate());
         customer.setUpdateTime(DateUtils.getDate());
         this.save(customer);
+    }
+
+    /**
+     * 更新客户信息
+     * @param customer
+     */
+    @Override
+    public void updateCustomer(Customer customer){
+        UserAccount userAccount = new UserAccount();
+        userAccount.setUserName(customer.getCustomerMobile());
+        userAccount.setMobile(customer.getCustomerMobile());
+        userAccount.setRealName(customer.getCustomerName());
+        userAccount.setStatus(customer.getStatus());
+        userAccount.setUpdateTime(DateUtils.getDate());
+        userAccountService.updateById(userAccount);
+        //创建客户数据
+        customer.setUpdateTime(DateUtils.getDate());
+        this.updateById(customer);
     }
 }

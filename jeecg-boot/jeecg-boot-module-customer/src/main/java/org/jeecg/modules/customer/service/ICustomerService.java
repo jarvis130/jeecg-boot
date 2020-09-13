@@ -16,4 +16,10 @@ public interface ICustomerService extends IService<Customer> {
      * @param customer
      */
     public void saveCustomer(Customer customer);
+
+    /**
+     * 更新客户信息
+     * @param customer
+     */
+    public void updateCustomer(Customer customer);
 }

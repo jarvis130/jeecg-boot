@@ -120,11 +120,6 @@
             }
           },
           {
-            title:'会员编号',
-            align:"center",
-            dataIndex: 'userId'
-          },
-          {
             title:'用户名',
             align:"center",
             dataIndex: 'userName'

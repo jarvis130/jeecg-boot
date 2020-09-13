@@ -60,7 +60,7 @@
 
           <a-col :span="6">
             <a-form-item label="客户经理" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-user-by-dep v-decorator="['customerManagerId']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
+              <j-select-user-by-dep v-decorator="['customerManager']" placeholder="请输入客户经理" :multi="false" style="width: 100%"></j-select-user-by-dep>
             </a-form-item>
           </a-col>
 
@@ -212,7 +212,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'id','customerName','customerType','customerMobile','companyName','companyAddress','industryType','customerManagerId','createBy','createTime','updateBy','updateTime','customerSource','introducerName','introducerMobile','subjectId','status'))
+          this.form.setFieldsValue(pick(this.model,'id','customerName','customerType','customerMobile','companyName','companyAddress','industryType','customerManager','createBy','createTime','updateBy','updateTime','customerSource','introducerName','introducerMobile','subjectId','status'))
         })
       },
       //渲染流程表单数据

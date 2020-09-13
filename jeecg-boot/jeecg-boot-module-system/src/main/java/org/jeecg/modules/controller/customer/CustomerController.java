@@ -83,7 +83,6 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	@ApiOperation(value="添加", notes="添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Customer customer) {
-
 		customerService.saveCustomer(customer);
 		return Result.ok("添加成功！");
 	}
@@ -98,7 +97,7 @@ public class CustomerController extends JeecgController<Customer, ICustomerServi
 	@ApiOperation(value="编辑", notes="编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody Customer customer) {
-		customerService.updateById(customer);
+		customerService.updateCustomer(customer);
 		return Result.ok("编辑成功!");
 	}
 	

@@ -34,12 +34,12 @@ public class Customer implements Serializable {
 	/**客户主键*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "客户主键")
-    private java.lang.Long id;
+    private java.lang.String id;
 
 	/**会员账号*/
 	@Excel(name = "会员账号", width = 15)
     @ApiModelProperty(value = "会员账号")
-    private java.lang.Long userId;
+    private java.lang.String userId;
 
 	/**客户名称*/
 	@Excel(name = "客户名称", width = 15)
@@ -74,13 +74,13 @@ public class Customer implements Serializable {
     private java.lang.String industryType;
 
 	/**客户经理编号*/
-	@Excel(name = "客户经理编号", width = 20)
-    @ApiModelProperty(value = "客户经理编号")
-    private java.lang.String customerManagerId;
+	@Excel(name = "客户经理", width = 20)
+    @ApiModelProperty(value = "客户经理")
+    private java.lang.String customerManager;
 
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
-    private java.lang.Integer createBy;
+    private java.lang.String createBy;
 
 	/**创建时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
@@ -90,7 +90,7 @@ public class Customer implements Serializable {
 
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
-    private java.lang.Integer updateBy;
+    private java.lang.String updateBy;
 
 	/**更新时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")

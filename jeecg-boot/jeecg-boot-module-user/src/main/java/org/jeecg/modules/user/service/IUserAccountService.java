@@ -22,4 +22,5 @@ public interface IUserAccountService extends IService<UserAccount> {
      * @return
      */
     public UserAccount getUserAccountByMobile(String mobile);
+
 }

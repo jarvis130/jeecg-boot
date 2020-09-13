@@ -22,6 +22,12 @@ public interface UserAccountMapper extends BaseMapper<UserAccount> {
     public Integer getUserMaxAccountId();
 
     /**
+     *  插入用户账号返回ID
+     * @return
+     */
+    public Long insertUserAccountReturnId(UserAccount userAccount);
+
+    /**
      *  根据手机号获取会员账号信息
      * @return
      */

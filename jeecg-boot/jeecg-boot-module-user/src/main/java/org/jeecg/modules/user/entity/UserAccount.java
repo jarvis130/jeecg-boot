@@ -36,7 +36,7 @@ public class UserAccount implements Serializable {
      */
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
-    private String id;
+    private java.lang.String id;
 
 	/**用户名*/
 	@Excel(name = "用户名", width = 15)
