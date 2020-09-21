@@ -42,6 +42,10 @@
 			<groupId>org.jeecgframework.boot</groupId>
 			<artifactId>jeecg-boot-module-customer</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jeecgframework.boot</groupId>
+			<artifactId>jeecg-boot-module-biz</artifactId>
+		</dependency>
 	</dependencies>
 	
 	<build>
