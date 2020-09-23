@@ -3,22 +3,22 @@
     <j-form-container :disabled="formDisabled">
       <a-form :form="form" slot="detail">
         <a-row>
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item label="商机编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['boSn']" placeholder="请输入商机编号" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item label="客户编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['userId']" placeholder="请输入客户编号"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['status']" placeholder="请输入状态" style="width: 100%"/>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item label="当前处理人" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="['handleBy']" placeholder="请输入当前处理人" style="width: 100%"/>
             </a-form-item>
@@ -33,6 +33,7 @@
             <a-button @click="submitForm">提 交</a-button>
           </a-col>
         </a-row>
+
       </a-form>
     </j-form-container>
   </a-spin>
