@@ -22,4 +22,9 @@ public class FillRuleConstant {
      */
     public static final String CATEGORY = "category_code_rule";
 
+    /**
+     * 工单编码
+     */
+    public static final String WORK_ORDER = "work_order_code_rule";
+
 }
