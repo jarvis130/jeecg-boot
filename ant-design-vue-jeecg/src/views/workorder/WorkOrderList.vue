@@ -152,7 +152,7 @@
             title:'责任团队',
             align:"center",
             width:60,
-            dataIndex: 'handleTerm'
+            dataIndex: 'handleDept_dictText'
           },
           {
             title:'责任人',

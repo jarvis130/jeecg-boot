@@ -60,7 +60,7 @@
 
           <a-col :span="24">
             <a-form-item label="截止日期" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择截止日期" v-decorator="['closeDate', validatorRules.closeDate]" :trigger-change="true" style="width: 100%"/>
+              <j-date placeholder="请选择截止日期" v-decorator="['expiryDate']" :trigger-change="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
 
