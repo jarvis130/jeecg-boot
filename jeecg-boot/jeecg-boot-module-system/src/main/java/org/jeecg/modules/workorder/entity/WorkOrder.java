@@ -88,6 +88,7 @@ public class WorkOrder implements Serializable {
     /**责任公司/部门*/
     @Excel(name = "责任公司/部门", width = 15)
     @ApiModelProperty(value = "责任公司/部门")
+    @Dict(dicCode = "id",dictTable="sys_depart",dicText="depart_name")
     private java.lang.String handleDept;
 
     /**处理人*/
