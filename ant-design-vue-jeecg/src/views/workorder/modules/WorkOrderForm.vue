@@ -35,8 +35,8 @@
           </a-col> -->
 
           <a-col :span="24">
-            <a-form-item label="负责组织" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-depart v-decorator="['handleDept', validatorRules.handleDept]" placeholder="请输入负责组织" style="width: 100%"/>
+            <a-form-item label="负责团队" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-select-depart v-decorator="['handleDept', validatorRules.handleDept]" placeholder="请输入负责团队" style="width: 100%"/>
             </a-form-item>
           </a-col>
 
