@@ -158,13 +158,13 @@
             title:'责任人',
             align:"center",
             width:60,
-            dataIndex: 'handleMaster'
+            dataIndex: 'handleMaster_dictText'
           },
           {
             title:'处理人',
             align:"center",
             width:60,
-            dataIndex: 'handleBy'
+            dataIndex: 'handleBy_dictText'
           },
           {
             title: '操作',

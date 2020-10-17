@@ -44,6 +44,7 @@ public class WorkOrder implements Serializable {
     /**创建人*/
     @Excel(name = "创建人", width = 15)
     @ApiModelProperty(value = "创建人")
+    @Dict(dicCode = "username",dictTable="sys_user",dicText="realname")
     private java.lang.Integer createBy;
 
     /**紧急程度*/
@@ -83,6 +84,7 @@ public class WorkOrder implements Serializable {
     /**负责人*/
     @Excel(name = "负责人", width = 15)
     @ApiModelProperty(value = "负责人")
+    @Dict(dicCode = "username",dictTable="sys_user",dicText="realname")
     private java.lang.String handleMaster;
 
     /**责任公司/部门*/
@@ -94,6 +96,7 @@ public class WorkOrder implements Serializable {
     /**处理人*/
     @Excel(name = "处理人", width = 15)
     @ApiModelProperty(value = "处理人")
+    @Dict(dicCode = "username",dictTable="sys_user",dicText="realname")
     private java.lang.String handleBy;
 
     /**监督人*/
