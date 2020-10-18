@@ -65,8 +65,8 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
+          <!-- <a @click="handleEdit(record)">编辑</a> -->
+          <a @click="handleWorkOrder(record)">编辑</a>
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -87,6 +87,7 @@
     </div>
 
     <work-order-modal ref="modalForm" @ok="modalFormOk"></work-order-modal>
+    <work-order-detail-modal ref="modalDetailForm" @ok="modalFormOk"></work-order-detail-modal>
   </a-card>
 </template>
 
@@ -96,12 +97,14 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import WorkOrderModal from './modules/WorkOrderModal'
+  import WorkOrderDetailModal from './modules/WorkOrderDetailModal'
 
   export default {
     name: 'WorkOrderList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      WorkOrderModal
+      WorkOrderModal,
+      WorkOrderDetailModal
     },
     data () {
       return {
@@ -195,6 +198,9 @@
     },
     methods: {
       initDictConfig(){
+      },
+      handleWorkOrder(record){
+        this.$refs.modalDetailForm.visible = true;
       }
     }
   }

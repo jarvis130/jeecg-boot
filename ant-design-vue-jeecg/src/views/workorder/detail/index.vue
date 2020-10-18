@@ -6,8 +6,12 @@
 </template>
 
 <script>
+  import '@/assets/less/TableExpand.less'
+  import { mixinDevice } from '@/utils/mixin'
+  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  
   export default {
-    name: 'WorkOrderDetailLayout',
+    name: 'WorkOrderDetailIndex',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
       
