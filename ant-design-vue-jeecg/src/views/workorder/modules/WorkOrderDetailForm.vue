@@ -1,76 +1,86 @@
 <template>
-  <a-spin :spinning="confirmLoading">
-    <j-form-container :disabled="formDisabled">
-      <a-form :form="form" slot="detail">
-        <a-row>
+  <div>
 
-          <a-col :span="24">
-            <a-form-item label="工单类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-category-select v-decorator="['categoryId', validatorRules.categoryId]" pcode="B03" placeholder="工单类型"/>
-            </a-form-item>
-          </a-col>
-          
-          <a-col :span="24">
-            <a-form-item label="标题/内容" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-textarea v-decorator="['content', validatorRules.content]" rows="6" placeholder="请输入标题/内容"/>
-            </a-form-item>
-          </a-col>
+    <a-row :gutter="24">
+      <a-col :sm="24" :md="12" :xl="18">
+        
+        <!--工单详情begin-->
+        <a-card title="需求描述" hoverable>
+          <template slot="actions" class="ant-card-actions">
+            <a-icon key="setting" type="setting" />
+            <a-icon key="edit" type="edit" />
+            <a-icon key="ellipsis" type="ellipsis" />
+          </template>
+          <a-card-meta description="This is the description">
+          </a-card-meta>
+        </a-card>
+        <!--工单详情end-->
 
-          <a-col :span="24">
-            <a-form-item label="上传附件"  :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-upload v-decorator="['attachedPath']"></j-upload>
-            </a-form-item>
-          </a-col>
+        <!--工单表单begin-->
+        <!--工单表单end-->
 
-          <a-col :span="24">
-            <a-form-item label="优先级" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-decorator="['priorityLevel', validatorRules.priorityLevel]" placeholder="请输入优先级" dictCode="priority_level"  :triggerChange="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
+        <!--工单记录begin-->
+        <a-list
+          class="comment-list"
+          :header="`共计 ${list.length} 条回复`"
+          item-layout="horizontal"
+          :data-source="list"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-comment :author="item.author" :avatar="item.avatar">
+              <template slot="actions">
+                <span v-for="action in item.actions">{{ action }}</span>
+              </template>
+              <p slot="content">
+                {{ item.content }}
+              </p>
+              <a-tooltip slot="datetime" :title="item.datetime.format('YYYY-MM-DD HH:mm:ss')">
+                <span>{{ item.datetime.fromNow() }}</span>
+              </a-tooltip>
+            </a-comment>
+          </a-list-item>
+        </a-list>
+        <!--工单记录end-->
+      </a-col>
+      <!--右侧布局-->
+      <a-col :sm="24" :md="12" :xl="6">
+        <a-card title="工单信息" hoverable>
+          <a-descriptions layout="horizontal">
+            <a-descriptions-item label="UserName">
+              Zhou Maomao
+            </a-descriptions-item>
+            <a-descriptions-item label="Telephone">
+              1810000000
+            </a-descriptions-item>
+            <a-descriptions-item label="Live">
+              Hangzhou, Zhejiang
+            </a-descriptions-item>
+            <a-descriptions-item label="Address" span="2">
+              No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+            </a-descriptions-item>
+            <a-descriptions-item label="Remark">
+              empty
+            </a-descriptions-item>
+          </a-descriptions>
+        </a-card>
+        <br>
+        <a-card title="客户信息" hoverable>
+          <template slot="actions" class="ant-card-actions">
+            <a-icon key="setting" type="setting" />
+            <a-icon key="edit" type="edit" />
+            <a-icon key="ellipsis" type="ellipsis" />
+          </template>
+          <a-card-meta title="Card title" description="This is the description">
+            <a-avatar
+              slot="avatar"
+              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            />
+          </a-card-meta>
+        </a-card>
+      </a-col>
+    </a-row>
 
-          <!-- <a-col :span="24">
-            <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-decorator="['status', validatorRules.status]" placeholder="请输入工单状态" dictCode="work_order_status"  :triggerChange="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col> -->
-
-          <a-col :span="24">
-            <a-form-item label="负责团队" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-depart v-decorator="['handleDept', validatorRules.handleDept]" placeholder="请输入负责团队" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-
-           <a-col :span="24">
-            <a-form-item label="负责人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <j-select-user-by-dep v-decorator="['handleMaster', validatorRules.handleMaster]" placeholder="请输入负责人" :multi="false" style="width: 100%"></j-select-user-by-dep>
-            </a-form-item>
-          </a-col>
-
-          <!-- <a-col :span="24">
-            <a-form-item label="处理人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-user-by-dep v-decorator="['handleBy']" placeholder="请输入处理人" :multi="false" style="width: 100%"></j-select-user-by-dep>
-            </a-form-item>
-          </a-col> -->
-
-          <a-col :span="24">
-            <a-form-item label="关注者" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-select-user-by-dep v-decorator="['superviseBy']" placeholder="请输入关注者" :multi="true" style="width: 100%"></j-select-user-by-dep>
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="24">
-            <a-form-item label="截止日期" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择截止日期" v-decorator="['expiryDate']" :trigger-change="true" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-
-          <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
-            <a-button @click="submitForm">提 交</a-button>
-          </a-col>
-        </a-row>
-      </a-form>
-    </j-form-container>
-  </a-spin>
+  </div>
 </template>
 
 <script>
@@ -84,6 +94,7 @@
   import JUpload from '@/components/jeecg/JUpload'
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
   import JSelectDepart from '@/components/jeecgbiz/JSelectDepart'
+  import moment from 'moment'
 
   export default {
     name: 'WorkOrderDetailForm',
@@ -159,7 +170,26 @@
           add: "/workorder/workOrder/add",
           edit: "/workorder/workOrder/edit",
           queryById: "/workorder/workOrder/queryById"
-        }
+        },
+        list: [
+          {
+            actions: ['Reply to'],
+            author: 'Han Solo',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            content:
+              'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+            datetime: moment().subtract(1, 'days'),
+          },
+          {
+            actions: ['Reply to'],
+            author: 'Han Solo',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            content:
+              'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+            datetime: moment().subtract(2, 'days'),
+          },
+        ],
+        moment,
       }
     },
     computed: {

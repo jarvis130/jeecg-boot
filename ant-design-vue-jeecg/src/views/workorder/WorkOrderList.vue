@@ -200,6 +200,7 @@
       initDictConfig(){
       },
       handleWorkOrder(record){
+        this.$refs.modalDetailForm.title = '工单详情';
         this.$refs.modalDetailForm.visible = true;
       }
     }
