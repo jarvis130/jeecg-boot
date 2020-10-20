@@ -6,7 +6,7 @@
     fullscreen
     switchFullscreen
     @ok="handleOk"
-    :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
+    :okButtonProps="{ class:{'jee-hidden': true} }"
     @cancel="handleCancel"
     cancelText="关闭">
     <work-order-detail-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></work-order-detail-form>

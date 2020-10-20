@@ -1,24 +1,40 @@
 <template>
   <div>
-
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="18">
         
         <!--工单详情begin-->
         <a-card title="需求描述" hoverable>
           <template slot="actions" class="ant-card-actions">
-            <a-icon key="setting" type="setting" />
-            <a-icon key="edit" type="edit" />
-            <a-icon key="ellipsis" type="ellipsis" />
+            <a-icon key="setting" type="" />
+            <a-icon key="edit" type="" />
+            <a-button type="primary" value="small" icon="edit">
+              接单
+            </a-button>
           </template>
           <a-card-meta description="This is the description">
           </a-card-meta>
         </a-card>
         <!--工单详情end-->
-
+        <br>
         <!--工单表单begin-->
+        <a-form layout="inline" :form="form">
+        <a-card title="" hoverable>
+          <template slot="actions" class="ant-card-actions">
+            <j-upload v-model="fileList" text="上传附件"></j-upload>
+            <div></div>
+            <a-button-group>
+              <a-button type="primary" value="small"> <a-icon type="select" />提交</a-button>
+              <a-button type="primary" value="small"> <a-icon type="file" />引用方案</a-button>
+            </a-button-group>
+          </template>
+        
+          <a-textarea v-decorator="['content', validatorRules.content]" rows="6" placeholder="请输入处理意见"/>
+           
+        </a-card>
+        </a-form>
         <!--工单表单end-->
-
+        <br>
         <!--工单记录begin-->
         <a-list
           class="comment-list"
@@ -42,40 +58,88 @@
         </a-list>
         <!--工单记录end-->
       </a-col>
+
       <!--右侧布局-->
       <a-col :sm="24" :md="12" :xl="6">
         <a-card title="工单信息" hoverable>
-          <a-descriptions layout="horizontal">
-            <a-descriptions-item label="UserName">
-              Zhou Maomao
-            </a-descriptions-item>
-            <a-descriptions-item label="Telephone">
-              1810000000
-            </a-descriptions-item>
-            <a-descriptions-item label="Live">
-              Hangzhou, Zhejiang
-            </a-descriptions-item>
-            <a-descriptions-item label="Address" span="2">
-              No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-            </a-descriptions-item>
-            <a-descriptions-item label="Remark">
-              empty
-            </a-descriptions-item>
-          </a-descriptions>
+          <a-list item-layout="horizontal">
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">工单编号</a>
+              </a-list-item-meta>
+              <div>101598</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">分类</a>
+              </a-list-item-meta>
+              <div>咨询-养殖</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">创建人</a>
+              </a-list-item-meta>
+              <div>李大嘴</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">创建时间</a>
+              </a-list-item-meta>
+              <div>2020-10-20 10:39</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">负责团队</a>
+              </a-list-item-meta>
+              <div>XXX组织</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">当前负责人</a>
+              </a-list-item-meta>
+              <div>张大嘴</div>
+            </a-list-item>
+
+          </a-list>
         </a-card>
         <br>
         <a-card title="客户信息" hoverable>
-          <template slot="actions" class="ant-card-actions">
-            <a-icon key="setting" type="setting" />
-            <a-icon key="edit" type="edit" />
-            <a-icon key="ellipsis" type="ellipsis" />
-          </template>
-          <a-card-meta title="Card title" description="This is the description">
+          <a-card-meta title="Card title" description="个人用户">
             <a-avatar
               slot="avatar"
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
             />
           </a-card-meta>
+          <br>
+          <a-list item-layout="horizontal">
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">联系电话</a>
+              </a-list-item-meta>
+              <div>李大嘴</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">入驻时间</a>
+              </a-list-item-meta>
+              <div>2020-10-20 10:39</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">所属公司</a>
+              </a-list-item-meta>
+              <div>XXX组织</div>
+            </a-list-item>
+
+          </a-list>
         </a-card>
       </a-col>
     </a-row>
@@ -84,7 +148,6 @@
 </template>
 
 <script>
-
   import { httpAction, getAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import { validateDuplicateValue } from '@/utils/util'
