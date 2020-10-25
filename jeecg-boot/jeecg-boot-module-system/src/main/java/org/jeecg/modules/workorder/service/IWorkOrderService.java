@@ -11,5 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IWorkOrderService extends IService<WorkOrder> {
 
+    /**
+     * 新增工单
+     * @param workOrder
+     * 
+     */
     public void addWorkOrder(WorkOrder workOrder);
 }
