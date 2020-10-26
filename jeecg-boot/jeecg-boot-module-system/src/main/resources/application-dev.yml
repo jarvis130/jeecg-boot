@@ -129,7 +129,7 @@ spring:
         master:
           url: jdbc:mysql://localhost:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
           username: root
-          password:
+          password: 123456
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:
@@ -172,9 +172,9 @@ jeecg :
   uploadType: local
   path :
     #文件上传根目录 设置
-    upload: D://opt//upFiles
+    upload: /Users/jarvis/Workspace/upFiles
     #webapp文件路径
-    webapp: D://opt//webapp
+    webapp: /Users/jarvis/Workspace/upFiles
   #短信秘钥
   sms:
     accessKeyId: ??

@@ -18,7 +18,7 @@
 
           <a-col :span="24">
             <a-form-item label="上传附件"  :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-upload v-decorator="['attachedPath']"></j-upload>
+              <j-upload v-decorator="['attachedPath']" bizPath=""></j-upload>
             </a-form-item>
           </a-col>
 
@@ -34,11 +34,11 @@
             </a-form-item>
           </a-col> -->
 
-          <a-col :span="24">
+          <!-- <a-col :span="24">
             <a-form-item label="负责团队" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-select-depart v-decorator="['handleDept', validatorRules.handleDept]" placeholder="请输入负责团队" style="width: 100%"/>
             </a-form-item>
-          </a-col>
+          </a-col> -->
 
            <a-col :span="24">
             <a-form-item label="负责人" :labelCol="labelCol" :wrapperCol="wrapperCol">

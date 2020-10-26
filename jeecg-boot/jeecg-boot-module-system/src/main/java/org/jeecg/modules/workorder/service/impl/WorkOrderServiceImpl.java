@@ -1,6 +1,10 @@
 package org.jeecg.modules.workorder.service.impl;
 
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.constant.FillRuleConstant;
+import org.jeecg.common.system.api.ISysBaseAPI;
+import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.system.vo.SysUserCacheInfo;
 import org.jeecg.common.util.FillRuleUtil;
 import org.jeecg.modules.workorder.constant.WorkOrderStatusConstant;
 import org.jeecg.modules.workorder.entity.WorkOrder;
@@ -24,6 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class WorkOrderServiceImpl extends ServiceImpl<WorkOrderMapper, WorkOrder> implements IWorkOrderService {
 
     @Autowired
+    private ISysBaseAPI sysBaseAPI;
+
+    @Autowired
     private WorkOrderMapper workOrderMapper;
 
     @Autowired
@@ -33,14 +40,24 @@ public class WorkOrderServiceImpl extends ServiceImpl<WorkOrderMapper, WorkOrder
     @Transactional
     public void addWorkOrder(WorkOrder workOrder) {
 
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();//当前操作用户
+        String orgId = sysUser.getDepartIds();
         String code = (String) FillRuleUtil.executeRule(FillRuleConstant.WORK_ORDER, null);
         workOrder.setWorkCode(code);
+        workOrder.setHandleDept(orgId);
         workOrder.setStatus(WorkOrderStatusConstant.ASSIGNED);
         workOrderMapper.insert(workOrder);
+        //插入回复内容
+        String content = "";
 
+        SysUserCacheInfo userCacheInfo = sysBaseAPI.getCacheUser(workOrder.getHandleMaster());//工单master信息
+        if(userCacheInfo != null){
+            String masterName = userCacheInfo.getSysUserName();
+            String orgName = userCacheInfo.getSysOrgCode();
+            content = sysUser.getRealname() + "将工单分配给" + orgName + "," + masterName;
+        }
         WorkOrderReply workOrderReply = new WorkOrderReply();
         workOrderReply.setWorkOrderId(workOrder.getId());
-        String content = "将工单分配给" + workOrder.getHandleMaster();
         workOrderReply.setContent(content);
         workOrderReplyMapper.insert(workOrderReply);
 

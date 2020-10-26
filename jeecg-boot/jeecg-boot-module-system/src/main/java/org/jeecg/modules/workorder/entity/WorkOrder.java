@@ -45,7 +45,7 @@ public class WorkOrder implements Serializable {
     @Excel(name = "创建人", width = 15)
     @ApiModelProperty(value = "创建人")
     @Dict(dicCode = "username",dictTable="sys_user",dicText="realname")
-    private java.lang.Integer createBy;
+    private java.lang.String createBy;
 
     /**紧急程度*/
     @Excel(name = "紧急程度", width = 15)
@@ -56,6 +56,7 @@ public class WorkOrder implements Serializable {
     /**工单类型*/
     @Excel(name = "工单类型", width = 15)
     @ApiModelProperty(value = "工单类型")
+    @Dict(dicCode = "id",dictTable="sys_category",dicText="name")
     private java.lang.String categoryId;
 
 	/**标题/内容*/
@@ -76,7 +77,7 @@ public class WorkOrder implements Serializable {
 
 	/**创建时间*/
     @Excel(name = "创建时间", width = 15)
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd hh:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "创建时间")
     private java.util.Date createTime;

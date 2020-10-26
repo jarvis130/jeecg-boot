@@ -201,6 +201,7 @@
       },
       handleWorkOrder(record){
         this.$refs.modalDetailForm.title = '工单详情';
+        this.$refs.modalDetailForm.edit(record);
         this.$refs.modalDetailForm.visible = true;
       }
     }

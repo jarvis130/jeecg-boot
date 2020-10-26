@@ -6,14 +6,16 @@
         <!--工单详情begin-->
         <a-card title="需求描述" hoverable>
           <template slot="actions" class="ant-card-actions">
-            <a-icon key="setting" type="" />
-            <a-icon key="edit" type="" />
+            <div></div>
+            <div></div>
             <a-button type="primary" value="small" icon="edit">
               接单
             </a-button>
           </template>
-          <a-card-meta description="This is the description">
+          <a-card-meta :description="model.content">
           </a-card-meta>
+          <br>
+          <div>附件：<a target="_blank" :href="attachedURL + model.attachedPath">{{ model.attachedPath }}</a></div>
         </a-card>
         <!--工单详情end-->
         <br>
@@ -21,7 +23,7 @@
         <a-form layout="inline" :form="form">
         <a-card title="" hoverable>
           <template slot="actions" class="ant-card-actions">
-            <j-upload v-model="fileList" text="上传附件"></j-upload>
+            <j-upload v-decorator="['attachedPath']" text="上传附件"></j-upload>
             <div></div>
             <a-button-group>
               <a-button type="primary" value="small"> <a-icon type="select" />提交</a-button>
@@ -67,42 +69,49 @@
               <a-list-item-meta description="" >
                 <a slot="title">工单编号</a>
               </a-list-item-meta>
-              <div>101598</div>
+              <div>{{ model.workCode }}</div>
             </a-list-item>
 
             <a-list-item>
               <a-list-item-meta description="" >
                 <a slot="title">分类</a>
               </a-list-item-meta>
-              <div>咨询-养殖</div>
+              <div>{{ model.categoryId_dictText }}</div>
+            </a-list-item>
+
+            <a-list-item>
+              <a-list-item-meta description="" >
+                <a slot="title">优先级</a>
+              </a-list-item-meta>
+              <div>{{ model.priorityLevel_dictText }}</div>
             </a-list-item>
 
             <a-list-item>
               <a-list-item-meta description="" >
                 <a slot="title">创建人</a>
               </a-list-item-meta>
-              <div>李大嘴</div>
+              <div>{{ model.createBy_dictText }}</div>
             </a-list-item>
 
             <a-list-item>
               <a-list-item-meta description="" >
                 <a slot="title">创建时间</a>
               </a-list-item-meta>
-              <div>2020-10-20 10:39</div>
+              <div>{{model.createTime}}</div>
             </a-list-item>
 
             <a-list-item>
               <a-list-item-meta description="" >
                 <a slot="title">负责团队</a>
               </a-list-item-meta>
-              <div>XXX组织</div>
+              <div>{{ model.handleDept_dictText }}</div>
             </a-list-item>
 
             <a-list-item>
               <a-list-item-meta description="" >
-                <a slot="title">当前负责人</a>
+                <a slot="title">负责人</a>
               </a-list-item-meta>
-              <div>张大嘴</div>
+              <div>{{ model.handleMaster_dictText }}</div>
             </a-list-item>
 
           </a-list>
@@ -253,6 +262,7 @@
           },
         ],
         moment,
+        attachedURL: window._CONFIG['attachedURL']
       }
     },
     computed: {
