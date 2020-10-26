@@ -205,7 +205,6 @@
       }
     },
     mounted() {
-      // this.randomData(23, false)
     },
     methods: {
       nextStep () {
@@ -292,44 +291,6 @@
 
       handleSelectRowChange(selectedRowIds) {
         this.selectedRowIds = selectedRowIds
-      },
-
-      /* 随机生成数据 */
-      randomData(size, loading = false) {
-        if (loading) {
-          this.loading = true
-        }
-
-        let randomDatetime = () => {
-          let time = parseInt(randomNumber(1000, 9999999999999))
-          return moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss')
-        }
-
-        let begin = Date.now()
-        let values = []
-        for (let i = 0; i < size; i++) {
-          values.push({
-            id: randomUUID(),
-            dbFieldName: `name_${i + 1}`,
-            // dbFieldTxt: randomString(10),
-            multipleSelect: ['string', ['int', 'double', 'boolean'][randomNumber(0, 2)]],
-            dbFieldType: ['string', 'int', 'double', 'boolean'][randomNumber(0, 3)],
-            dbLength: randomNumber(0, 233),
-            datetime: randomDatetime(),
-            isNull: ['Y', 'N'][randomNumber(0, 1)]
-          })
-        }
-
-        this.dataSource = values
-        let end = Date.now()
-        let diff = end - begin
-
-        if (loading && diff < size) {
-          setTimeout(() => {
-            this.loading = false
-          }, size - diff)
-        }
-
       },
 
       handleDelete(props) {

@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import { getAction } from '@/api/manage'
-
+import { putAction, postAction, getAction } from '@/api/manage'
 
 const goods = {
   state: {
@@ -12,11 +11,22 @@ const goods = {
     }
   },
   actions: {
-    // TODO 如果没找到可以尝试请求一下
-    saveGoodsInfo({ commit }, id) {
-      debugger
-      commit('SET_ID', id);
-    }
+    SaveGoodsInfo({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        postAction("/goods/goodsInfo/add", params).then(response => {
+          debugger;
+          if(response.success){
+            const result = response.result
+            commit('SET_ID', result);
+            resolve(response)
+          }else{
+            resolve(response)
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
 
   }
 }

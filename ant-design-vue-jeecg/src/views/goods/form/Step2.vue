@@ -112,7 +112,7 @@
               if(res.success){
                 // that.$message.success(res.message);
                 debugger;
-                this.$store.dispatch('saveGoodsInfo' , res.result) ;
+                this.$store.commit('saveGoodsInfo' , res.result) ;
                 this.$emit('nextStep');
               }else{
                 that.$message.warning(res.message);

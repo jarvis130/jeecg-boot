@@ -84,6 +84,7 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex"
   import { httpAction, getAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import JImageUpload from '@/components/jeecg/JImageUpload'
@@ -228,6 +229,7 @@
       }
     },
     methods: {
+      ...mapActions([ "SaveGoodsInfo" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
@@ -244,18 +246,27 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            console.log("表单提交数据",formData)
-            httpAction(httpurl,formData,method).then((res)=>{
-              if(res.success){
-                // that.$message.success(res.message);
-                this.$store.dispatch('saveGoodsInfo' , res.result) ;
-                this.$emit('nextStep');
-              }else{
-                that.$message.warning(res.message);
-              }
+
+            that.SaveGoodsInfo(formData).then((res) => {
+              this.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
             }).finally(() => {
               that.confirmLoading = false;
-            })
+            });
+     
+            // httpAction(httpurl,formData,method).then((res)=>{
+            //   if(res.success){
+            //     // that.$message.success(res.message);
+            //     this.$store.dispatch('saveGoodsInfo' , res.result) ;
+            //     this.$emit('nextStep');
+            //   }else{
+            //     that.$message.warning(res.message);
+            //   }
+            // }).finally(() => {
+            //   that.confirmLoading = false;
+            // })
+
           }
          
         })
