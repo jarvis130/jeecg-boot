@@ -6,6 +6,7 @@ import user from './modules/user'
 import permission from './modules/permission'
 import enhance from './modules/enhance'
 import online from './modules/online'
+import goods from './modules/goods'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     user,
     permission,
     enhance,
-    online
+    online,
+    goods
   },
   state: {
 

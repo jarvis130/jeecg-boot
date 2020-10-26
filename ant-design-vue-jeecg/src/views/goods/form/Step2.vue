@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form style="margin: 40px auto 0;">
+    <a-form :form="form" style="margin: 40px auto 0;">
 
       <a-form-item
         label="关键词"
@@ -49,16 +49,33 @@
 <script>
   import JEditor from '@/components/jeecg/JEditor'
   import JCheckbox from '@/components/jeecg/JCheckbox'
+  import { mapGetters } from "vuex";
+
   export default {
     name: "Step2",
     components: {
       JEditor,
       JCheckbox
     },
+    computed: {
+        // 用vuex读取数据(读取的是getters.js中的数据)
+        // 相当于this.$store.getters.news(vuex语法糖)
+        ...mapGetters(["goods"])
+	  },
     data () {
       return {
-        loading: false,
+        form: this.$form.createForm(this),
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 5 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+        },
+        confirmLoading: false,
         model: {
+          id: '',
           goodsDesc: ''
         },
         jcheckbox: {
@@ -69,11 +86,43 @@
             { label: '推荐', value: 'isPromote'}
           ]
         },
+        url: {
+          add: "/goods/goodsInfo/add",
+          edit: "/goods/goodsInfo/edit",
+          queryById: "/goods/goodsInfo/queryById"
+        }
       }
     },
     methods: {
       nextStep () {
-        this.$emit('nextStep')
+        const that = this;
+        // 触发表单验证
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            let httpurl = '';
+            let method = '';
+            debugger;
+            this.model.id = this.goods.id;
+            httpurl+=this.url.edit;
+            method = 'put';
+            let formData = Object.assign(this.model, values);
+            console.log("表单提交数据",formData)
+            httpAction(httpurl,formData,method).then((res)=>{
+              if(res.success){
+                // that.$message.success(res.message);
+                debugger;
+                this.$store.dispatch('saveGoodsInfo' , res.result) ;
+                this.$emit('nextStep');
+              }else{
+                that.$message.warning(res.message);
+              }
+            }).finally(() => {
+              that.confirmLoading = false;
+            })
+          }
+         
+        })
       },
       prevStep () {
         this.$emit('prevStep')
