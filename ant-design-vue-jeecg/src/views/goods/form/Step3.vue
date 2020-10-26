@@ -23,11 +23,11 @@
           </a-form-model-item>
 
           <a-form-model-item
-            v-for="(domain, index) in dynamicValidateForm.domains"
-            :key="domain.key"
+            v-for="(sku, index) in dynamicValidateForm.skus"
+            :key="sku.key"
             v-bind="index === 0 ? formItemLayout : {}"
             :label="index === 0 ? '规格' : ''"
-            :prop="'domains.' + index + '.value'"
+            :prop="'skus.' + index + '.value'"
             :rules="{
               required: true,
               message: '规格不能为空',
@@ -35,22 +35,24 @@
             }"
           >
             <a-input
-              v-model="domain.value"
+              v-model="sku.value"
               placeholder="请输入规格"
               style="width: 20%; margin-right: 8px"
+              @change = "skuInputChange"
             />
             <a-icon
-              v-if="dynamicValidateForm.domains.length > 1"
+              v-if="dynamicValidateForm.skus.length > 0"
               class="dynamic-delete-button"
               type="minus-circle-o"
-              :disabled="dynamicValidateForm.domains.length === 1"
-              @click="removeDomain(domain)"
+              :disabled="dynamicValidateForm.skus.length === 1"
+              @click="removeDomain(sku)"
             />
           </a-form-model-item>
           
           <a-divider></a-divider>
 
           <a-form-item
+            v-if="dynamicValidateForm.skus.length > 0"
             label=""
             :labelCol="{span: 2}"
             :wrapperCol="{span: 24}"
@@ -61,9 +63,9 @@
               :columns="columns"
               :dataSource="dataSource"
               :dragSort="true"
+              :actionButton="true"
               style="margin-top: 8px;"
               @selectRowChange="handleSelectRowChange">
-
               <template v-slot:action="props">
                 <a @click="handleDelete(props)">删除</a>
               </template>
@@ -78,7 +80,7 @@
       <br>
      
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
+        <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
     </a-form>
@@ -116,7 +118,7 @@
           },
         },
         dynamicValidateForm: {
-          domains: [],
+          skus: [],
         },
         loading: false,
         model: {
@@ -164,10 +166,8 @@
             key: 'price',
             width: '120px',
             type: FormTypes.inputNumber,
-            defaultValue: 32,
+            defaultValue: 0.00,
             placeholder: '${title}',
-            // 是否是统计列，只有 inputNumber 才能设置统计列
-            statistics: true,
             validateRules: [{ required: true, message: '请输入${title}' }]
           },
           {
@@ -175,7 +175,7 @@
             key: 'stock',
             width: '120px',
             type: FormTypes.inputNumber,
-            defaultValue: '100.32',
+            defaultValue: '0',
             placeholder: '请选择${title}',
             validateRules: [{ required: true, message: '请选择${title}' }]
           },
@@ -205,15 +205,11 @@
       }
     },
     mounted() {
-      this.randomData(23, false)
+      // this.randomData(23, false)
     },
     methods: {
       nextStep () {
-        let that = this
-        that.loading = true
-        setTimeout(function () {
-          that.$emit('nextStep')
-        }, 1500)
+        that.$emit('nextStep');
       },
       prevStep () {
         this.$emit('prevStep')
@@ -232,27 +228,41 @@
         this.$refs[formName].resetFields();
       },
       removeDomain(item) {
-        let index = this.dynamicValidateForm.domains.indexOf(item);
+        let index = this.dynamicValidateForm.skus.indexOf(item);
         if (index !== -1) {
-          this.dynamicValidateForm.domains.splice(index, 1);
+          this.dynamicValidateForm.skus.splice(index, 1);
+          this.columns.splice(index, 1);
         }
       },
+      /**新增规格 */
       addDomain() {
-        this.dynamicValidateForm.domains.push({
-          value: '',
-          key: Date.now(),
+        let length = this.dynamicValidateForm.skus.length + 1;
+        let name = '规格'+length;
+        let key = Date.now();
+        this.dynamicValidateForm.skus.unshift({
+          value: name,
+          key: key,
         });
         this.columns.unshift(
           {
-            title: '库存1',
-            key: 'stock',
+            title: name,
+            key: 'c' + key,
             width: '120px',
-            type: FormTypes.inputNumber,
-            defaultValue: '100.32',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
+            type: FormTypes.input,
+            defaultValue: '',
+            placeholder: '请输入规格值',
+            validateRules: [{ required: true, message: '请输入规格值' }]
           }
         );
+      },
+      /**修改规格时触发 */
+      skuInputChange() {
+        let _this = this;
+        let size = _this.dynamicValidateForm.skus.length;
+        for (let i = 0; i < size; i++) {
+          let value = _this.dynamicValidateForm.skus[i].value;
+          _this.columns[i].title = value;
+        }
       },
       /**Jtable */
        /** 表单验证 */

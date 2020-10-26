@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form style="max-width: 500px; margin: 40px auto 0;">
+    <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
         label="商品名称"
@@ -15,7 +15,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['goodsSn', validatorRules.goodsSn]" placeholder="请输入商品编码"></a-input>
+         <a-input v-decorator="['goodsSn']" placeholder="请输入商品编码"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -55,7 +55,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-input v-decorator="['brandId', validatorRules.brandId]" placeholder="请输入品牌编号"></a-input>
+        <a-input v-decorator="['marketPrice', validatorRules.marketPrice]" placeholder="请输入市场价格"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -63,7 +63,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-input v-decorator="['brandId', validatorRules.brandId]" placeholder="请输入品牌编号"></a-input>
+        <a-input v-decorator="['salePrice', validatorRules.salePrice]" placeholder="请输入平台价格"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -71,7 +71,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-switch v-decorator="['isOnSale']"/>
+        <a-switch default-unchecked v-decorator="['isOnSale']"/>
       </a-form-item>
 
 
@@ -84,7 +84,10 @@
 </template>
 
 <script>
+  import { httpAction, getAction } from '@/api/manage'
+  import pick from 'lodash.pick'
   import JImageUpload from '@/components/jeecg/JImageUpload'
+  
   export default {
     name: "Step1",
     components: {
@@ -149,6 +152,11 @@
           marketPrice: {
             rules: [
               { required: true, message: '请输入市场价!'},
+            ]
+          },
+          salePrice: {
+            rules: [
+              { required: true, message: '请输入平台价格!'},
             ]
           },
           keywords: {
@@ -221,7 +229,36 @@
     },
     methods: {
       nextStep () {
-        this.$emit('nextStep')
+        const that = this;
+        // 触发表单验证
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            let httpurl = '';
+            let method = '';
+            if(!this.model.id){
+              httpurl+=this.url.add;
+              method = 'post';
+            }else{
+              httpurl+=this.url.edit;
+               method = 'put';
+            }
+            let formData = Object.assign(this.model, values);
+            console.log("表单提交数据",formData)
+            httpAction(httpurl,formData,method).then((res)=>{
+              if(res.success){
+                // that.$message.success(res.message);
+                this.$store.dispatch('saveGoodsInfo' , res.result) ;
+                this.$emit('nextStep');
+              }else{
+                that.$message.warning(res.message);
+              }
+            }).finally(() => {
+              that.confirmLoading = false;
+            })
+          }
+         
+        })
       }
     }
   }
