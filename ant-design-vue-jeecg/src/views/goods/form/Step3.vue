@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form style="margin: 40px auto 0;">
+    <a-form :form="form" style="margin: 40px auto 0;">
 
       <a-form-item
         label="启用规格"
@@ -93,14 +93,22 @@
   import JEditor from '@/components/jeecg/JEditor'
   import JEditableTable from '@/components/jeecg/JEditableTable'
   import { randomUUID, randomNumber } from '@/utils/util'
+  import { mapGetters, mapActions } from "vuex";
+
   export default {
     name: "Step3",
     components: {
       JEditor,
       JEditableTable
     },
+    computed: {
+    // 用vuex读取数据(读取的是getters.js中的数据)
+    // 相当于this.$store.getters.goods(vuex语法糖)
+    ...mapGetters(["goods"])
+	  },
     data () {
       return {
+        form: this.$form.createForm(this),
         formItemLayout: {
           labelCol: {
             xs: { span: 24 },
@@ -207,24 +215,29 @@
     mounted() {
     },
     methods: {
+      ...mapActions([ "UpdateGoodsInfo" ]),
       nextStep () {
-        that.$emit('nextStep');
+        const that = this;
+        // 触发表单验证
+        that.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            that.model.id = that.goods.id;
+            let formData = Object.assign(that.model, values);
+            console.log("表单提交数据",formData)
+            that.UpdateGoodsInfo(formData).then((res) => {
+              this.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });
+          }
+         
+        })
       },
       prevStep () {
         this.$emit('prevStep')
-      },
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
       },
       removeDomain(item) {
         let index = this.dynamicValidateForm.skus.indexOf(item);
@@ -283,10 +296,6 @@
 
         this.$message.info('获取值成功，请看控制台输出')
 
-      },
-      /** 模拟加载1000条数据 */
-      handleTableSet() {
-        this.randomData(1000, true)
       },
 
       handleSelectRowChange(selectedRowIds) {
