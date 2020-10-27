@@ -121,7 +121,7 @@ public class GoodsInfo implements Serializable {
 	/**是否启用sku编辑，1是，2否*/
 	@Excel(name = "是否启用sku编辑，1是，2否", width = 15)
     @ApiModelProperty(value = "是否启用sku编辑，1是，2否")
-    private java.lang.Integer enableSku;
+    private java.lang.Boolean enableSku;
 	/**规格json数据，用于前台页面展示*/
 	@Excel(name = "规格json数据，用于前台页面展示", width = 15)
     @ApiModelProperty(value = "规格json数据，用于前台页面展示")

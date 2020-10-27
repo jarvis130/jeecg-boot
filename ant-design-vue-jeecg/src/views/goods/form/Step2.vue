@@ -49,7 +49,8 @@
 <script>
   import JEditor from '@/components/jeecg/JEditor'
   import JCheckbox from '@/components/jeecg/JCheckbox'
-  import { mapGetters } from "vuex";
+  import { httpAction, getAction } from '@/api/manage'
+  import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: "Step2",
@@ -59,7 +60,7 @@
     },
     computed: {
         // 用vuex读取数据(读取的是getters.js中的数据)
-        // 相当于this.$store.getters.news(vuex语法糖)
+        // 相当于this.$store.getters.goods(vuex语法糖)
         ...mapGetters(["goods"])
 	  },
     data () {
@@ -94,32 +95,26 @@
       }
     },
     methods: {
+      ...mapActions([ "UpdateGoodsInfo" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
-        this.form.validateFields((err, values) => {
+        that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
-            debugger;
-            this.model.id = this.goods.id;
-            httpurl+=this.url.edit;
+            that.model.id = that.goods.id;
             method = 'put';
-            let formData = Object.assign(this.model, values);
+            let formData = Object.assign(that.model, values);
             console.log("表单提交数据",formData)
-            httpAction(httpurl,formData,method).then((res)=>{
-              if(res.success){
-                // that.$message.success(res.message);
-                debugger;
-                this.$store.commit('saveGoodsInfo' , res.result) ;
-                this.$emit('nextStep');
-              }else{
-                that.$message.warning(res.message);
-              }
+            that.UpdateGoodsInfo(formData).then((res) => {
+              this.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
             }).finally(() => {
               that.confirmLoading = false;
-            })
+            });
           }
          
         })

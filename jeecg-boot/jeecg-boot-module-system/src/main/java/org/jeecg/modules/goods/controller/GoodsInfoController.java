@@ -82,8 +82,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	@ApiOperation(value="商品管理-添加", notes="商品管理-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody GoodsInfo goodsInfo) {
-		String id = goodsInfoService.insertGoodsInfo(goodsInfo);
-		return Result.OK(id);
+		GoodsInfo result = goodsInfoService.insertGoodsInfo(goodsInfo);
+		return Result.OK(result);
 	}
 	
 	/**
@@ -96,8 +96,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	@ApiOperation(value="商品管理-编辑", notes="商品管理-编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody GoodsInfo goodsInfo) {
-		goodsInfoService.updateById(goodsInfo);
-		return Result.OK("编辑成功!");
+        GoodsInfo result = goodsInfoService.updateGoodsInfo(goodsInfo);
+		return Result.OK(result);
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package org.jeecg.modules.goods.service.impl;
 
+import org.jeecg.common.constant.FillRuleConstant;
+import org.jeecg.common.util.FillRuleUtil;
 import org.jeecg.modules.goods.entity.GoodsInfo;
 import org.jeecg.modules.goods.mapper.GoodsInfoMapper;
 import org.jeecg.modules.goods.service.IGoodsInfoService;
@@ -21,9 +23,24 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
     private GoodsInfoMapper goodsInfoMapper;
 
     @Override
-    public String insertGoodsInfo(GoodsInfo goodsInfo){
+    public GoodsInfo insertGoodsInfo(GoodsInfo goodsInfo){
 
+        if(goodsInfo.getGoodsSn() == null){
+            //用户没有输入就使用系统规则生成编码
+            goodsInfo.setGoodsSn((String) FillRuleUtil.executeRule(FillRuleConstant.GOODS_CODE, null));
+        }
         goodsInfoMapper.insert(goodsInfo);
-        return goodsInfo.getId();
+
+
+        return goodsInfoMapper.selectById(goodsInfo.getId());
+    }
+
+    @Override
+    public GoodsInfo updateGoodsInfo(GoodsInfo goodsInfo){
+
+        goodsInfoMapper.updateById(goodsInfo);
+
+
+        return goodsInfoMapper.selectById(goodsInfo.getId());
     }
 }
