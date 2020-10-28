@@ -3,68 +3,20 @@
     <a-form style="margin: 40px auto 0;">
 
       <a-form-item
-        label="启用规格"
+        label="启用属性"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-switch v-model="model.enableSku"/>
+         <a-switch v-model="model.enableAttribute"/>
       </a-form-item>
 
-      <div v-if="model.enableSku == true">
-        <a-form-model
-          ref="dynamicValidateForm"
-          :model="dynamicValidateForm"
-          v-bind="formItemLayoutWithOutLabel"
-        >
-          <a-form-model-item
-            v-for="(domain, index) in dynamicValidateForm.domains"
-            :key="domain.key"
-            v-bind="index === 0 ? formItemLayout : {}"
-            :label="index === 0 ? 'Domains' : ''"
-            :prop="'domains.' + index + '.value'"
-            :rules="{
-              required: true,
-              message: 'domain can not be null',
-              trigger: 'blur',
-            }"
-          >
-            <a-input
-              v-model="domain.value"
-              placeholder="please input domain"
-              style="width: 60%; margin-right: 8px"
-            />
-            <a-icon
-              v-if="dynamicValidateForm.domains.length > 1"
-              class="dynamic-delete-button"
-              type="minus-circle-o"
-              :disabled="dynamicValidateForm.domains.length === 1"
-              @click="removeDomain(domain)"
-            />
-          </a-form-model-item>
-          <a-form-model-item v-bind="formItemLayoutWithOutLabel">
-            <a-button type="dashed" style="width: 60%" @click="addDomain">
-              <a-icon type="plus" /> Add field
-            </a-button>
-          </a-form-model-item>
-          <a-form-model-item v-bind="formItemLayoutWithOutLabel">
-            <a-button type="primary" html-type="submit" @click="submitForm('dynamicValidateForm')">
-              Submit
-            </a-button>
-            <a-button style="margin-left: 10px" @click="resetForm('dynamicValidateForm')">
-              Reset
-            </a-button>
-          </a-form-model-item>
-        </a-form-model>
-
-       <a-divider></a-divider>
-
+      <div v-if="model.enableAttribute == true">
+    
         <j-editable-table
           ref="editableTable"
           :loading="loading"
           :columns="columns"
           :dataSource="dataSource"
-          :rowNumber="true"
-          :rowSelection="true"
           :actionButton="true"
           :dragSort="true"
           style="margin-top: 8px;"
@@ -94,14 +46,21 @@
   import JEditor from '@/components/jeecg/JEditor'
   import JEditableTable from '@/components/jeecg/JEditableTable'
   import { randomUUID, randomNumber } from '@/utils/util'
+  import { mapGetters, mapActions } from "vuex";
   export default {
     name: "Step4",
     components: {
       JEditor,
       JEditableTable
     },
+    computed: {
+    // 用vuex读取数据(读取的是getters.js中的数据)
+    // 相当于this.$store.getters.goods(vuex语法糖)
+    ...mapGetters(["goods"])
+	  },
     data () {
       return {
+        form: this.$form.createForm(this),
         formItemLayout: {
           labelCol: {
             xs: { span: 24 },
@@ -123,14 +82,14 @@
         },
         loading: false,
         model: {
-          enableSku: false
+          enableAttribute: false
         },
         columns: [
           {
-            title: '字段名称',
-            key: 'dbFieldName',
+            title: '属性名称',
+            key: 'attributeName',
             // width: '19%',
-            width: '300px',
+            width: '200px',
             type: FormTypes.input,
             defaultValue: '',
             placeholder: '请输入${title}',
@@ -171,110 +130,15 @@
             ]
           },
           {
-            title: '文件域',
-            key: 'upload',
-            type: FormTypes.upload,
-            // width: '19%',
-            width: '300px',
-            placeholder: '点击上传',
-            token: true,
-            responseName: 'message',
-            action: window._CONFIG['domianURL'] + '/sys/common/upload'
-          },
-          {
-            title: '字段类型',
-            key: 'dbFieldType',
+            title: '属性值',
+            key: 'attributeValue',
             // width: '18%',
             width: '300px',
-            type: FormTypes.select,
-            options: [ // 下拉选项
-              { title: 'String', value: 'string' },
-              { title: 'Integer', value: 'int' },
-              { title: 'Double', value: 'double' },
-              { title: 'Boolean', value: 'boolean' }
-            ],
+            type: FormTypes.input,
             allowInput: true,
             defaultValue: '',
             placeholder: '请选择${title}',
             validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          {
-            title: '性别（字典）',
-            key: 'sex_dict',
-            width: '300px',
-            type: FormTypes.select,
-            options: [],
-            dictCode: 'sex',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          {
-            title: '多选测试',
-            key: 'multipleSelect',
-            // width: '18%',
-            width: '300px',
-            type: FormTypes.select,
-            props: { 'mode': 'multiple' }, // 支持多选
-            options: [
-              { title: 'String', value: 'string' },
-              { title: 'Integer', value: 'int' },
-              { title: 'Double', value: 'double' },
-              { title: 'Boolean', value: 'boolean' }
-            ],
-            defaultValue: ['int', 'boolean'], // 多个默认项
-            // defaultValue: 'string,double,int', // 也可使用这种方式
-            placeholder: '这里可以多选',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          {
-            title: '字段长度',
-            key: 'dbLength',
-            // width: '8%',
-            width: '100px',
-            type: FormTypes.inputNumber,
-            defaultValue: 32,
-            placeholder: '${title}',
-            // 是否是统计列，只有 inputNumber 才能设置统计列
-            statistics: true,
-            validateRules: [{ required: true, message: '请输入${title}' }]
-          },
-          {
-            title: '日期',
-            key: 'datetime',
-            // width: '22%',
-            width: '320px',
-            type: FormTypes.datetime,
-            defaultValue: '2019-4-30 14:52:22',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          {
-            title: '数字',
-            key: 'money',
-            width: '320px',
-            type: FormTypes.inputNumber,
-            defaultValue: '100.32',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          {
-            title: '可以为空',
-            key: 'isNull',
-            // width: '8%',
-            width: '100px',
-            type: FormTypes.checkbox,
-            customValue: ['Y', 'N'], // true ,false
-            defaultChecked: false
-          },
-          {
-            type: FormTypes.popup,
-            key: 'popup',
-            title: 'JPopup',
-            width: '180px',
-            popupCode: 'demo',
-            field: 'name',
-            orgFields: 'name',
-            destFields: 'name'
           },
           {
             title: '操作',
@@ -291,15 +155,28 @@
       }
     },
     mounted() {
-      this.randomData(23, false)
     },
     methods: {
+      ...mapActions([ "UpdateGoodsInfo" ]),
       nextStep () {
-        let that = this
-        that.loading = true
-        setTimeout(function () {
-          that.$emit('nextStep')
-        }, 1500)
+        const that = this;
+        // 触发表单验证
+        that.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            that.model.id = that.goods.id;
+            let formData = Object.assign(that.model, values);
+            console.log("表单提交数据",formData)
+            that.UpdateGoodsInfo(formData).then((res) => {
+              this.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });
+          }
+         
+        })
       },
       prevStep () {
         this.$emit('prevStep')
@@ -350,51 +227,9 @@
         this.$message.info('获取值成功，请看控制台输出')
 
       },
-      /** 模拟加载1000条数据 */
-      handleTableSet() {
-        this.randomData(1000, true)
-      },
 
       handleSelectRowChange(selectedRowIds) {
         this.selectedRowIds = selectedRowIds
-      },
-
-      /* 随机生成数据 */
-      randomData(size, loading = false) {
-        if (loading) {
-          this.loading = true
-        }
-
-        let randomDatetime = () => {
-          let time = parseInt(randomNumber(1000, 9999999999999))
-          return moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss')
-        }
-
-        let begin = Date.now()
-        let values = []
-        for (let i = 0; i < size; i++) {
-          values.push({
-            id: randomUUID(),
-            dbFieldName: `name_${i + 1}`,
-            // dbFieldTxt: randomString(10),
-            multipleSelect: ['string', ['int', 'double', 'boolean'][randomNumber(0, 2)]],
-            dbFieldType: ['string', 'int', 'double', 'boolean'][randomNumber(0, 3)],
-            dbLength: randomNumber(0, 233),
-            datetime: randomDatetime(),
-            isNull: ['Y', 'N'][randomNumber(0, 1)]
-          })
-        }
-
-        this.dataSource = values
-        let end = Date.now()
-        let diff = end - begin
-
-        if (loading && diff < size) {
-          setTimeout(() => {
-            this.loading = false
-          }, size - diff)
-        }
-
       },
 
       handleDelete(props) {

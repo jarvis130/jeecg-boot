@@ -18,11 +18,12 @@
 </template>
 
 <script>
-  import Step1 from './Step1'
-  import Step2 from './Step2'
-  import Step3 from './Step3'
-  import Step4 from './Step3'
-  import Finish from './Finish'
+  import Step1 from './Step1';
+  import Step2 from './Step2';
+  import Step3 from './Step3';
+  import Step4 from './Step4';
+  import Finish from './Finish';
+  import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: "GoodsForm",
@@ -37,16 +38,23 @@
       return {
         description: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
         currentTab: 0,
-
+        flag: 0,
         // form
         form: null,
       }
     },
+    mounted(){
+      this.flag = this.$route.query.flag
+      if( this.flag != 'edit' || this.flag == undefined){
+        //新增商品清空store
+        this.ClearGoodsStore();
+      }
+    },
     methods: {
-
+      ...mapActions([ "ClearGoodsStore" ]),
       // handler
       nextStep () {
-        if (this.currentTab < 2) {
+        if (this.currentTab < 4) {
           this.currentTab += 1
         }
       },

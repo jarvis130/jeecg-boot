@@ -85,7 +85,7 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 		GoodsInfo result = goodsInfoService.insertGoodsInfo(goodsInfo);
 		return Result.OK(result);
 	}
-	
+
 	/**
 	 *  编辑
 	 *
