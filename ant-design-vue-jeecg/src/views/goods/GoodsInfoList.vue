@@ -11,7 +11,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button @click="goodsAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -66,7 +66,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a @click="goodsEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -97,6 +97,7 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import GoodsInfoModal from './modules/GoodsInfoModal'
+  import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: 'GoodsInfoList',
@@ -211,8 +212,16 @@
       },
     },
     methods: {
+      ...mapActions([ "SetGoodsStore" ]),
       initDictConfig(){
-      }
+      },
+      goodsAdd(){
+        this.$router.push({ path: '/goods/form/index' });
+      },
+      goodsEdit(record){
+        this.SetGoodsStore(record);
+        this.$router.push({ path: '/goods/form/index?flag=edit' });
+      },
     }
   }
 </script>

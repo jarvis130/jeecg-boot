@@ -71,7 +71,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-switch default-unchecked v-decorator="['isOnSale']"/>
+        <a-switch v-model="model.isOnSale"/>
       </a-form-item>
 
 
@@ -84,11 +84,12 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex"
+
   import { httpAction, getAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import JImageUpload from '@/components/jeecg/JImageUpload'
-  
+  import { mapGetters, mapActions } from "vuex"; 
+
   export default {
     name: "Step1",
     components: {
@@ -118,7 +119,8 @@
       return {
         form: this.$form.createForm(this),
         model: {
-          imgList: []
+          imgList: [],
+          isOnSale: false
         },
         labelCol: {
           xs: { span: 24 },
@@ -228,49 +230,57 @@
         }
       }
     },
+    computed: {
+      // 用vuex读取数据(读取的是getters.js中的数据)
+      // 相当于this.$store.getters.goods(vuex语法糖)
+      ...mapGetters(["goods"])
+    },
+    created() {
+      if (this.goods.id != null && this.goods.id != ""){
+        let record = this.goods;
+        this.edit(record);
+      }
+    },
     methods: {
-      ...mapActions([ "SaveGoodsInfo" ]),
+      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
       nextStep () {
         const that = this;
+        this.model.id = this.goods.id;
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            let httpurl = '';
-            let method = '';
-            if(!this.model.id){
-              httpurl+=this.url.add;
-              method = 'post';
-            }else{
-              httpurl+=this.url.edit;
-               method = 'put';
-            }
             let formData = Object.assign(this.model, values);
-
-            that.SaveGoodsInfo(formData).then((res) => {
-              this.$emit('nextStep');
-            }).catch((err) => {
-              that.$message.warning(res.message);
-            }).finally(() => {
-              that.confirmLoading = false;
-            });
-     
-            // httpAction(httpurl,formData,method).then((res)=>{
-            //   if(res.success){
-            //     // that.$message.success(res.message);
-            //     this.$store.dispatch('saveGoodsInfo' , res.result) ;
-            //     this.$emit('nextStep');
-            //   }else{
-            //     that.$message.warning(res.message);
-            //   }
-            // }).finally(() => {
-            //   that.confirmLoading = false;
-            // })
-
+            if(!that.model.id){
+              that.SaveGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(res.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
+            }else{
+              that.UpdateGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(res.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
+            }
+ 
           }
          
         })
-      }
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
+        })
+      },
     }
   }
 </script>

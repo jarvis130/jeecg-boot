@@ -26,6 +26,7 @@ const goods = {
     isPromote: '',
     enableSku: '',
     skuJsonData: '',
+    enableAttribute: '',
     attributeJsonData: ''
   },
   mutations: {
@@ -86,6 +87,9 @@ const goods = {
     SET_SKU_JSON_DATA: (state, skuJsonData) => {
       state.skuJsonData = skuJsonData;
     },
+    SET_ENABLE_ATTRIBUTE: (state, enableAttribute) => {
+      state.enableAttribute = enableAttribute;
+    },
     SET_ATTRIBUTE_JSON_DATA: (state, attributeJsonData) => {
       state.attributeJsonData = attributeJsonData;
     },
@@ -109,7 +113,31 @@ const goods = {
       state.isPromote = params.isPromote;
       state.enableSku = params.enableSku;
       state.skuJsonData = params.skuJsonData;
+      state.enableAttribute = params.enableAttribute;
       state.attributeJsonData = params.attributeJsonData;
+    },
+    CLEAR_GOODS: (state) => {
+      state.id = '';
+      state.catId = '';
+      state.goodsSn = '';
+      state.goodsName = '';
+      state.brandId = '';
+      state.marketPrice = '';
+      state.salePrice = '';
+      state.keywords = '';
+      state.goodsBrief = '';
+      state.goodsDesc = '';
+      state.isReal = '';
+      state.extensionCode = '';
+      state.isOnSale = '';
+      state.isBest = '';
+      state.isNew = '';
+      state.isHot = '';
+      state.isPromote = '';
+      state.enableSku = '';
+      state.skuJsonData = '';
+      state.enableAttribute = '';
+      state.attributeJsonData = '';
     },
   },
   actions: {
@@ -143,7 +171,12 @@ const goods = {
         })
       })
     },
-  
+    ClearGoodsStore({ commit }) {
+      commit('CLEAR_GOODS');
+    },
+    SetGoodsStore({ commit }, params) {
+      commit('SET_GOODS', params);
+    }
   }
 }
 
