@@ -7,7 +7,7 @@
         :labelCol="{span: 2}"
         :wrapperCol="{span: 10}"
       >
-         <a-input v-decorator="['keywords']" placeholder="请输入关键词"></a-input>
+         <a-input v-model="model.keywords" placeholder="请输入关键词"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -26,7 +26,7 @@
         :labelCol="{span: 2}"
         :wrapperCol="{span: 20}"
       >
-         <a-textarea v-decorator="['goodsBrief']" rows="4" placeholder="请输入商品简述"/>
+         <a-textarea v-model="model.goodsBrief" rows="4" placeholder="请输入商品简述"/>
       </a-form-item>
 
       <a-form-item
@@ -58,11 +58,6 @@
       JEditor,
       JCheckbox
     },
-    computed: {
-        // 用vuex读取数据(读取的是getters.js中的数据)
-        // 相当于this.$store.getters.goods(vuex语法糖)
-        ...mapGetters(["goods"])
-	  },
     data () {
       return {
         form: this.$form.createForm(this),
@@ -77,6 +72,8 @@
         confirmLoading: false,
         model: {
           id: '',
+          keywords: '',
+          goodsBrief: '',
           goodsDesc: ''
         },
         jcheckbox: {
@@ -94,6 +91,17 @@
         }
       }
     },
+    computed: {
+      // 用vuex读取数据(读取的是getters.js中的数据)
+      // 相当于this.$store.getters.goods(vuex语法糖)
+      ...mapGetters(["goods"])
+    },
+    created() {
+      if (this.goods.id != null && this.goods.id != ""){
+        let record = this.goods;
+        this.edit(record);
+      }
+    },
     methods: {
       ...mapActions([ "UpdateGoodsInfo" ]),
       nextStep () {
@@ -102,10 +110,7 @@
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            let httpurl = '';
-            let method = '';
             that.model.id = that.goods.id;
-            method = 'put';
             let formData = Object.assign(that.model, values);
             console.log("表单提交数据",formData)
             that.UpdateGoodsInfo(formData).then((res) => {
@@ -121,7 +126,15 @@
       },
       prevStep () {
         this.$emit('prevStep')
-      }
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
+        })
+      },
     }
   }
 </script>

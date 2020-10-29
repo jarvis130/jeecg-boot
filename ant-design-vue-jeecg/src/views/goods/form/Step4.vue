@@ -53,11 +53,6 @@
       JEditor,
       JEditableTable
     },
-    computed: {
-    // 用vuex读取数据(读取的是getters.js中的数据)
-    // 相当于this.$store.getters.goods(vuex语法糖)
-    ...mapGetters(["goods"])
-	  },
     data () {
       return {
         form: this.$form.createForm(this),
@@ -154,8 +149,17 @@
         selectedRowIds: []
       }
     },
-    mounted() {
+    created() {
+      if (this.goods.id != null && this.goods.id != ""){
+        let record = this.goods;
+        this.edit(record);
+      }
     },
+    computed: {
+    // 用vuex读取数据(读取的是getters.js中的数据)
+    // 相当于this.$store.getters.goods(vuex语法糖)
+    ...mapGetters(["goods"])
+	  },
     methods: {
       ...mapActions([ "UpdateGoodsInfo" ]),
       nextStep () {
@@ -235,6 +239,14 @@
       handleDelete(props) {
         let { rowId, target } = props
         target.removeRows(rowId)
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
+        })
       }
     }
   }

@@ -101,11 +101,6 @@
       JEditor,
       JEditableTable
     },
-    computed: {
-    // 用vuex读取数据(读取的是getters.js中的数据)
-    // 相当于this.$store.getters.goods(vuex语法糖)
-    ...mapGetters(["goods"])
-	  },
     data () {
       return {
         form: this.$form.createForm(this),
@@ -212,7 +207,16 @@
         selectedRowIds: []
       }
     },
-    mounted() {
+    created() {
+        if (this.goods.id != null && this.goods.id != ""){
+        let record = this.goods;
+        this.edit(record);
+      }
+    },
+    computed: {
+      // 用vuex读取数据(读取的是getters.js中的数据)
+      // 相当于this.$store.getters.goods(vuex语法糖)
+      ...mapGetters(["goods"])
     },
     methods: {
       ...mapActions([ "UpdateGoodsInfo" ]),
@@ -224,6 +228,9 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
+            debugger;
+            let jsonStr = that.encode();
+            formData.skuJsonData = jsonStr;
             console.log("表单提交数据",formData)
             that.UpdateGoodsInfo(formData).then((res) => {
               this.$emit('nextStep');
@@ -305,6 +312,28 @@
       handleDelete(props) {
         let { rowId, target } = props
         target.removeRows(rowId)
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
+        })
+      },
+      encode (){
+        let _this = this;
+        this.$refs.editableTable.getValues((error, values) => {
+            // 错误数 = 0 则代表验证通过
+            if (error === 0) {
+                // this.$message.success('验证通过')
+                // 将通过后的数组提交到后台或自行进行其他处理
+                return JSON.stringify(values);
+            } else {
+                // this.$message.error('验证未通过')
+                return '';
+            }
+        })
       }
     }
   }
