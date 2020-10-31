@@ -4,8 +4,8 @@
       <a-step title="填写商品信息" />
       <a-step title="设置商品详情" />
       <a-step title="设置商品规格" />
+      <a-step title="设置商品图片" />
       <a-step title="设置商品属性" />
-      <a-step title="完成" />
     </a-steps>
     <div class="content">
       <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
@@ -22,7 +22,7 @@
   import Step2 from './Step2';
   import Step3 from './Step3';
   import Step4 from './Step4';
-  import Finish from './Finish';
+  import Step5 from './Step5';
   import { mapGetters, mapActions } from "vuex";
 
   export default {
@@ -32,7 +32,7 @@
       Step2,
       Step3,
       Step4,
-      Finish
+      Step5
     },
     data () {
       return {
@@ -44,11 +44,11 @@
       }
     },
     mounted(){
-      this.flag = this.$route.query.flag
-      if( this.flag != 'edit' || this.flag == undefined){
-        //新增商品清空store
-        this.ClearGoodsStore();
-      }
+      // this.flag = this.$route.query.flag
+      // if( this.flag != 'edit' || this.flag == undefined){
+      //   //新增商品清空store
+      //   this.ClearGoodsStore();
+      // }
     },
     methods: {
       ...mapActions([ "ClearGoodsStore" ]),

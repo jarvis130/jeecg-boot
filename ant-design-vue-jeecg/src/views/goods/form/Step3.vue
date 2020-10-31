@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import pick from 'lodash.pick'
   import moment from 'moment'
   import { FormTypes } from '@/utils/JEditableTableUtil'
   import JEditor from '@/components/jeecg/JEditor'
@@ -204,10 +205,11 @@
 
         ],
         dataSource: [],
-        selectedRowIds: []
+        selectedRowIds: [],
+        dataSourceStr: '',
       }
     },
-    created() {
+    mounted() {
         if (this.goods.id != null && this.goods.id != ""){
         let record = this.goods;
         this.edit(record);
@@ -228,17 +230,33 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
-            debugger;
-            let jsonStr = that.encode();
-            formData.skuJsonData = jsonStr;
-            console.log("表单提交数据",formData)
-            that.UpdateGoodsInfo(formData).then((res) => {
-              this.$emit('nextStep');
-            }).catch((err) => {
-              that.$message.warning(res.message);
-            }).finally(() => {
-              that.confirmLoading = false;
-            });
+  
+            //将表格数据解析成字符串
+            this.$refs.editableTable.getValues((error, values) => {
+              // 错误数 = 0 则代表验证通过
+              if (error === 0) {
+                  // this.$message.success('验证通过')
+                  // 将通过后的数组提交到后台或自行进行其他处理
+                  let arr = {
+                    skus: that.dynamicValidateForm.skus,
+                    columns: that.columns,
+                    dataSource: values    
+                  };
+                  formData.skuJsonData = JSON.stringify(arr);
+                  console.log("表单提交数据",formData)
+                  that.UpdateGoodsInfo(formData).then((res) => {
+                    this.$emit('nextStep');
+                  }).catch((err) => {
+                    that.$message.warning(res.message);
+                  }).finally(() => {
+                    that.confirmLoading = false;
+                  });
+
+              } else {
+                  // this.$message.error('验证未通过')
+              }
+            })
+            
           }
          
         })
@@ -316,24 +334,19 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        this.visible = true;
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
-        })
-      },
-      encode (){
-        let _this = this;
-        this.$refs.editableTable.getValues((error, values) => {
-            // 错误数 = 0 则代表验证通过
-            if (error === 0) {
-                // this.$message.success('验证通过')
-                // 将通过后的数组提交到后台或自行进行其他处理
-                return JSON.stringify(values);
-            } else {
-                // this.$message.error('验证未通过')
-                return '';
-            }
-        })
+        // this.visible = true;
+        // this.$nextTick(() => {
+        //   this.form.setFieldsValue(pick(this.model,'enableSku'))
+        // });
+        // debugger;
+        let skusJsonData = this.model.skuJsonData;
+        if(skusJsonData){
+          let arr = JSON.parse(skusJsonData);
+          this.columns = arr.columns;
+          this.dataSource = arr.dataSource;
+          this.dynamicValidateForm.skus = arr.skus || [];
+        }
+        
       }
     }
   }

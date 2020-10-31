@@ -6,6 +6,7 @@
     fullscreen
     switchFullscreen
     @ok="handleOk"
+    okText="提交"
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
     cancelText="关闭">
@@ -15,7 +16,8 @@
 
 <script>
 
-  import GoodsInfoForm from './GoodsInfoForm'
+  // import GoodsInfoForm from './GoodsInfoForm'
+  import GoodsInfoForm from '../form/Index'
   export default {
     name: 'GoodsInfoModal',
     components: {
@@ -35,15 +37,17 @@
         this.$nextTick(()=>{
           this.$refs.realForm.add();
         })
+        this.$refs.realForm.currentTab = 0;
       },
       edit (record) {
         this.visible=true
         this.$nextTick(()=>{
           this.$refs.realForm.edit(record);
         })
+        this.$refs.realForm.currentTab = 0;
       },
       close () {
-        this.$emit('close');
+        this.$emit('ok');
         this.visible = false;
       },
       handleOk () {

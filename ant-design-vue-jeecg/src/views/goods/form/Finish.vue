@@ -3,10 +3,10 @@
     <a-form style="margin: 40px auto 0;">
       <result title="操作成功" :is-success="true" description="">
         
-        <div slot="action">
+        <!-- <div slot="action">
           <a-button type="primary" @click="finish">继续创建</a-button>
           <a-button style="margin-left: 8px" @click="toOrderList">返回列表</a-button>
-        </div>
+        </div> -->
       </result>
     </a-form>
   </div>

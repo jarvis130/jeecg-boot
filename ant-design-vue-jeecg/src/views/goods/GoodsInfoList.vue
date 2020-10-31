@@ -11,7 +11,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="goodsAdd" type="primary" icon="plus">新增</a-button>
+      <a-button @click="handleAdd2" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -66,7 +66,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="goodsEdit(record)">编辑</a>
+          <a @click="handleEdit2(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -212,16 +212,28 @@
       },
     },
     methods: {
-      ...mapActions([ "SetGoodsStore" ]),
+      ...mapActions([ "SetGoodsStore", "ClearGoodsStore" ]),
       initDictConfig(){
       },
-      goodsAdd(){
-        this.$router.push({ path: '/goods/form/index' });
+      handleAdd1(){
+        this.$router.push('/goods/form/index');
       },
-      goodsEdit(record){
+      handleEdit1(record){
         this.SetGoodsStore(record);
-        this.$router.push({ path: '/goods/form/index?flag=edit' });
+        this.$router.push('/goods/form/index?flag=edit');
       },
+      handleAdd2(){
+        this.ClearGoodsStore();//清空store数据
+        this.$refs.modalForm.add();
+        this.$refs.modalForm.title = "新增商品";
+        this.$refs.modalForm.disableSubmit = false;
+      },
+      handleEdit2(record){
+        this.SetGoodsStore(record);
+        this.$refs.modalForm.edit(record);
+        this.$refs.modalForm.title = "编辑商品";
+        this.$refs.modalForm.disableSubmit = false;
+      }
     }
   }
 </script>

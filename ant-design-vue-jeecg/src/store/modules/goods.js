@@ -141,6 +141,21 @@ const goods = {
     },
   },
   actions: {
+    Save_Step1({ commit }, params) {
+      commit('SET_GOODS', result);
+    },
+    Save_Step2({ commit }, params) {
+      commit('SET_GOODS', result);
+    },
+    Save_Step3({ commit }, params) {
+      commit('SET_GOODS', result);
+    },
+    Save_Step4({ commit }, params) {
+      commit('SET_GOODS', result);
+    },
+    Save_Step5({ commit }, params) {
+      commit('SET_GOODS', result);
+    },
     SaveGoodsInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
         postAction("/goods/goodsInfo/add", params).then(response => {

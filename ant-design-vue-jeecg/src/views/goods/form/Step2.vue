@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  import pick from 'lodash.pick'
   import JEditor from '@/components/jeecg/JEditor'
   import JCheckbox from '@/components/jeecg/JCheckbox'
   import { httpAction, getAction } from '@/api/manage'
@@ -96,7 +97,7 @@
       // 相当于this.$store.getters.goods(vuex语法糖)
       ...mapGetters(["goods"])
     },
-    created() {
+    mounted() {
       if (this.goods.id != null && this.goods.id != ""){
         let record = this.goods;
         this.edit(record);
