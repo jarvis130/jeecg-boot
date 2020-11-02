@@ -208,9 +208,10 @@
             //将表格数据解析成字符串
             this.$refs.editableTable.getValues((error, values) => {
               
+              that.editableTable=values;
               // 错误数 = 0 则代表验证通过
               if (error === 0) {
-                  debugger
+    
                   //设置sku_key值
                   let str='';
                   let length = values.length;
@@ -226,22 +227,23 @@
                       str = tmpArr.join(",");
                     }
                     //设置表格值
-                    that.$refs.editableTable.setValues([
-                      {
-                        rowKey: keyId, // 行的id
-                        values: { // 在这里 values 中的 name 是你 columns 中配置的 key
-                            'name': 'skuKey',
-                            'images': str
-                        }
-                      }
-                    ]);
+                    // that.editableTable.push([
+                    //   {
+                    //     rowKey: keyId, // 行的id
+                    //     values: { // 在这里 values 中的 name 是你 columns 中配置的 key
+                    //         'name': 'skuKey',
+                    //         'skuKey': str
+                    //     }
+                    //   }
+                    // ]);
+                    that.editableTable[j]['skuKey']=str;
                   }
-                  
+                
                   // 将通过后的数组提交到后台或自行进行其他处理
                   let arr = {
                     skus: that.dynamicValidateForm.skus,
                     columns: that.columns,
-                    dataSource: values    
+                    dataSource: that.editableTable    
                   };
                   formData.skuJsonData = JSON.stringify(arr);
                   console.log("表单提交数据",formData)
@@ -334,11 +336,11 @@
       },
       handleUploadImage(props) {
         let { rowId, target } = props
-        
         this.rowId = rowId;
         this.$refs.modalForm.visible = true;
         this.$refs.modalForm.title = "图片管理";
         this.$refs.modalForm.disableSubmit = false;
+      
       },
       modalFormOk(data) {
         debugger;
