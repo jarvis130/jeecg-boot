@@ -3,25 +3,22 @@
     :title="title"
     :width="width"
     :visible="visible"
-    fullscreen
     switchFullscreen
     @ok="handleOk"
-    okText="提交"
-    :okButtonProps="{ class:{'jee-hidden': true} }"
+    :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
     cancelText="关闭">
-    <goods-info-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></goods-info-form>
+    <goods-sku-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></goods-sku-form>
   </j-modal>
 </template>
 
 <script>
 
-  // import GoodsInfoForm from './GoodsInfoForm'
-  import GoodsInfoForm from '../form/Index'
+  import GoodsSkuForm from './GoodsSkuForm'
   export default {
-    name: 'GoodsInfoModal',
+    name: 'GoodsSkuModal',
     components: {
-      GoodsInfoForm
+      GoodsSkuForm
     },
     data () {
       return {
@@ -37,17 +34,15 @@
         this.$nextTick(()=>{
           this.$refs.realForm.add();
         })
-        this.$refs.realForm.currentTab = 0;
       },
       edit (record) {
         this.visible=true
         this.$nextTick(()=>{
           this.$refs.realForm.edit(record);
         })
-        this.$refs.realForm.currentTab = 0;
       },
       close () {
-        this.$emit('ok');
+        this.$emit('close');
         this.visible = false;
       },
       handleOk () {

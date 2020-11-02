@@ -1,5 +1,7 @@
 package org.jeecg.modules.goods.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import org.jeecg.common.constant.FillRuleConstant;
 import org.jeecg.common.util.FillRuleUtil;
 import org.jeecg.modules.goods.entity.GoodsInfo;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Description: goods_info
@@ -36,10 +39,18 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
     }
 
     @Override
+    @Transactional
     public GoodsInfo updateGoodsInfo(GoodsInfo goodsInfo){
 
         goodsInfoMapper.updateById(goodsInfo);
-
+        //保存规格
+//        String skuJsonData = goodsInfo.getSkuJsonData();
+//        if(skuJsonData != null){
+//            JSONArray array = JSONArray.parseArray(skuJsonData);
+//            if(array != null){
+//
+//            }
+//        }
 
         return goodsInfoMapper.selectById(goodsInfo.getId());
     }

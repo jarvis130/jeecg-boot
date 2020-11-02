@@ -67,6 +67,8 @@
               style="margin-top: 8px;"
               @selectRowChange="handleSelectRowChange">
               <template v-slot:action="props">
+                <a @click="handleUploadImage(props)">图片管理</a>
+                <a-divider type="vertical" />
                 <a @click="handleDelete(props)">删除</a>
               </template>
 
@@ -84,6 +86,9 @@
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
     </a-form>
+
+    <image-upload-modal ref="modalForm" @ok="modalFormOk"></image-upload-modal>
+
   </div>
 </template>
 
@@ -93,14 +98,17 @@
   import { FormTypes } from '@/utils/JEditableTableUtil'
   import JEditor from '@/components/jeecg/JEditor'
   import JEditableTable from '@/components/jeecg/JEditableTable'
-  import { randomUUID, randomNumber } from '@/utils/util'
+  import ImageUploadModal from './ImageUploadModal'
+  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: "Step3",
     components: {
       JEditor,
-      JEditableTable
+      JEditableTable,
+      JeecgListMixin,
+      ImageUploadModal
     },
     data () {
       return {
@@ -129,42 +137,6 @@
           enableSku: false
         },
         columns: [
-          // {
-          //   title: '字段名称',
-          //   key: 'dbFieldName',
-          //   width: '150px',
-          //   type: FormTypes.input,
-          //   defaultValue: '',
-          //   placeholder: '请输入${title}',
-          //   validateRules: [
-          //     {
-          //       required: true, // 必填
-          //       message: '请输入${title}' // 显示的文本
-          //     },
-          //     {
-          //       pattern: /^[a-z|A-Z][a-z|A-Z\d_-]{0,}$/, // 正则
-          //       message: '${title}必须以字母开头，可包含数字、下划线、横杠'
-          //     },
-          //     {
-          //       unique: true,
-          //       message: '${title}不能重复'
-          //     },
-          //     {
-          //       handler(type, value, row, column, callback, target) {
-          //         if (type === 'blur') {
-          //           if (value === 'abc') {
-          //             callback(false, '${title}不能是abc')  // false = 未通过校验
-          //           } else {
-          //             callback(true) // true = 通过验证
-          //           }
-          //         } else {
-          //           callback(true) // 不填写或者填写 null 代表不进行任何操作
-          //         }
-          //       },
-          //       message: '${title}默认提示'
-          //     }
-          //   ]
-          // },
           {
             title: '单价',
             key: 'price',
@@ -183,22 +155,23 @@
             placeholder: '请选择${title}',
             validateRules: [{ required: true, message: '请选择${title}' }]
           },
-          // {
-          //   title: '文件域',
-          //   key: 'upload',
-          //   type: FormTypes.upload,
-          //   // width: '19%',
-          //   width: '300px',
-          //   placeholder: '点击上传',
-          //   token: true,
-          //   responseName: 'message',
-          //   action: window._CONFIG['domianURL'] + '/sys/common/upload'
-          // },
+          {
+            title: '图库',
+            key: 'images',
+            width: '200px',
+            type: FormTypes.hidden
+          },
+          {
+            title: 'skuKey',
+            key: 'skuKey',
+            width: '200px',
+            type: FormTypes.hidden
+          },
           {
             title: '操作',
             key: 'action',
             // width: '8%',
-            width: '100px',
+            width: '200px',
             type: FormTypes.slot,
             slotName: 'action',
           }
@@ -207,6 +180,7 @@
         dataSource: [],
         selectedRowIds: [],
         dataSourceStr: '',
+        rowId: 0
       }
     },
     mounted() {
@@ -233,9 +207,36 @@
   
             //将表格数据解析成字符串
             this.$refs.editableTable.getValues((error, values) => {
+              
               // 错误数 = 0 则代表验证通过
               if (error === 0) {
-                  // this.$message.success('验证通过')
+                  debugger
+                  //设置sku_key值
+                  let str='';
+                  let length = values.length;
+                  let size = that.dynamicValidateForm.skus.length;
+                  for(var j=0;j<length;j++){
+                    let item = values[j];
+                    let keyId = item['id'];
+                    let tmpArr = [];
+                    for(var i=0; i < size; i++){
+                      let sku = that.dynamicValidateForm.skus[i];
+                      let key = sku['key'];
+                      tmpArr.push(item[key]);
+                      str = tmpArr.join(",");
+                    }
+                    //设置表格值
+                    that.$refs.editableTable.setValues([
+                      {
+                        rowKey: keyId, // 行的id
+                        values: { // 在这里 values 中的 name 是你 columns 中配置的 key
+                            'name': 'skuKey',
+                            'images': str
+                        }
+                      }
+                    ]);
+                  }
+                  
                   // 将通过后的数组提交到后台或自行进行其他处理
                   let arr = {
                     skus: that.dynamicValidateForm.skus,
@@ -283,7 +284,7 @@
         this.columns.unshift(
           {
             title: name,
-            key: 'c' + key,
+            key: key,
             width: '120px',
             type: FormTypes.input,
             defaultValue: '',
@@ -331,14 +332,29 @@
         let { rowId, target } = props
         target.removeRows(rowId)
       },
+      handleUploadImage(props) {
+        let { rowId, target } = props
+        
+        this.rowId = rowId;
+        this.$refs.modalForm.visible = true;
+        this.$refs.modalForm.title = "图片管理";
+        this.$refs.modalForm.disableSubmit = false;
+      },
+      modalFormOk(data) {
+        debugger;
+        this.$refs.editableTable.setValues([
+          {
+            rowKey: this.rowId, // 行的id
+            values: { // 在这里 values 中的 name 是你 columns 中配置的 key
+                'name': 'images',
+                'images': data
+            }
+          }
+        ]);
+      },
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        // this.visible = true;
-        // this.$nextTick(() => {
-        //   this.form.setFieldsValue(pick(this.model,'enableSku'))
-        // });
-        // debugger;
         let skusJsonData = this.model.skuJsonData;
         if(skusJsonData){
           let arr = JSON.parse(skusJsonData);

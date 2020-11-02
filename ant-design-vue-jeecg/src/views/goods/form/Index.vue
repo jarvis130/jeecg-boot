@@ -4,7 +4,6 @@
       <a-step title="填写商品信息" />
       <a-step title="设置商品详情" />
       <a-step title="设置商品规格" />
-      <a-step title="设置商品图片" />
       <a-step title="设置商品属性" />
     </a-steps>
     <div class="content">
@@ -12,7 +11,6 @@
       <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
       <step3 v-if="currentTab === 2" @nextStep="nextStep" @prevStep="prevStep"/>
       <step4 v-if="currentTab === 3" @nextStep="nextStep" @prevStep="prevStep"/>
-      <finish v-if="currentTab === 4" @prevStep="prevStep" @finish="finish"/>
     </div>
   </a-card>
 </template>
@@ -22,7 +20,6 @@
   import Step2 from './Step2';
   import Step3 from './Step3';
   import Step4 from './Step4';
-  import Step5 from './Step5';
   import { mapGetters, mapActions } from "vuex";
 
   export default {
@@ -31,8 +28,7 @@
       Step1,
       Step2,
       Step3,
-      Step4,
-      Step5
+      Step4
     },
     data () {
       return {
