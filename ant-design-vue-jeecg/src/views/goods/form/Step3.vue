@@ -87,7 +87,7 @@
       </a-form-item>
     </a-form>
 
-    <image-upload-modal ref="modalForm" @ok="modalFormOk"></image-upload-modal>
+    <image-upload-modal ref="modalForm" @ok="modalFormOk" :images="imagesStr"></image-upload-modal>
 
   </div>
 </template>
@@ -180,7 +180,8 @@
         dataSource: [],
         selectedRowIds: [],
         dataSourceStr: '',
-        rowId: 0
+        rowId: 0,
+        imagesStr: ''
       }
     },
     mounted() {
@@ -335,15 +336,60 @@
         target.removeRows(rowId)
       },
       handleUploadImage(props) {
-        let { rowId, target } = props
+
+        let { rowId, caseId, allValues, target } = props
         this.rowId = rowId;
+        let key = caseId + rowId;
+        let imagesStr = '';
+        let values = allValues.inputValues;
+        let size = values.length;
+        for(var i=0; i<size; i++){
+          if(values[i]['id'] == key){
+            imagesStr = values[i]['images'];
+            break;
+          }
+        }
+    
+        if(imagesStr != '' || imagesStr != undefined){
+          let arr = [];
+          let imagesArr = [];
+          arr = imagesStr.split(',');
+          if(arr.length > 0){
+            for(var i=0;i<arr.length;i++){
+              let url = arr[i];
+              if(url){
+                var newStr=url.indexOf("http");
+                if(newStr==0){
+                  imagesArr.push(url);  
+                }else{
+                  imagesArr.push(window._CONFIG['domianURL']+"/"+url);      
+                }
+                  
+              }
+              
+              // this.imageList.push(
+              //   {
+              //     uid: Date.now(),
+              //     name: url,
+              //     status: 'done',
+              //     url: window._CONFIG['domianURL']+"/"+url,
+              //   }
+              // );
+
+            }
+            // debugger;
+            this.imagesStr = imagesArr.join(",");
+          }
+          
+        }
         this.$refs.modalForm.visible = true;
         this.$refs.modalForm.title = "图片管理";
         this.$refs.modalForm.disableSubmit = false;
-      
       },
       modalFormOk(data) {
-        debugger;
+        
+        if(!data) return;
+
         this.$refs.editableTable.setValues([
           {
             rowKey: this.rowId, // 行的id

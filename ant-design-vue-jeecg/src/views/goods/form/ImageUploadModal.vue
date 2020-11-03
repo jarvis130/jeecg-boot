@@ -12,7 +12,7 @@
     <!-- <image-upload-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></image-upload-form> -->
 
     <a-upload
-      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      :action="action"
       list-type="picture-card"
       :file-list="fileList"
       @preview="handlePreview"
@@ -21,13 +21,15 @@
       <div v-if="fileList.length < 8">
         <a-icon type="plus" />
         <div class="ant-upload-text">
-          Upload
+          上传图片
         </div>
       </div>
     </a-upload>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleImageCancel">
-      <img alt="example" style="width: 100%" :src="previewImage" />
+      <img alt="预览" style="width: 100%" :src="previewImage" />
     </a-modal>
+
+    <!-- <j-image-upload text="上传" :isMultiple="isMultiple" v-model="fileList" ></j-image-upload> -->
  
   </j-modal>
 </template>
@@ -41,49 +43,44 @@
       reader.onerror = error => reject(error);
     });
   }
-  // import ImageUploadForm from './ImageUploadForm'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
   export default {
     name: 'ImageUploadModal',
     components: {
+      JImageUpload
+    },
+    props:{
+      images: {
+        type: String,
+        default () {
+            return ''
+        }
+      },
+    },
+    watch: {
+      images(val) {
+        // debugger;
+        // this.fileList = this.images;
+      }
     },
     data () {
       return {
         title:'',
         width:800,
+        isMultiple: true,
         visible: false,
         disableSubmit: false,
         previewVisible: false,
+        action: window._CONFIG['domianURL']+"/sys/common/upload",
         previewImage: '',
+        // fileList: 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg,http://127.0.0.1:8080/jeecg-boot/temp/plief_1604368209705.jpg'
         fileList: [
           {
             uid: '-1',
-            name: 'image.png',
+            name: 'temp/timg_1604368203974.jpeg',
             status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-          {
-            uid: '-2',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-          {
-            uid: '-3',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-          {
-            uid: '-4',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-          {
-            uid: '-5',
-            name: 'image.png',
-            status: 'error',
-          },
+            url: 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg',
+          }
         ],
       }
     },
