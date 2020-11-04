@@ -7,11 +7,12 @@
     @ok="handleOk"
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
+    destroyOnClose
     cancelText="关闭">
 
     <!-- <image-upload-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></image-upload-form> -->
 
-    <a-upload
+    <!-- <a-upload
       :action="action"
       list-type="picture-card"
       :file-list="fileList"
@@ -27,9 +28,9 @@
     </a-upload>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleImageCancel">
       <img alt="预览" style="width: 100%" :src="previewImage" />
-    </a-modal>
+    </a-modal> -->
 
-    <!-- <j-image-upload text="上传" :isMultiple="isMultiple" v-model="fileList" ></j-image-upload> -->
+    <j-image-upload text="上传" :isMultiple="isMultiple" :value="imageValue"></j-image-upload>
  
   </j-modal>
 </template>
@@ -59,8 +60,9 @@
     },
     watch: {
       images(val) {
-        // debugger;
+        debugger;
         // this.fileList = this.images;
+        // this.fileList = 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg,http://127.0.0.1:8080/jeecg-boot/temp/plief_1604368209705.jpg';
       }
     },
     data () {
@@ -73,15 +75,15 @@
         previewVisible: false,
         action: window._CONFIG['domianURL']+"/sys/common/upload",
         previewImage: '',
-        // fileList: 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg,http://127.0.0.1:8080/jeecg-boot/temp/plief_1604368209705.jpg'
-        fileList: [
-          {
-            uid: '-1',
-            name: 'temp/timg_1604368203974.jpeg',
-            status: 'done',
-            url: 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg',
-          }
-        ],
+        imageValue: ''
+        // fileList: [
+        //   {
+        //     uid: '-1',
+        //     name: 'temp/timg_1604368203974.jpeg',
+        //     status: 'done',
+        //     url: 'http://127.0.0.1:8080/jeecg-boot/temp/timg_1604368203974.jpeg',
+        //   }
+        // ],
       }
     },
     methods: {
@@ -126,6 +128,10 @@
       },
       handleChange({ fileList }) {
         this.fileList = fileList;
+      },
+      setImageValue(data){
+        debugger;
+        this.imageValue = data;
       }
     }
   }

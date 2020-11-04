@@ -87,28 +87,71 @@
       </a-form-item>
     </a-form>
 
-    <image-upload-modal ref="modalForm" @ok="modalFormOk" :images="imagesStr"></image-upload-modal>
+    <!-- <image-upload-modal ref="modalForm" @ok="modalFormOk" :images="imagesStr"></image-upload-modal> -->
+
+      <j-modal
+      :title="title"
+      :width="width"
+      :visible="visible"
+      switchFullscreen
+      @ok="handleOk"
+      @cancel="handleCancel"
+      cancelText="关闭">
+
+      <!-- <image-upload-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></image-upload-form> -->
+
+      <a-upload
+        list-type="picture-card"
+        :file-list="fileList"
+        :headers="headers"
+        :action="uploadAction"
+        data="temp"
+        @preview="handlePreview"
+        @change="handleImageChange"
+      >
+        <div v-if="fileList.length < 8">
+          <a-icon type="plus" />
+          <div class="ant-upload-text">
+            上传图片
+          </div>
+        </div>
+      </a-upload>
+      <a-modal :visible="previewVisible" :footer="null" @cancel="handleImageCancel">
+        <img alt="预览" style="width: 100%" :src="previewImage" />
+      </a-modal>
+  
+    </j-modal>
+
 
   </div>
 </template>
 
 <script>
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+  import Vue from 'vue'
   import pick from 'lodash.pick'
   import moment from 'moment'
   import { FormTypes } from '@/utils/JEditableTableUtil'
   import JEditor from '@/components/jeecg/JEditor'
   import JEditableTable from '@/components/jeecg/JEditableTable'
-  import ImageUploadModal from './ImageUploadModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { mapGetters, mapActions } from "vuex";
+  import { ACCESS_TOKEN } from "@/store/mutation-types";
 
   export default {
     name: "Step3",
     components: {
       JEditor,
       JEditableTable,
-      JeecgListMixin,
-      ImageUploadModal
+      JeecgListMixin
     },
     data () {
       return {
@@ -181,7 +224,13 @@
         selectedRowIds: [],
         dataSourceStr: '',
         rowId: 0,
-        imagesStr: ''
+        visible: false,
+        isMultiple: true,
+        fileList: [],
+        title: '',
+        width: 800,
+        headers:{},
+        uploadAction: window._CONFIG['domianURL']+"/sys/common/upload"
       }
     },
     mounted() {
@@ -337,68 +386,89 @@
       },
       handleUploadImage(props) {
 
-        let { rowId, caseId, allValues, target } = props
+        let { rowId, index, caseId, allValues, target } = props
+     
         this.rowId = rowId;
-        let key = caseId + rowId;
-        let imagesStr = '';
+        let images = [];
+        let tmpArr = [];
         let values = allValues.inputValues;
-        let size = values.length;
-        for(var i=0; i<size; i++){
-          if(values[i]['id'] == key){
-            imagesStr = values[i]['images'];
-            break;
-          }
+        if(values){
+          images = values[index]['images'];
         }
-    
-        if(imagesStr != '' || imagesStr != undefined){
-          let arr = [];
-          let imagesArr = [];
-          arr = imagesStr.split(',');
-          if(arr.length > 0){
-            for(var i=0;i<arr.length;i++){
-              let url = arr[i];
-              if(url){
-                var newStr=url.indexOf("http");
-                if(newStr==0){
-                  imagesArr.push(url);  
-                }else{
-                  imagesArr.push(window._CONFIG['domianURL']+"/"+url);      
-                }
-                  
-              }
-              
-              // this.imageList.push(
-              //   {
-              //     uid: Date.now(),
-              //     name: url,
-              //     status: 'done',
-              //     url: window._CONFIG['domianURL']+"/"+url,
+
+        if(images.length > 0){
+          let url = '';
+          if(images.length > 0){
+            for(var i=0;i<images.length;i++){
+              let tmp = images[i];
+              // if(tmp){
+              //   var newStr=tmp.indexOf("http");
+              //   if(newStr==0){
+              //     url = tmp;  
+              //   }else{
+              //     url = window._CONFIG['domianURL']+"/"+tmp;      
               //   }
-              // );
+                  
+              // }
+              
+              tmpArr.push(
+                {
+                  uid: Date.now(),
+                  name: tmp['name'],
+                  status: 'done',
+                  url: window._CONFIG['domianURL']+"/"+ tmp['name'],
+                  // thumbUrl: tmp['thumbUrl'],
+                  type: tmp['type']
+                }
+              );
 
             }
-            // debugger;
-            this.imagesStr = imagesArr.join(",");
+ 
           }
           
         }
-        this.$refs.modalForm.visible = true;
-        this.$refs.modalForm.title = "图片管理";
-        this.$refs.modalForm.disableSubmit = false;
+       
+       this.fileList.splice(0, this.fileList.length);
+        this.fileList = tmpArr;
+        const token = Vue.ls.get(ACCESS_TOKEN);
+        this.headers = {"X-Access-Token":token}
+        this.visible = true;
+       
       },
-      modalFormOk(data) {
+      handleCancel () {
+        this.visible = false;
+      },
+      handleOk (e) {
         
-        if(!data) return;
+        if(!this.fileList) return;
+      
+        let files = this.fileList;
+        let arr=[];
+        for(var i=0; i<files.length; i++){
+          let file = files[i];
+          arr.push(
+            {
+              'uid': file['uid'],
+              'name': file['name'],
+              'status': file['status'],
+              // 'thumbUrl': file['thumbUrl'],
+              'type': file['type'],
+            }
+          );
+        }
 
         this.$refs.editableTable.setValues([
           {
             rowKey: this.rowId, // 行的id
             values: { // 在这里 values 中的 name 是你 columns 中配置的 key
                 'name': 'images',
-                'images': data
+                'images': arr
             }
           }
         ]);
+      
+        this.fileList.splice(0, this.fileList.length);
+        this.visible = false;
       },
       edit (record) {
         this.form.resetFields();
@@ -411,7 +481,21 @@
           this.dynamicValidateForm.skus = arr.skus || [];
         }
         
-      }
+      },
+      /**图片处理 */
+      handleImageCancel() {
+        this.previewVisible = false;
+      },
+      async handlePreview(file) {
+        if (!file.url && !file.preview) {
+          file.preview = await getBase64(file.originFileObj);
+        }
+        this.previewImage = file.url || file.preview;
+        this.previewVisible = true;
+      },
+      handleImageChange({ fileList }) {
+        this.fileList = fileList;
+      },
     }
   }
 </script>
