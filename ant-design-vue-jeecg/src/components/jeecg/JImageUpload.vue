@@ -81,7 +81,6 @@
     },
     watch:{
       value(val){
-        debugger;
         if (val instanceof Array) {
           this.initFileList(val.join(','))
         } else {

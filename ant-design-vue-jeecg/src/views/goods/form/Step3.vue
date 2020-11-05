@@ -98,14 +98,12 @@
       @cancel="handleCancel"
       cancelText="关闭">
 
-      <!-- <image-upload-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></image-upload-form> -->
-
       <a-upload
         list-type="picture-card"
         :file-list="fileList"
         :headers="headers"
         :action="uploadAction"
-        data="temp"
+        data="{'biz': 'temp'}"
         @preview="handlePreview"
         @change="handleImageChange"
         @beforeUpload="beforeUpload"
@@ -147,13 +145,15 @@ function getBase64(file) {
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { mapGetters, mapActions } from "vuex";
   import { ACCESS_TOKEN } from "@/store/mutation-types";
+  import JUpload from '@/components/jeecg/JUpload'
 
   export default {
     name: "Step3",
     components: {
       JEditor,
       JEditableTable,
-      JeecgListMixin
+      JeecgListMixin,
+      JUpload
     },
     data () {
       return {
