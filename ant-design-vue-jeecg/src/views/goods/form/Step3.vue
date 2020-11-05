@@ -17,7 +17,7 @@
           v-bind="formItemLayoutWithOutLabel"
         >
           <a-form-model-item v-bind="formItemLayoutWithOutLabel">
-            <a-button type="primary" style="width: 20%" @click="addDomain">
+            <a-button type="primary" style="width: 20%" @click="addSku">
               <a-icon type="plus" /> 添加规格
             </a-button>
           </a-form-model-item>
@@ -108,6 +108,8 @@
         data="temp"
         @preview="handlePreview"
         @change="handleImageChange"
+        @beforeUpload="beforeUpload"
+        accept="image/jpeg,image/jpg,image/png"
       >
         <div v-if="fileList.length < 8">
           <a-icon type="plus" />
@@ -276,16 +278,7 @@ function getBase64(file) {
                       tmpArr.push(item[key]);
                       str = tmpArr.join(",");
                     }
-                    //设置表格值
-                    // that.editableTable.push([
-                    //   {
-                    //     rowKey: keyId, // 行的id
-                    //     values: { // 在这里 values 中的 name 是你 columns 中配置的 key
-                    //         'name': 'skuKey',
-                    //         'skuKey': str
-                    //     }
-                    //   }
-                    // ]);
+          
                     that.editableTable[j]['skuKey']=str;
                   }
                 
@@ -325,7 +318,7 @@ function getBase64(file) {
         }
       },
       /**新增规格 */
-      addDomain() {
+      addSku() {
         let length = this.dynamicValidateForm.skus.length + 1;
         let name = '规格'+length;
         let key = Date.now();
@@ -375,61 +368,56 @@ function getBase64(file) {
         this.$message.info('获取值成功，请看控制台输出')
 
       },
-
       handleSelectRowChange(selectedRowIds) {
         this.selectedRowIds = selectedRowIds
       },
-
       handleDelete(props) {
         let { rowId, target } = props
         target.removeRows(rowId)
       },
+      /**图片管理 */
       handleUploadImage(props) {
 
         let { rowId, index, caseId, allValues, target } = props
      
         this.rowId = rowId;
+        let imageStr = '';
         let images = [];
         let tmpArr = [];
         let values = allValues.inputValues;
         if(values){
-          images = values[index]['images'];
+          imageStr = values[index]['images'];
         }
 
-        if(images.length > 0){
-          let url = '';
+        if(imageStr != '' && imageStr != undefined){
+          images = imageStr.split(',');
           if(images.length > 0){
-            for(var i=0;i<images.length;i++){
-              let tmp = images[i];
-              // if(tmp){
-              //   var newStr=tmp.indexOf("http");
-              //   if(newStr==0){
-              //     url = tmp;  
-              //   }else{
-              //     url = window._CONFIG['domianURL']+"/"+tmp;      
-              //   }
-                  
-              // }
-              
-              tmpArr.push(
-                {
-                  uid: Date.now(),
-                  name: tmp['name'],
-                  status: 'done',
-                  url: window._CONFIG['domianURL']+"/"+ tmp['name'],
-                  // thumbUrl: tmp['thumbUrl'],
-                  type: tmp['type']
-                }
-              );
+            let url = '';
+            if(images.length > 0){
+              for(var i=0;i<images.length;i++){
+                let tmp = images[i];
+  
+                tmpArr.push(
+                  {
+                    uid: Date.now(),
+                    name: tmp,
+                    status: 'done',
+                    url: window._CONFIG['domianURL']+"/"+ tmp,
+                    // thumbUrl: tmp['thumbUrl'],
+                    // type: tmp['type']
+                  }
+                );
 
+              }
+  
             }
- 
+            this.fileList.splice(0, this.fileList.length);// 清空fileList,重新赋值
+            this.fileList = tmpArr;
           }
-          
         }
+        
        
-       this.fileList.splice(0, this.fileList.length);
-        this.fileList = tmpArr;
+        
         const token = Vue.ls.get(ACCESS_TOKEN);
         this.headers = {"X-Access-Token":token}
         this.visible = true;
@@ -447,27 +435,29 @@ function getBase64(file) {
         for(var i=0; i<files.length; i++){
           let file = files[i];
           arr.push(
-            {
-              'uid': file['uid'],
-              'name': file['name'],
-              'status': file['status'],
-              // 'thumbUrl': file['thumbUrl'],
-              'type': file['type'],
-            }
+            // {
+            //   'uid': file['uid'],
+            //   'name': file['name'],
+            //   'status': file['status'],
+            //   // 'thumbUrl': file['thumbUrl'],
+            //   'type': file['type'],
+            // }
+            file['name']
           );
         }
-
+        //将数组转化为字符串
+        let str = arr.join(',');
         this.$refs.editableTable.setValues([
           {
             rowKey: this.rowId, // 行的id
             values: { // 在这里 values 中的 name 是你 columns 中配置的 key
                 'name': 'images',
-                'images': arr
+                'images': str
             }
           }
         ]);
       
-        this.fileList.splice(0, this.fileList.length);
+        this.fileList.splice(0, this.fileList.length);// 清空fileList
         this.visible = false;
       },
       edit (record) {
@@ -483,6 +473,17 @@ function getBase64(file) {
         
       },
       /**图片处理 */
+      beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
+        if (!isJpgOrPng) {
+          this.$message.error('只能上传jpg/png格式的头像!')
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2
+        if (!isLt2M) {
+          this.$message.error('图片不得大于2MB!')
+        }
+        return isJpgOrPng && isLt2M
+      },
       handleImageCancel() {
         this.previewVisible = false;
       },
