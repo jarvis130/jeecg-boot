@@ -87,38 +87,38 @@
       </a-form-item>
     </a-form>
 
-    <!-- <image-upload-modal ref="modalForm" @ok="modalFormOk" :images="imagesStr"></image-upload-modal> -->
-
-      <j-modal
+    <j-modal
       :title="title"
       :width="width"
       :visible="visible"
       switchFullscreen
       @ok="handleOk"
-      @cancel="handleCancel"
+      @cancel="handleModalCancel"
       cancelText="关闭">
 
       <a-upload
-        list-type="picture-card"
-        :file-list="fileList"
-        :headers="headers"
+        name="file"
+        listType="picture-card"
+        :multiple="isMultiple"
         :action="uploadAction"
-        data="{'biz': 'temp'}"
-        @preview="handlePreview"
-        @change="handleImageChange"
-        @beforeUpload="beforeUpload"
-        accept="image/jpeg,image/jpg,image/png"
-      >
-        <div v-if="fileList.length < 8">
-          <a-icon type="plus" />
-          <div class="ant-upload-text">
-            上传图片
-          </div>
+        :headers="headers"
+        :data="{biz:bizPath}"
+        :fileList="fileList"
+        :beforeUpload="beforeUpload"
+        :disabled="disabled"
+        :isMultiple="isMultiple"
+        :showUploadList="isMultiple"
+        @change="handleChange"
+        @preview="handlePreview">
+        <img v-if="!isMultiple && picUrl" :src="getAvatarView()" style="height:104px;max-width:300px"/>
+        <div v-else >
+          <a-icon :type="uploadLoading ? 'loading' : 'plus'" />
+          <div class="ant-upload-text">{{ text }}</div>
         </div>
+        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel()">
+          <img alt="" style="width: 100%" :src="previewImage"/>
+        </a-modal>
       </a-upload>
-      <a-modal :visible="previewVisible" :footer="null" @cancel="handleImageCancel">
-        <img alt="预览" style="width: 100%" :src="previewImage" />
-      </a-modal>
   
     </j-modal>
 
@@ -127,14 +127,6 @@
 </template>
 
 <script>
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
 
   import Vue from 'vue'
   import pick from 'lodash.pick'
@@ -144,16 +136,27 @@ function getBase64(file) {
   import JEditableTable from '@/components/jeecg/JEditableTable'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { mapGetters, mapActions } from "vuex";
-  import { ACCESS_TOKEN } from "@/store/mutation-types";
-  import JUpload from '@/components/jeecg/JUpload'
+
+  import { ACCESS_TOKEN } from "@/store/mutation-types"
+  import { getFileAccessHttpUrl } from '@/api/manage'
+
+  const uidGenerator=()=>{
+    return '-'+parseInt(Math.random()*10000+1,10);
+  }
+  const getFileName=(path)=>{
+    if(path.lastIndexOf("\\")>=0){
+      let reg=new RegExp("\\\\","g");
+      path = path.replace(reg,"/");
+    }
+    return path.substring(path.lastIndexOf("/")+1);
+  }
 
   export default {
     name: "Step3",
     components: {
       JEditor,
       JEditableTable,
-      JeecgListMixin,
-      JUpload
+      JeecgListMixin
     },
     data () {
       return {
@@ -226,14 +229,64 @@ function getBase64(file) {
         selectedRowIds: [],
         dataSourceStr: '',
         rowId: 0,
+        //图片上传参数
         visible: false,
-        isMultiple: true,
+        // isMultiple: true,
         fileList: [],
         title: '',
         width: 800,
         headers:{},
-        uploadAction: window._CONFIG['domianURL']+"/sys/common/upload"
+        uploadAction: window._CONFIG['domianURL']+"/sys/common/upload",
+        uploadLoading:false,
+        picUrl:false,
+        headers:{},
+        fileList: [],
+        previewImage:"",
+        previewVisible: false,
       }
+    },
+    props:{
+      text:{
+        type:String,
+        required:false,
+        default:"上传"
+      },
+      /*这个属性用于控制文件上传的业务路径*/
+      bizPath:{
+        type:String,
+        required:false,
+        default:"skupic"
+      },
+      value:{
+        type:[String,Array],
+        required:false
+      },
+      disabled:{
+        type:Boolean,
+        required:false,
+        default: false
+      },
+      isMultiple:{
+        type:Boolean,
+        required:false,
+        default: true
+      }
+    },
+    watch:{
+      value(val){
+        if (val instanceof Array) {
+          this.initFileList(val.join(','))
+        } else {
+          this.initFileList(val)
+        }
+        if(!val || val.length==0){
+          this.picUrl = false;
+        }
+      }
+    },
+    created(){
+      const token = Vue.ls.get(ACCESS_TOKEN);
+      this.headers = {"X-Access-Token":token}
     },
     mounted() {
         if (this.goods.id != null && this.goods.id != ""){
@@ -415,21 +468,19 @@ function getBase64(file) {
             this.fileList = tmpArr;
           }
         }
-        
-       
-        
+         
         const token = Vue.ls.get(ACCESS_TOKEN);
         this.headers = {"X-Access-Token":token}
         this.visible = true;
        
       },
-      handleCancel () {
+      handleModalCancel () {
         this.visible = false;
       },
       handleOk (e) {
         
         if(!this.fileList) return;
-      
+       
         let files = this.fileList;
         let arr=[];
         for(var i=0; i<files.length; i++){
@@ -473,30 +524,112 @@ function getBase64(file) {
         
       },
       /**图片处理 */
-      beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
-        if (!isJpgOrPng) {
-          this.$message.error('只能上传jpg/png格式的头像!')
+      initFileList(paths){
+        debugger;
+        if(!paths || paths.length==0){
+          this.fileList = [];
+          return;
         }
-        const isLt2M = file.size / 1024 / 1024 < 2
-        if (!isLt2M) {
-          this.$message.error('图片不得大于2MB!')
+        this.picUrl = true;
+        let fileList = [];
+        let arr = paths.split(",")
+        for(var a=0;a<arr.length;a++){
+          let url = getFileAccessHttpUrl(arr[a]);
+          fileList.push({
+            uid: uidGenerator(),
+            name: getFileName(arr[a]),
+            status: 'done',
+            url: url,
+            response:{
+              status:"history",
+              message:arr[a]
+            }
+          })
         }
-        return isJpgOrPng && isLt2M
+        this.fileList = fileList
       },
-      handleImageCancel() {
+      beforeUpload: function(file){
+        var fileType = file.type;
+        if(fileType.indexOf('image')<0){
+          this.$message.warning('请上传图片');
+          return false;
+        }
+      },
+      handleChange(info) {
+        this.picUrl = false;
+        let fileList = info.fileList
+        if(info.file.status==='done'){
+          if(info.file.response.success){
+            this.picUrl = true;
+            fileList = fileList.map((file) => {
+              if (file.response) {
+                file.url = file.response.message;
+              }
+              return file;
+            });
+          }
+          //this.$message.success(`${info.file.name} 上传成功!`);
+        }else if (info.file.status === 'error') {
+          this.$message.error(`${info.file.name} 上传失败.`);
+        }else if(info.file.status === 'removed'){
+          this.handleDelete(info.file)
+        }
+        this.fileList = fileList
+        if(info.file.status==='done' || info.file.status === 'removed'){
+          this.handlePathChange()
+        }
+      },
+      // 预览
+      handlePreview (file) {
+        this.previewImage = file.url || file.thumbUrl
+        this.previewVisible = true
+      },
+      getAvatarView(){
+        if(this.fileList.length>0){
+          let url = this.fileList[0].url
+          return getFileAccessHttpUrl(url)
+        }
+      },
+      handlePathChange(){
+        let uploadFiles = this.fileList
+        let path = ''
+        if(!uploadFiles || uploadFiles.length==0){
+          path = ''
+        }
+        let arr = [];
+        if(!this.isMultiple){
+          arr.push(uploadFiles[uploadFiles.length-1].response.message)
+        }else{
+          for(let a=0;a<uploadFiles.length;a++){
+            // update-begin-author:taoyan date:20200819 for:【开源问题z】上传图片组件 LOWCOD-783
+            if(uploadFiles[a].status === 'done' ) {
+              arr.push(uploadFiles[a].response.message)
+            }else{
+              return;
+            }
+            // update-end-author:taoyan date:20200819 for:【开源问题z】上传图片组件 LOWCOD-783
+          }
+        }
+        if(arr.length>0){
+          path = arr.join(",")
+        }
+        this.$emit('change', path);
+      },
+      handleDelete(file){
+        //如有需要新增 删除逻辑
+        console.log(file)
+      },
+      handleCancel() {
+        this.close();
         this.previewVisible = false;
       },
-      async handlePreview(file) {
-        if (!file.url && !file.preview) {
-          file.preview = await getBase64(file.originFileObj);
-        }
-        this.previewImage = file.url || file.preview;
-        this.previewVisible = true;
+      close () {
+
       },
-      handleImageChange({ fileList }) {
-        this.fileList = fileList;
-      },
+    },
+    model: {
+      prop: 'value',
+      event: 'change'
     }
   }
 </script>
