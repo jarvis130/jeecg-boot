@@ -146,19 +146,22 @@
               if (error === 0) {
                   // this.$message.success('验证通过')
                   // 将通过后的数组提交到后台或自行进行其他处理
-                  let arr = {
-                    columns: that.columns,
-                    dataSource: values    
-                  };
-                  formData.attributeJsonData = JSON.stringify(arr);
-                  console.log("表单提交数据",formData)
-                  that.UpdateGoodsInfo(formData).then((res) => {
-                    this.$emit('nextStep');
-                  }).catch((err) => {
-                    that.$message.warning(res.message);
-                  }).finally(() => {
-                    that.confirmLoading = false;
-                  });
+                  if(values != null){
+                    let arr = {
+                      columns: that.columns,
+                      dataSource: values    
+                    };
+                    formData.attributeJsonData = JSON.stringify(arr);
+                    console.log("表单提交数据",formData)
+                    that.UpdateGoodsInfo(formData).then((res) => {
+                      that.$parent.$parent.close();
+                    }).catch((err) => {
+                      that.$message.warning(res.message);
+                    }).finally(() => {
+                      that.confirmLoading = false;
+                    });
+                  }
+                  
 
               } else {
                   // this.$message.error('验证未通过')

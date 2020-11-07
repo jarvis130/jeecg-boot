@@ -75,6 +75,12 @@
             </j-editable-table>
           </a-form-item>
 
+          <a-form-model-item>
+            <a-input
+                v-model="model.step" type="hidden"
+              />
+            </a-form-model-item>
+
         </a-form-model>
 
       </div>
@@ -182,7 +188,8 @@
         },
         loading: false,
         model: {
-          enableSku: false
+          enableSku: false,
+          step: '3'
         },
         columns: [
           {
@@ -342,6 +349,8 @@
                     dataSource: that.editableTable    
                   };
                   formData.skuJsonData = JSON.stringify(arr);
+         
+                  formData.step = '3';
                   console.log("表单提交数据",formData)
                   that.UpdateGoodsInfo(formData).then((res) => {
                     this.$emit('nextStep');

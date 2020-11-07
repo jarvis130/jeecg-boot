@@ -32,7 +32,7 @@ public class GoodsSku implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**规格主键*/
-	@TableId(type = IdType.ASSIGN_ID)
+//	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "规格主键")
     private java.lang.String id;
 	/**组合key标签，用于展示*/
@@ -43,6 +43,10 @@ public class GoodsSku implements Serializable {
 	@Excel(name = "平台价格", width = 15)
     @ApiModelProperty(value = "平台价格")
     private java.math.BigDecimal salePrice;
+    /**库存*/
+    @Excel(name = "库存", width = 15)
+    @ApiModelProperty(value = "库存")
+    private java.lang.Integer stock;
 	/**商品主键*/
 	@Excel(name = "商品主键", width = 15)
     @ApiModelProperty(value = "商品主键")
