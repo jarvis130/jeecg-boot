@@ -3,10 +3,10 @@
     :title="title"
     :width="width"
     :visible="visible"
-    fullscreen
     switchFullscreen
     @ok="handleOk"
     okText="提交"
+    destroyOnClose
     :okButtonProps="{ class:{'jee-hidden': true} }"
     @cancel="handleCancel"
     cancelText="关闭">
@@ -18,6 +18,8 @@
 
   // import GoodsInfoForm from './GoodsInfoForm'
   import GoodsInfoForm from '../form/Index'
+  import { mapGetters, mapActions } from "vuex"; 
+  
   export default {
     name: 'GoodsInfoModal',
     components: {
@@ -32,19 +34,18 @@
       }
     },
     methods: {
+      ...mapActions([ "SetGoodsStore", "SaveGoodsInfo", "UpdateGoodsInfo" ]),
       add () {
         this.visible=true
         this.$nextTick(()=>{
           this.$refs.realForm.add();
         })
-        this.$refs.realForm.currentTab = 0;
       },
       edit (record) {
         this.visible=true
         this.$nextTick(()=>{
           this.$refs.realForm.edit(record);
         })
-        this.$refs.realForm.currentTab = 0;
       },
       close () {
         this.$emit('ok');
@@ -52,6 +53,27 @@
       },
       handleOk () {
         this.$refs.realForm.submitForm();
+
+        that.confirmLoading = true;
+        let formData = Object.assign(this.model, values);
+        if(!that.model.id){
+          that.SaveGoodsInfo(formData).then((res) => {
+            that.$emit('nextStep');
+          }).catch((err) => {
+            that.$message.warning(res.message);
+          }).finally(() => {
+            that.confirmLoading = false;
+          });
+        }else{
+          that.UpdateGoodsInfo(formData).then((res) => {
+            that.$emit('nextStep');
+          }).catch((err) => {
+            that.$message.warning(res.message);
+          }).finally(() => {
+            that.confirmLoading = false;
+          });
+        }
+
       },
       submitCallback(){
         this.$emit('ok');

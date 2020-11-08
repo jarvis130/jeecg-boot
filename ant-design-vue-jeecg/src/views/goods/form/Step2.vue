@@ -104,7 +104,7 @@
       }
     },
     methods: {
-      ...mapActions([ "UpdateGoodsInfo" ]),
+      ...mapActions([ "SetGoodsStore2" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
@@ -113,14 +113,15 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
-            console.log("表单提交数据",formData)
-            that.UpdateGoodsInfo(formData).then((res) => {
-              this.$emit('nextStep');
+            
+            that.SetGoodsStore2(formData).then((res) => {
+              that.$emit('nextStep');
             }).catch((err) => {
               that.$message.warning(res.message);
             }).finally(() => {
               that.confirmLoading = false;
             });
+
           }
          
         })

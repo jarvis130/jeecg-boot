@@ -47,7 +47,8 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <j-image-upload v-model="model.imgList"></j-image-upload>
+      
+        <j-image-upload v-model="model.goodsThumb" :isMultiple="isMultiple"></j-image-upload>
       </a-form-item>
 
       <a-form-item
@@ -119,7 +120,7 @@
       return {
         form: this.$form.createForm(this),
         model: {
-          imgList: [],
+          goodsThumb: '',
           isOnSale: false
         },
         labelCol: {
@@ -131,6 +132,7 @@
           sm: { span: 16 },
         },
         confirmLoading: false,
+        isMultiple: true,
         validatorRules: {
           catId: {
             rules: [
@@ -236,49 +238,44 @@
       ...mapGetters(["goods"])
     },
     created() {
-      if (this.goods.id != null && this.goods.id != ""){
-        let record = this.goods;
-        this.edit(record);
-      }
+      // if (this.goods.id != null && this.goods.id != ""){
+      //   let record = this.goods;
+      //   this.edit(record);
+      // }
     },
     methods: {
-      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
+      ...mapActions([ "SetGoodsStore1" ]),
       nextStep () {
         const that = this;
         this.model.id = this.goods.id;
+     
         // 触发表单验证
-        this.form.validateFields((err, values) => {
+        that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            let formData = Object.assign(this.model, values);
-            if(!that.model.id){
-              that.SaveGoodsInfo(formData).then((res) => {
-                that.$emit('nextStep');
-              }).catch((err) => {
-                that.$message.warning(res.message);
-              }).finally(() => {
-                that.confirmLoading = false;
-              });
-            }else{
-              that.UpdateGoodsInfo(formData).then((res) => {
-                that.$emit('nextStep');
-              }).catch((err) => {
-                that.$message.warning(res.message);
-              }).finally(() => {
-                that.confirmLoading = false;
-              });
-            }
+            let formData = Object.assign(that.model, values);
+        
+            that.SetGoodsStore1(formData).then((res) => {
+              that.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });
  
           }
          
         })
+      },
+      add () {
+        // this.edit({});
       },
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
         })
       },
     }

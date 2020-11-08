@@ -23,5 +23,5 @@ public interface IGoodsInfoService extends IService<GoodsInfo> {
      * @param goodsInfo
      * @return
      */
-    public GoodsInfo updateGoodsInfo(GoodsInfo goodsInfo);
+    public void updateGoodsInfo(GoodsInfo goodsInfo);
 }

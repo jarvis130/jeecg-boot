@@ -97,7 +97,6 @@
     },
     methods:{
       initFileList(paths){
-        debugger;
         if(!paths || paths.length==0){
           this.fileList = [];
           return;

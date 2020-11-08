@@ -43,7 +43,7 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
 
     @Override
     @Transactional
-    public GoodsInfo updateGoodsInfo(GoodsInfo goodsInfo){
+    public void updateGoodsInfo(GoodsInfo goodsInfo){
 
         goodsInfoMapper.updateById(goodsInfo);
         //保存规格
@@ -62,6 +62,5 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
             }
         }
 
-        return goodsInfoMapper.selectById(goodsInfo.getId());
     }
 }

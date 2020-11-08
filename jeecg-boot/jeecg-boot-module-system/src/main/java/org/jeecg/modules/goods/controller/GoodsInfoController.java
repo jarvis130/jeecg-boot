@@ -96,8 +96,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	@ApiOperation(value="商品管理-编辑", notes="商品管理-编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody GoodsInfo goodsInfo) {
-        GoodsInfo result = goodsInfoService.updateGoodsInfo(goodsInfo);
-		return Result.OK(result);
+        goodsInfoService.updateGoodsInfo(goodsInfo);
+		return Result.OK("编辑成功!");
 	}
 	
 	/**

@@ -75,12 +75,6 @@
             </j-editable-table>
           </a-form-item>
 
-          <a-form-model-item>
-            <a-input
-                v-model="model.step" type="hidden"
-              />
-            </a-form-model-item>
-
         </a-form-model>
 
       </div>
@@ -307,63 +301,79 @@
       ...mapGetters(["goods"])
     },
     methods: {
-      ...mapActions([ "UpdateGoodsInfo" ]),
+      ...mapActions([ "SetGoodsStore3" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
+
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
-  
-            //将表格数据解析成字符串
-            this.$refs.editableTable.getValues((error, values) => {
-              
-              that.editableTable=values;
-              // 错误数 = 0 则代表验证通过
-              if (error === 0) {
-    
-                  //设置sku_key值
-                  let str='';
-                  let length = values.length;
-                  let size = that.dynamicValidateForm.skus.length;
-                  for(var j=0;j<length;j++){
-                    let item = values[j];
-                    let keyId = item['id'];
-                    let tmpArr = [];
-                    for(var i=0; i < size; i++){
-                      let sku = that.dynamicValidateForm.skus[i];
-                      let key = sku['key'];
-                      tmpArr.push(item[key]);
-                      str = tmpArr.join(",");
-                    }
-          
-                    that.editableTable[j]['skuKey']=str;
-                  }
-                
-                  // 将通过后的数组提交到后台或自行进行其他处理
-                  let arr = {
-                    skus: that.dynamicValidateForm.skus,
-                    columns: that.columns,
-                    dataSource: that.editableTable    
-                  };
-                  formData.skuJsonData = JSON.stringify(arr);
-         
-                  formData.step = '3';
-                  console.log("表单提交数据",formData)
-                  that.UpdateGoodsInfo(formData).then((res) => {
-                    this.$emit('nextStep');
-                  }).catch((err) => {
-                    that.$message.warning(res.message);
-                  }).finally(() => {
-                    that.confirmLoading = false;
-                  });
+     
+            if(that.model.enableSku){
 
-              } else {
-                  // this.$message.error('验证未通过')
-              }
-            })
+              //将表格数据解析成字符串
+              this.$refs.editableTable.getValues((error, values) => {
+                
+                that.editableTable=values;
+                // 错误数 = 0 则代表验证通过
+                if (error === 0) {
+      
+                    //设置sku_key值
+                    let str='';
+                    let length = values.length;
+                    let size = that.dynamicValidateForm.skus.length;
+                    for(var j=0;j<length;j++){
+                      let item = values[j];
+                      let keyId = item['id'];
+                      let tmpArr = [];
+                      for(var i=0; i < size; i++){
+                        let sku = that.dynamicValidateForm.skus[i];
+                        let key = sku['key'];
+                        tmpArr.push(item[key]);
+                        str = tmpArr.join(",");
+                      }
+            
+                      that.editableTable[j]['skuKey']=str;
+                    }
+                  
+                    // 将通过后的数组提交到后台或自行进行其他处理
+                    let arr = {
+                      skus: that.dynamicValidateForm.skus,
+                      columns: that.columns,
+                      dataSource: that.editableTable    
+                    };
+                    formData.skuJsonData = JSON.stringify(arr);
+          
+                    console.log("表单提交数据",formData)
+
+                    that.SetGoodsStore3(formData).then((res) => {
+                      that.$emit('nextStep');
+                    }).catch((err) => {
+                      that.$message.warning(res.message);
+                    }).finally(() => {
+                      that.confirmLoading = false;
+                    });
+
+                } else {
+                    // this.$message.error('验证未通过')
+                }
+              })
+
+            }else{
+
+              that.SetGoodsStore3(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(res.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });   
+
+            }
+            
             
           }
          

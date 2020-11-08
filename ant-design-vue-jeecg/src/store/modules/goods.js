@@ -94,27 +94,57 @@ const goods = {
       state.attributeJsonData = attributeJsonData;
     },
     SET_GOODS: (state, params) => {
-      state.id = params.id;
-      state.catId = params.catId;
-      state.goodsSn = params.goodsSn;
-      state.goodsName = params.goodsName;
-      state.brandId = params.brandId;
-      state.marketPrice = params.marketPrice;
-      state.salePrice = params.salePrice;
-      state.keywords = params.keywords;
-      state.goodsBrief = params.goodsBrief;
-      state.goodsDesc = params.goodsDesc;
-      state.isReal = params.isReal;
-      state.extensionCode = params.extensionCode;
-      state.isOnSale = params.isOnSale;
-      state.isBest = params.isBest;
-      state.isNew = params.isNew;
-      state.isHot = params.isHot;
-      state.isPromote = params.isPromote;
-      state.enableSku = params.enableSku;
-      state.skuJsonData = params.skuJsonData;
-      state.enableAttribute = params.enableAttribute;
-      state.attributeJsonData = params.attributeJsonData;
+      state.id = params.id = '' ? '' : params.id;
+      state.catId = params.catId = '' ? '' : params.catId;
+      state.goodsSn = params.goodsSn = '' ? '' : params.goodsSn;
+      state.goodsName = params.goodsName = '' ? '' : params.goodsName;
+      state.brandId = params.brandId = '' ? '' : params.brandId;
+      state.marketPrice = params.marketPrice = '' ? '' : params.marketPrice;
+      state.salePrice = params.salePrice = '' ? '' : params.salePrice;
+      state.goodsThumb = params.goodsThumb = '' ? '' : params.goodsThumb;
+      state.keywords = params.keywords = '' ? '' : params.keywords;
+      state.goodsBrief = params.goodsBrief = '' ? '' : params.goodsBrief;
+      state.goodsDesc = params.goodsDesc = '' ? '' : params.goodsDesc;
+      state.isReal = params.isReal = '' ? '' : params.isReal;
+      state.extensionCode = params.extensionCode = '' ? '' : params.extensionCode;
+      state.isOnSale = params.isOnSale = '' ? '' : params.isOnSale;
+      state.isBest = params.isBest = '' ? '' : params.isBest;
+      state.isNew = params.isNew = '' ? '' : params.isNew;
+      state.isHot = params.isHot = '' ? '' : params.isHot;
+      state.isPromote = params.isPromote = '' ? '' : params.isPromote;
+      state.enableSku = params.enableSku = '' ? '' : params.enableSku;
+      state.skuJsonData = params.skuJsonData = '' ? '' : params.skuJsonData;
+      state.enableAttribute = params.enableAttribute = '' ? '' : params.enableAttribute;
+      state.attributeJsonData = params.attributeJsonData = '' ? '' : params.attributeJsonData;
+    },
+    SET_GOODS1: (state, params) => {
+      state.id = params.id = '' ? '' : params.id;
+      state.catId = params.catId = '' ? '' : params.catId;
+      state.goodsSn = params.goodsSn = '' ? '' : params.goodsSn;
+      state.goodsName = params.goodsName = '' ? '' : params.goodsName;
+      state.brandId = params.brandId = '' ? '' : params.brandId;
+      state.marketPrice = params.marketPrice = '' ? '' : params.marketPrice;
+      state.salePrice = params.salePrice = '' ? '' : params.salePrice;
+      state.isReal = params.isReal = '' ? '' : params.isReal;
+      state.extensionCode = params.extensionCode = '' ? '' : params.extensionCode;
+      state.isOnSale = params.isOnSale = '' ? '' : params.isOnSale;
+    },
+    SET_GOODS2: (state, params) => {
+      state.keywords = params.keywords = '' ? '' : params.keywords;
+      state.goodsBrief = params.goodsBrief = '' ? '' : params.goodsBrief;
+      state.goodsDesc = params.goodsDesc = '' ? '' : params.goodsDesc;
+      state.isBest = params.isBest = '' ? '' : params.isBest;
+      state.isNew = params.isNew = '' ? '' : params.isNew;
+      state.isHot = params.isHot = '' ? '' : params.isHot;
+      state.isPromote = params.isPromote = '' ? '' : params.isPromote;
+    },
+    SET_GOODS3: (state, params) => {
+      state.enableSku = params.enableSku = '' ? '' : params.enableSku;
+      state.skuJsonData = params.skuJsonData = '' ? '' : params.skuJsonData;
+    },
+    SET_GOODS4: (state, params) => {
+      state.enableAttribute = params.enableAttribute = '' ? '' : params.enableAttribute;
+      state.attributeJsonData = params.attributeJsonData = '' ? '' : params.attributeJsonData;
     },
     CLEAR_GOODS: (state) => {
       state.id = '';
@@ -141,21 +171,6 @@ const goods = {
     },
   },
   actions: {
-    Save_Step1({ commit }, params) {
-      commit('SET_GOODS', result);
-    },
-    Save_Step2({ commit }, params) {
-      commit('SET_GOODS', result);
-    },
-    Save_Step3({ commit }, params) {
-      commit('SET_GOODS', result);
-    },
-    Save_Step4({ commit }, params) {
-      commit('SET_GOODS', result);
-    },
-    Save_Step5({ commit }, params) {
-      commit('SET_GOODS', result);
-    },
     SaveGoodsInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
         postAction("/goods/goodsInfo/add", params).then(response => {
@@ -175,8 +190,8 @@ const goods = {
       return new Promise((resolve, reject) => {
         putAction("/goods/goodsInfo/edit", params).then(response => {
           if(response.success){
-            const result = response.result
-            commit('SET_GOODS', result);
+            // const result = response.result
+            // commit('SET_GOODS', result);
             resolve(response)
           }else{
             resolve(response)
@@ -191,6 +206,18 @@ const goods = {
     },
     SetGoodsStore({ commit }, params) {
       commit('SET_GOODS', params);
+    },
+    SetGoodsStore1({ commit }, params) {
+      commit('SET_GOODS1', params);
+    },
+    SetGoodsStore2({ commit }, params) {
+      commit('SET_GOODS2', params);
+    },
+    SetGoodsStore3({ commit }, params) {
+      commit('SET_GOODS3', params);
+    },
+    SetGoodsStore4({ commit }, params) {
+      commit('SET_GOODS4', params);
     }
   }
 }

@@ -129,7 +129,7 @@
     ...mapGetters(["goods"])
 	  },
     methods: {
-      ...mapActions([ "UpdateGoodsInfo" ]),
+      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
@@ -140,33 +140,69 @@
             let formData = Object.assign(that.model, values);
             console.log("表单提交数据",formData)
             
-            //将表格数据解析成字符串
-            this.$refs.editableTable.getValues((error, values) => {
-              // 错误数 = 0 则代表验证通过
-              if (error === 0) {
-                  // this.$message.success('验证通过')
-                  // 将通过后的数组提交到后台或自行进行其他处理
-                  if(values != null){
-                    let arr = {
-                      columns: that.columns,
-                      dataSource: values    
-                    };
-                    formData.attributeJsonData = JSON.stringify(arr);
-                    console.log("表单提交数据",formData)
-                    that.UpdateGoodsInfo(formData).then((res) => {
-                      that.$parent.$parent.close();
-                    }).catch((err) => {
-                      that.$message.warning(res.message);
-                    }).finally(() => {
-                      that.confirmLoading = false;
-                    });
-                  }
-                  
+            if(that.form.enableAttribute){
+              
+              //将表格数据解析成字符串
+              this.$refs.editableTable.getValues((error, values) => {
+                // 错误数 = 0 则代表验证通过
+                if (error === 0) {
+                    // this.$message.success('验证通过')
+                    // 将通过后的数组提交到后台或自行进行其他处理
+                    if(values != null){
+                      let arr = {
+                        columns: that.columns,
+                        dataSource: values    
+                      };
+                      formData.attributeJsonData = JSON.stringify(arr);
+                      console.log("表单提交数据",formData)
+           
+                      if(!that.model.id){
+                        that.SaveGoodsInfo(formData).then((res) => {
+                          that.$emit('nextStep');
+                        }).catch((err) => {
+                          that.$message.warning(err.message);
+                        }).finally(() => {
+                          that.confirmLoading = false;
+                        });
+                      }else{
+                        that.UpdateGoodsInfo(formData).then((res) => {
+                          that.$emit('nextStep');
+                        }).catch((err) => {
+                          that.$message.warning(err.message);
+                        }).finally(() => {
+                          that.confirmLoading = false;
+                        });
+                      }
 
-              } else {
-                  // this.$message.error('验证未通过')
+                    }
+                    
+
+                } else {
+                    // this.$message.error('验证未通过')
+                }
+              })
+
+            }else{
+
+              if(!that.model.id){
+                that.SaveGoodsInfo(formData).then((res) => {
+                  that.$emit('nextStep');
+                }).catch((err) => {
+                  that.$message.warning(err.message);
+                }).finally(() => {
+                  that.confirmLoading = false;
+                });
+              }else{
+                that.UpdateGoodsInfo(formData).then((res) => {
+                  that.$emit('nextStep');
+                }).catch((err) => {
+                  that.$message.warning(err.message);
+                }).finally(() => {
+                  that.confirmLoading = false;
+                });
               }
-            })
+
+            }
 
           }
          
