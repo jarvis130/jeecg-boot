@@ -104,9 +104,6 @@
         this.SetGoodsStore(record);
         this.$refs.step1Form.edit(record);
       },
-      initTab() {
-        this.currentTab = 0;
-      },
       nextStep () {
         if (this.currentTab < 4) {
           this.currentTab += 1

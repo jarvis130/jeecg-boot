@@ -128,6 +128,7 @@ const goods = {
       state.isReal = params.isReal = '' ? '' : params.isReal;
       state.extensionCode = params.extensionCode = '' ? '' : params.extensionCode;
       state.isOnSale = params.isOnSale = '' ? '' : params.isOnSale;
+      state.goodsThumb = params.goodsThumb = '' ? '' : params.goodsThumb;
     },
     SET_GOODS2: (state, params) => {
       state.keywords = params.keywords = '' ? '' : params.keywords;

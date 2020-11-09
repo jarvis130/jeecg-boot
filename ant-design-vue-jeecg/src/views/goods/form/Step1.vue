@@ -76,7 +76,7 @@
       </a-form-item>
 
 
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
+      <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button type="primary" @click="nextStep">下一步</a-button>
       </a-form-item>
 
@@ -120,7 +120,7 @@
       return {
         form: this.$form.createForm(this),
         model: {
-          goodsThumb: '',
+          goodsThumb: [],
           isOnSale: false
         },
         labelCol: {
@@ -237,11 +237,11 @@
       // 相当于this.$store.getters.goods(vuex语法糖)
       ...mapGetters(["goods"])
     },
-    created() {
-      // if (this.goods.id != null && this.goods.id != ""){
-      //   let record = this.goods;
-      //   this.edit(record);
-      // }
+    mounted() {
+      if (this.goods.id != null && this.goods.id != ""){
+        let record = this.goods;
+        this.edit(record);
+      }
     },
     methods: {
       ...mapActions([ "SetGoodsStore1" ]),
@@ -254,7 +254,6 @@
           if (!err) {
             that.confirmLoading = true;
             let formData = Object.assign(that.model, values);
-        
             that.SetGoodsStore1(formData).then((res) => {
               that.$emit('nextStep');
             }).catch((err) => {
@@ -277,6 +276,35 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'id', 'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
         })
+        //图片处理
+        // let imageStr = this.model.goodsThumb;
+        // if(imageStr != '' && imageStr != undefined){
+        //   let images = imageStr.split(',');
+        //   let tmpArr = [];
+        //   if(images.length > 0){
+        //     let url = '';
+        //     if(images.length > 0){
+        //       for(var i=0;i<images.length;i++){
+        //         let tmp = images[i];
+  
+        //         tmpArr.push(
+        //           {
+        //             uid: Date.now(),
+        //             name: tmp,
+        //             status: 'done',
+        //             url: window._CONFIG['domianURL']+"/"+ tmp,
+        //             // thumbUrl: tmp['thumbUrl'],
+        //             // type: tmp['type']
+        //           }
+        //         );
+
+        //       }
+  
+        //     }
+        //     // this.goodsThumb.splice(0, this.goodsThumb.length);// 清空fileList,重新赋值
+        //     this.goodsThumb = tmpArr;
+        //   }
+        // }//
       },
     }
   }

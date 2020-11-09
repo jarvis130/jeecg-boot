@@ -37,7 +37,7 @@
             <a-input
               v-model="sku.value"
               placeholder="请输入规格"
-              style="width: 20%; margin-right: 8px"
+              style="width: 40%; margin-right: 8px"
               @change = "skuInputChange"
             />
             <a-icon
@@ -81,7 +81,7 @@
       
       <br>
      
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
+      <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
@@ -92,6 +92,7 @@
       :width="width"
       :visible="visible"
       switchFullscreen
+      destroyOnClose
       @ok="handleOk"
       @cancel="handleModalCancel"
       cancelText="关闭">
@@ -183,12 +184,11 @@
         loading: false,
         model: {
           enableSku: false,
-          step: '3'
         },
         columns: [
           {
             title: '单价',
-            key: 'price',
+            key: 'salePrice',
             width: '120px',
             type: FormTypes.inputNumber,
             defaultValue: 0.00,
@@ -488,8 +488,8 @@
           }
         }
          
-        const token = Vue.ls.get(ACCESS_TOKEN);
-        this.headers = {"X-Access-Token":token}
+        // const token = Vue.ls.get(ACCESS_TOKEN);
+        // this.headers = {"X-Access-Token":token}
         this.visible = true;
        
       },
@@ -591,7 +591,7 @@
         }else if (info.file.status === 'error') {
           this.$message.error(`${info.file.name} 上传失败.`);
         }else if(info.file.status === 'removed'){
-          this.handleDelete(info.file)
+          this.handleFileDelete(info.file)
         }
         this.fileList = fileList
         if(info.file.status==='done' || info.file.status === 'removed'){
@@ -634,7 +634,7 @@
         }
         this.$emit('change', path);
       },
-      handleDelete(file){
+      handleFileDelete(file){
         //如有需要新增 删除逻辑
         console.log(file)
       },

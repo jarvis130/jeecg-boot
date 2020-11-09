@@ -50,7 +50,7 @@ public class GoodsSku implements Serializable {
 	/**商品主键*/
 	@Excel(name = "商品主键", width = 15)
     @ApiModelProperty(value = "商品主键")
-    private java.lang.Integer goodsId;
+    private java.lang.String goodsId;
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
     private java.lang.String createBy;

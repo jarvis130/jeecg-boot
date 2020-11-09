@@ -13,7 +13,7 @@ public class SkuDataEntity implements Serializable {
 
     private String id;
     private String skuKey;
-    private String price;
+    private String salePrice;
     private Integer orderNum;
     private String stock;
 
@@ -33,12 +33,12 @@ public class SkuDataEntity implements Serializable {
         this.skuKey = skuKey;
     }
 
-    public String getPrice() {
-        return price;
+    public String getSalePrice() {
+        return salePrice;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setSalePrice(String salePrice) {
+        this.salePrice = salePrice;
     }
 
     public Integer getOrderNum() {

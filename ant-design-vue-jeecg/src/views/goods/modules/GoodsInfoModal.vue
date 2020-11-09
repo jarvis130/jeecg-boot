@@ -28,7 +28,7 @@
     data () {
       return {
         title:'',
-        width:800,
+        width:900,
         visible: false,
         disableSubmit: false
       }
@@ -43,9 +43,9 @@
       },
       edit (record) {
         this.visible=true
-        this.$nextTick(()=>{
-          this.$refs.realForm.edit(record);
-        })
+        // this.$nextTick(()=>{
+        //   this.$refs.realForm.edit(record);
+        // })
       },
       close () {
         this.$emit('ok');
