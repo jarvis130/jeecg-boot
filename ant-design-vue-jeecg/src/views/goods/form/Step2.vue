@@ -38,7 +38,7 @@
         <j-editor v-model="model.goodsDesc"/>
       </a-form-item>
      
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
+      <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button type="primary" @click="nextStep">下一步</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
