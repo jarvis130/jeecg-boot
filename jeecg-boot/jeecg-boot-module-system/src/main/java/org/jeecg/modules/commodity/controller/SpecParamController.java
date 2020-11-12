@@ -1,4 +1,4 @@
-package org.jeecg.modules.inventory.controller;
+package org.jeecg.modules.commodity.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.inventory.entity.InventoryInfo;
-import org.jeecg.modules.inventory.service.IInventoryInfoService;
+import org.jeecg.modules.commodity.entity.SpecParam;
+import org.jeecg.modules.commodity.service.ISpecParamService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,66 +37,66 @@ import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 
  /**
- * @Description: inventory_info
+ * @Description: spec_param
  * @Author: jeecg-boot
  * @Date:   2020-11-10
  * @Version: V1.0
  */
-@Api(tags="inventory_info")
+@Api(tags="spec_param")
 @RestController
-@RequestMapping("/inventory/inventoryInfo")
+@RequestMapping("/commodity/specParam")
 @Slf4j
-public class InventoryInfoController extends JeecgController<InventoryInfo, IInventoryInfoService> {
+public class SpecParamController extends JeecgController<SpecParam, ISpecParamService> {
 	@Autowired
-	private IInventoryInfoService inventoryInfoService;
+	private ISpecParamService specParamService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param inventoryInfo
+	 * @param specParam
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-分页列表查询")
-	@ApiOperation(value="inventory_info-分页列表查询", notes="inventory_info-分页列表查询")
+	@AutoLog(value = "spec_param-分页列表查询")
+	@ApiOperation(value="spec_param-分页列表查询", notes="spec_param-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(InventoryInfo inventoryInfo,
+	public Result<?> queryPageList(SpecParam specParam,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<InventoryInfo> queryWrapper = QueryGenerator.initQueryWrapper(inventoryInfo, req.getParameterMap());
-		Page<InventoryInfo> page = new Page<InventoryInfo>(pageNo, pageSize);
-		IPage<InventoryInfo> pageList = inventoryInfoService.page(page, queryWrapper);
+		QueryWrapper<SpecParam> queryWrapper = QueryGenerator.initQueryWrapper(specParam, req.getParameterMap());
+		Page<SpecParam> page = new Page<SpecParam>(pageNo, pageSize);
+		IPage<SpecParam> pageList = specParamService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 *   添加
 	 *
-	 * @param inventoryInfo
+	 * @param specParam
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-添加")
-	@ApiOperation(value="inventory_info-添加", notes="inventory_info-添加")
+	@AutoLog(value = "spec_param-添加")
+	@ApiOperation(value="spec_param-添加", notes="spec_param-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody InventoryInfo inventoryInfo) {
-		inventoryInfoService.save(inventoryInfo);
+	public Result<?> add(@RequestBody SpecParam specParam) {
+		specParamService.save(specParam);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 *  编辑
 	 *
-	 * @param inventoryInfo
+	 * @param specParam
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-编辑")
-	@ApiOperation(value="inventory_info-编辑", notes="inventory_info-编辑")
+	@AutoLog(value = "spec_param-编辑")
+	@ApiOperation(value="spec_param-编辑", notes="spec_param-编辑")
 	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody InventoryInfo inventoryInfo) {
-		inventoryInfoService.updateById(inventoryInfo);
+	public Result<?> edit(@RequestBody SpecParam specParam) {
+		specParamService.updateById(specParam);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -106,11 +106,11 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-通过id删除")
-	@ApiOperation(value="inventory_info-通过id删除", notes="inventory_info-通过id删除")
+	@AutoLog(value = "spec_param-通过id删除")
+	@ApiOperation(value="spec_param-通过id删除", notes="spec_param-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		inventoryInfoService.removeById(id);
+		specParamService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -120,11 +120,11 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-批量删除")
-	@ApiOperation(value="inventory_info-批量删除", notes="inventory_info-批量删除")
+	@AutoLog(value = "spec_param-批量删除")
+	@ApiOperation(value="spec_param-批量删除", notes="spec_param-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.inventoryInfoService.removeByIds(Arrays.asList(ids.split(",")));
+		this.specParamService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功!");
 	}
 	
@@ -134,26 +134,26 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-通过id查询")
-	@ApiOperation(value="inventory_info-通过id查询", notes="inventory_info-通过id查询")
+	@AutoLog(value = "spec_param-通过id查询")
+	@ApiOperation(value="spec_param-通过id查询", notes="spec_param-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		InventoryInfo inventoryInfo = inventoryInfoService.getById(id);
-		if(inventoryInfo==null) {
+		SpecParam specParam = specParamService.getById(id);
+		if(specParam==null) {
 			return Result.error("未找到对应数据");
 		}
-		return Result.OK(inventoryInfo);
+		return Result.OK(specParam);
 	}
 
     /**
     * 导出excel
     *
     * @param request
-    * @param inventoryInfo
+    * @param specParam
     */
     @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, InventoryInfo inventoryInfo) {
-        return super.exportXls(request, inventoryInfo, InventoryInfo.class, "inventory_info");
+    public ModelAndView exportXls(HttpServletRequest request, SpecParam specParam) {
+        return super.exportXls(request, specParam, SpecParam.class, "spec_param");
     }
 
     /**
@@ -165,7 +165,7 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
     */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        return super.importExcel(request, response, InventoryInfo.class);
+        return super.importExcel(request, response, SpecParam.class);
     }
 
 }

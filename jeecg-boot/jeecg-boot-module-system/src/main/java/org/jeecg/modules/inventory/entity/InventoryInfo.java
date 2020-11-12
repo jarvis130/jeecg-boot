@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: inventory_info
  * @Author: jeecg-boot
- * @Date:   2020-11-09
+ * @Date:   2020-11-10
  * @Version: V1.0
  */
 @Data
