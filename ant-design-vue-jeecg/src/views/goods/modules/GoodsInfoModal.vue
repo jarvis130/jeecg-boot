@@ -28,7 +28,7 @@
     data () {
       return {
         title:'',
-        width:900,
+        width:1000,
         visible: false,
         disableSubmit: false
       }
