@@ -31,6 +31,7 @@ const goods = {
     genericSpec: '',
     specArr: [],
     tableData: [],
+    oldTableData: []
   },
   mutations: {
     SET_GOODS: (state, params) => {
@@ -120,6 +121,9 @@ const goods = {
     },
     getTableData(state, data) {
       state.tableData = data
+    },
+    setOldTableData(state, data) {
+      state.oldTableData = data
     }
   },
   actions: {
@@ -128,6 +132,9 @@ const goods = {
     },
     getTableData(state, data) {
       state.commit('getTableData', data)
+    },
+    setOldTableData(state, data) {
+      state.commit('setOldTableData', data)
     },
     SaveGoodsInfo({ commit }, params) {
       return new Promise((resolve, reject) => {

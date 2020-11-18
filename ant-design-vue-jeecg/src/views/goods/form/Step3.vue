@@ -72,7 +72,7 @@
       </a-form-item>
 
       <a-form-item label="价格和库存" :labelCol="{span: 0}" :wrapperCol="{span: 24}" v-if="tableData.length > 0">
-        <a-table :dataSource="tableData" border>
+        <a-table :dataSource="tableData" border :pagination="pagination">
          
             <a-table-column v-for="(item, index) in specArr" :key="index" :title="item.name" align="center" width="10%">
               <template slot-scope="scope">
@@ -94,7 +94,7 @@
               <template slot-scope="scope">
             
 
-                  <j-image-upload v-model="scope.picture" :data="{biz:bizPath}" :isMultiple="isMultiple" style="width:80px;height:60px;"></j-image-upload>
+                  <j-image-upload v-model="scope.picture" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
 
               </template>
             </a-table-column>
@@ -195,6 +195,7 @@
         allData: [],
         setStock: "",
         setPrice: "",
+        pagination: false
         //
       }
     },
@@ -222,7 +223,7 @@
       ...mapGetters(["goods"])
     },
     methods: {
-      ...mapActions([ "getSpecArr", "getTableData" ]),
+      ...mapActions([ "getSpecArr", "getTableData", "setOldTableData" ]),
       // 点击添加规格组
       createdSpecifi() {
           if (this.specName) {
@@ -287,6 +288,9 @@
       },
       // 整理数据
       changeDataTable(m, n) {
+          //保存当前表格数据
+          this.$store.dispatch("setOldTableData", this.tableData);
+          //
           this.tableData = []
           this.allData = descartes(m);
           if (n.length > 1) {
@@ -307,6 +311,13 @@
                   this.tableData.push(dataArr);
                   this.$store.dispatch("getTableData", this.tableData);
               }
+          }
+          //取出old数据，然后向当前表格赋值
+          let oldData = this.goods.oldTableData;
+          for(var i=0;i<this.tableData.length-1;i++){
+            this.tableData[i]['price'] = oldData[i]['price']
+            this.tableData[i]['stock'] = oldData[i]['stock']
+            this.tableData[i]['picture'] = oldData[i]['picture']
           }
       },
       clicksSet(name) {
@@ -416,6 +427,11 @@
         vertical-align: middle;
         border-radius: 50%;
         text-align: center;
+    }
+
+    .ant-upload.ant-upload-select-picture-card{
+      width: 30px;
+      height: 30px;
     }
 
 </style>
