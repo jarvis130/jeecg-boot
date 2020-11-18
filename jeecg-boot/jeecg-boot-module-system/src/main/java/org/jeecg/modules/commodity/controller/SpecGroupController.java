@@ -1,18 +1,19 @@
 package org.jeecg.modules.commodity.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.api.client.util.ArrayMap;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.commodity.entity.SpecGroup;
+import org.jeecg.modules.commodity.entity.SpecParam;
 import org.jeecg.modules.commodity.service.ISpecGroupService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,6 +21,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.commodity.service.ISpecParamService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -49,6 +51,9 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 public class SpecGroupController extends JeecgController<SpecGroup, ISpecGroupService> {
 	@Autowired
 	private ISpecGroupService specGroupService;
+
+	@Autowired
+	private ISpecParamService specParamService;
 	
 	/**
 	 * 分页列表查询
@@ -167,5 +172,121 @@ public class SpecGroupController extends JeecgController<SpecGroup, ISpecGroupSe
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, SpecGroup.class);
     }
+
+	 /**
+	  * 根据分类查询规格组合
+	  *
+	  * @param cateId
+	  * @return
+	  */
+	 @AutoLog(value = "spec_group-根据分类查询规格组合")
+	 @ApiOperation(value="spec_group-根据分类查询规格组合", notes="spec_group-根据分类查询规格组合")
+	 @GetMapping(value = "/querySpecialList")
+	 public Result<?> querySpecialList(String cateId, HttpServletRequest req) {
+		 QueryWrapper<SpecGroup> queryWrapper1 = new QueryWrapper<>();
+		 queryWrapper1.eq("cid", cateId);
+		 queryWrapper1.select().orderByAsc("sort_no");
+		 List<SpecGroup> specGroupList = new ArrayList<>();
+		 specGroupList = specGroupService.list(queryWrapper1);
+		 //
+//		 QueryWrapper<SpecParam> queryWrapper2 = new QueryWrapper<>();
+//		 queryWrapper2.eq("cid", cateId);
+//		 queryWrapper2.eq("generic", 1);
+//		 queryWrapper2.select().orderByAsc("sort_no");
+//		 List<SpecParam> genericParamList = new ArrayList<>();
+//		 genericParamList = specParamService.list(queryWrapper2);
+		 //
+		 QueryWrapper<SpecParam> queryWrapper3 = new QueryWrapper<>();
+		 queryWrapper3.eq("cid", cateId);
+		 queryWrapper3.eq("generic", 0);
+		 queryWrapper3.select().orderByAsc("sort_no");
+		 List<SpecParam> specialParamList = new ArrayList<>();
+		 specialParamList = specParamService.list(queryWrapper3);
+
+
+//		 List specialList = new ArrayList();
+//
+//		 //通用规格
+//		 for(int i=0; i<specGroupList.size(); i++){
+//		 	Map<String, Object> map = new LinkedHashMap<String, Object>();
+//		 	SpecGroup specGroup = specGroupList.get(i);
+//		 	if(specGroup != null){
+//
+//		 		//
+//				Map<String, String> genericMap = new LinkedHashMap<String,String>();
+//		 		for(int j=0; j< genericParamList.size(); j++){
+//		 			SpecParam specParam = genericParamList.get(j);
+//		 			if(specParam != null){
+//		 				int b = specParam.getGeneric();
+//		 				if(specParam.getGroupId().equals(specGroup.getId()) && b==1){
+//							genericMap.put(specParam.getId(), specParam.getName());
+//						}
+//					}
+//				}
+//				if(genericMap.size() > 0){
+//					map.put("groupId", specGroup.getId());
+//					map.put("groupName", specGroup.getName());
+//					map.put("children", genericMap);
+//					specialList.add(map);
+//				}
+//
+//			}
+//
+//		 }
+
+
+		 return Result.OK(specialParamList);
+	 }
+
+	 /**
+	  * 根据分类查询规格组合
+	  *
+	  * @param cateId
+	  * @return
+	  */
+	 @AutoLog(value = "spec_group-根据分类查询规格组合")
+	 @ApiOperation(value="spec_group-根据分类查询规格组合", notes="spec_group-根据分类查询规格组合")
+	 @GetMapping(value = "/queryGenericList")
+	 public Result<?> queryGenericList(String cateId, HttpServletRequest req) {
+		 QueryWrapper<SpecGroup> queryWrapper1 = new QueryWrapper<>();
+		 queryWrapper1.eq("cid", cateId);
+		 queryWrapper1.select().orderByAsc("sort_no");
+		 List<SpecGroup> specGroupList = new ArrayList<>();
+		 specGroupList = specGroupService.list(queryWrapper1);
+		 //
+		 QueryWrapper<SpecParam> queryWrapper2 = new QueryWrapper<>();
+		 queryWrapper2.eq("cid", cateId);
+		 queryWrapper2.eq("generic", 1);
+		 queryWrapper2.select().orderByAsc("group_id", "sort_no");
+		 List<SpecParam> genericParamList = new ArrayList<>();
+		 genericParamList = specParamService.list(queryWrapper2);
+
+
+		 List genericList = new ArrayList();
+
+		 Map<String, String> map = new ArrayMap<>();
+		 for(int i=0; i< specGroupList.size(); i++) {
+			 SpecGroup specGroup = specGroupList.get(i);
+			 if (specGroup != null) {
+				 map.put(specGroup.getId(), specGroup.getName());
+			 }
+		 }
+
+
+		 for(int j=0; j< genericParamList.size(); j++){
+			 Map<String, String> genericMap = new LinkedHashMap<String,String>();
+			 SpecParam specParam = genericParamList.get(j);
+			 if(specParam != null){
+				 genericMap.put("groupId", specParam.getGroupId());
+				 genericMap.put("groupName", (String)map.get(specParam.getGroupId()));
+				 genericMap.put("specId", specParam.getId());
+				 genericMap.put("specName", specParam.getName());
+				 genericMap.put("attributeValue", "");
+				 genericList.add(genericMap);
+			 }
+		 }
+
+		 return Result.OK(genericList);
+	 }
 
 }

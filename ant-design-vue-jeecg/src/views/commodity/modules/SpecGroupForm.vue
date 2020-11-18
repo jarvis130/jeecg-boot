@@ -14,6 +14,11 @@
             </a-form-item>
           </a-col>
           <a-col :span="24">
+            <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['remark']" placeholder="请输入备注"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
             <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-dict-select-tag v-decorator="['status', validatorRules.status]" placeholder="请输入状态" dictCode="enable_status"  :triggerChange="true" style="width: 100%"/>
             </a-form-item>
@@ -132,7 +137,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'cid','name','status'))
+          this.form.setFieldsValue(pick(this.model,'cid','name', 'remark','status'))
         })
       },
       //渲染流程表单数据

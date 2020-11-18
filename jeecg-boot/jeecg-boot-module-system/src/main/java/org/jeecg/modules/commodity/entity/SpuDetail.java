@@ -32,9 +32,9 @@ public class SpuDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**spuId*/
-	@Excel(name = "spuId", width = 15)
-    @ApiModelProperty(value = "spuId")
-    private java.lang.String spuId;
+	@Excel(name = "id", width = 15)
+    @ApiModelProperty(value = "id")
+    private java.lang.String id;
 	/**商品描述信息*/
 	@Excel(name = "商品描述信息", width = 15)
     @ApiModelProperty(value = "商品描述信息")

@@ -10,28 +10,15 @@
          <a-input v-model="model.keywords" placeholder="请输入关键词"></a-input>
       </a-form-item>
 
-            <a-form-item
-        label="是否新品"
-           :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
-      >
-         <j-dict-select-tag v-decorator="['isNew']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
-      </a-form-item>
-
-            <a-form-item
-        label="是否热卖"
-         :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
-      >
-         <j-dict-select-tag v-decorator="['isHot']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
-      </a-form-item>
-
-            <a-form-item
-        label="是否推荐"
+      <a-form-item
+        label="过滤条件"
         :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
+        :wrapperCol="{span: 20}"
       >
-         <j-dict-select-tag v-decorator="['isRecommend']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+         <j-checkbox
+            v-model="jcheckbox.values"
+            :options="jcheckbox.options"
+          />
       </a-form-item>
 
       <a-form-item
@@ -39,7 +26,7 @@
         :labelCol="{span: 2}"
         :wrapperCol="{span: 20}"
       >
-         <a-textarea v-model="model.brief" rows="4" placeholder="请输入商品简述"/>
+         <a-textarea v-model="model.goodsBrief" rows="4" placeholder="请输入商品简述"/>
       </a-form-item>
 
       <a-form-item
@@ -48,7 +35,7 @@
         :wrapperCol="{span: 20}"
         class="stepFormText"
       >
-        <j-editor v-model="model.description"/>
+        <j-editor v-model="model.goodsDesc"/>
       </a-form-item>
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
@@ -87,11 +74,21 @@
         model: {
           id: '',
           keywords: '',
-          brief: '',
-          description: ''
+          goodsBrief: '',
+          goodsDesc: ''
+        },
+        jcheckbox: {
+          values: 'spring,jeecgboot',
+          options: [
+            { label: '新品', value: 'isNew' },
+            { label: '热卖', value: 'isHot' },
+            { label: '推荐', value: 'isPromote'}
+          ]
         },
         url: {
-
+          add: "/goods/goodsInfo/add",
+          edit: "/goods/goodsInfo/edit",
+          queryById: "/goods/goodsInfo/queryById"
         }
       }
     },
@@ -101,7 +98,7 @@
       ...mapGetters(["goods"])
     },
     mounted() {
-      if (this.goods){
+      if (this.goods.id != null && this.goods.id != ""){
         let record = this.goods;
         this.edit(record);
       }
@@ -137,7 +134,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'cId','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','brief','description','extensionCode','isOnSale','isNew','isHot','isRecommend'))
+          this.form.setFieldsValue(pick(this.model,'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
         })
       },
     }

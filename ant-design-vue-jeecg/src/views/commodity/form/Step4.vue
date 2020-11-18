@@ -7,47 +7,30 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-switch v-model="model.enableGenericSpec"/>
+         <a-switch v-model="model.enableAttribute"/>
       </a-form-item>
 
-      <div v-if="model.enableGenericSpec == true">
+      <div v-if="model.enableAttribute == true">
+    
+        <j-editable-table
+          ref="editableTable"
+          :loading="loading"
+          :columns="columns"
+          :dataSource="dataSource"
+          :actionButton="true"
+          :dragSort="true"
+          style="margin-top: 8px;"
+          @selectRowChange="handleSelectRowChange">
 
+          <template v-slot:action="props">
+            <a @click="handleDelete(props)">删除</a>
+          </template>
 
-      <a-row>
-        <a-col :span="6">
-        
-        </a-col>
-        <a-col :span="6">
-        
-        </a-col>
-        <a-col :span="6">
-      
-        </a-col>
-        <a-col :span="6">
-          <a-button type="primary" @click="showModal">
-            同步最新配置
-          </a-button>
-        </a-col>
-      </a-row>
-
-    <a-modal v-model="visible" title="同步最新配置" ok-text="继续" cancel-text="取消" @ok="hideModal">
-      <p>同步配置将清空下表填写的内容，是否确定？</p>
-    </a-modal>
-
-          <j-editable-table
-            border
-            ref="editableTable"
-            :loading="loading"
-            :columns="columns"
-            :dataSource="genericList"
-            style="margin-top: 8px;"
-            @selectRowChange="handleSelectRowChange">
-
-          </j-editable-table>
-
-     
+        </j-editable-table>
 
       </div>
+      
+      
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
@@ -58,22 +41,6 @@
 </template>
 
 <script>
-
-// 动态计算需要合并的单元格的行
-    const temp = {}; // 当前重复的值,支持多列
-    const mergeCells = (text, array, columns) => {
-        let i = 0;
-        if (text !== temp[columns]) {
-            temp[columns] = text;
-            array.forEach((item) => {
-                if (item.groupName === temp[columns]) {
-                    i += 1;
-                }
-            });
-        }
-        return i;
-    };
-
   import pick from 'lodash.pick'
   import moment from 'moment'
   import { FormTypes } from '@/utils/JEditableTableUtil'
@@ -81,7 +48,6 @@
   import JEditableTable from '@/components/jeecg/JEditableTable'
   import { randomUUID, randomNumber } from '@/utils/util'
   import { mapGetters, mapActions } from "vuex";
-  import { httpAction, getAction } from '@/api/manage'
   export default {
     name: "Step4",
     components: {
@@ -112,61 +78,49 @@
         },
         loading: false,
         model: {
-          enableGenericSpec: false
+          enableAttribute: false
         },
         columns: [
           {
-            title: '属性组',
-            key: 'groupName',
-            width: '100px',
-            type: FormTypes.nomal,
-            dataIndex: 'groupName',
-            align: "center",
-            colSpan: 3,//合并表头
-            //自定义的渲染格式
-            customRender:(value, row, index) => {//合并行 和 标题头相同 本行合并几个其它行用colSpan = 0去取消显示
-                console.log(value,row,index)//本列的值,所有行数据包括本列,第几列
-                const obj = {
-                    children: value,
-                    attrs: {},
-                  };
-                    obj.attrs.colSpan = 3;//这里设置的是表格体的合并
-                    return obj;
-            }
-          },
-          {
             title: '属性名称',
-            key: 'specName',
+            key: 'attributeName',
+            // width: '18%',
             width: '200px',
-            type: FormTypes.nomal
+            type: FormTypes.input,
+            allowInput: true,
+            defaultValue: '',
+            placeholder: '请选择${title}',
+            validateRules: [{ required: true, message: '请选择${title}' }]
           },
           {
             title: '属性值',
             key: 'attributeValue',
+            // width: '18%',
             width: '300px',
             type: FormTypes.input,
             allowInput: true,
             defaultValue: '',
             placeholder: '请选择${title}',
             validateRules: [{ required: true, message: '请选择${title}' }]
+          },
+          {
+            title: '操作',
+            key: 'action',
+            // width: '8%',
+            width: '100px',
+            type: FormTypes.slot,
+            slotName: 'action',
           }
 
         ],
         dataSource: [],
-        selectedRowIds: [],
-        genericList: [],
-        visible: false,
-        url: {
-          list: "/commodity/specGroup/queryGenericList"
-        }
+        selectedRowIds: []
       }
     },
     mounted() {
-      if (this.goods){
+      if (this.goods.id != null && this.goods.id != ""){
         let record = this.goods;
         this.edit(record);
-      }else{
-        this.loadGenericData();
       }
     },
     computed: {
@@ -186,17 +140,20 @@
             let formData = Object.assign(that.model, values);
             console.log("表单提交数据",formData)
             
-            if(that.model.enableGenericSpec){
+            if(that.form.enableAttribute){
               
               //将表格数据解析成字符串
-              that.$refs.editableTable.getValues((error, values) => {
+              this.$refs.editableTable.getValues((error, values) => {
                 // 错误数 = 0 则代表验证通过
                 if (error === 0) {
-             
                     // this.$message.success('验证通过')
                     // 将通过后的数组提交到后台或自行进行其他处理
                     if(values != null){
-                      formData.genericSpec = JSON.stringify(values);
+                      let arr = {
+                        columns: that.columns,
+                        dataSource: values    
+                      };
+                      formData.attributeJsonData = JSON.stringify(arr);
                       console.log("表单提交数据",formData)
            
                       if(!that.model.id){
@@ -221,8 +178,7 @@
                     
 
                 } else {
-                    this.$message.error('验证未通过');
-                    return;
+                    // this.$message.error('验证未通过')
                 }
               })
 
@@ -245,6 +201,7 @@
                   that.confirmLoading = false;
                 });
               }
+
             }
 
           }
@@ -253,6 +210,16 @@
       },
       prevStep () {
         this.$emit('prevStep')
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
@@ -302,59 +269,16 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'enableGenericSpec'))
-        })
-        let genericSpec = this.model.genericSpec;
-        if(genericSpec){
-          let that = this;
-          let arr = JSON.parse(genericSpec);
-          if(arr instanceof Array){
-            that.genericList = arr;
-            // let tmp = [];
-            // for(var i=0; i<arr.length; i++){
-            //   let item = arr[i];
-            //   tmp.push({
-            //     rowKey: item['id'], // 行的id
-            //     values: { // 在这里 values 中的 name 是你 columns 中配置的 key
-            //         'attributeValue': item['attributeValue']
-            //     }    
-            //   });
-            // }
-            // debugger;
-            // that.$refs.editableTable.setValues(tmp);
-          }
+        // this.$nextTick(() => {
+        //   this.form.setFieldsValue(pick(this.model, 'enableAttribute'))
+        // })
+
+        let attributeJsonData = this.model.attributeJsonData;
+        if(attributeJsonData){
+          let arr = JSON.parse(attributeJsonData);
+          this.columns = arr.columns;
+          this.dataSource = arr.dataSource;
         }
-      },
-      loadGenericData() {
-        if(!this.url.list){
-          this.$message.error("请设置url.list属性!")
-          return
-        }
-        let that = this;
-        this.loading = true;
-        let param = {
-          cateId: this.goods.cid3
-        }
-        getAction(this.url.list, param).then((res) => {
-          if (res.success) {
-            // debugger
-            //渲染组件
-            that.genericList = res.result;
-            //
-          }
-          if(res.code===510){
-            that.$message.warning(res.message)
-          }
-          that.loading = false;
-        })
-      },
-      showModal() {
-        this.visible = true;
-      },
-      hideModal() {
-        this.loadGenericData();
-        this.visible = false;
       }
     }
   }

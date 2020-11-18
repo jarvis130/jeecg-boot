@@ -44,6 +44,12 @@ public class SpecGroup implements Serializable {
 	@Excel(name = "规格组的名称", width = 15)
     @ApiModelProperty(value = "规格组的名称")
     private java.lang.String name;
+
+    /**规格组的名称*/
+    @Excel(name = "备注", width = 15)
+    @ApiModelProperty(value = "备注")
+    private java.lang.String remark;
+
 	/**租户编号*/
 	@Excel(name = "租户编号", width = 15)
     @ApiModelProperty(value = "租户编号")
@@ -78,4 +84,9 @@ public class SpecGroup implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "更新时间")
     private java.util.Date updateTime;
+
+    /**排序*/
+    @Excel(name = "排序", width = 15)
+    @ApiModelProperty(value = "排序")
+    private java.lang.Integer sortNo;
 }

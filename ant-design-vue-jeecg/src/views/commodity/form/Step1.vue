@@ -3,19 +3,11 @@
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
-        label="商品标题"
+        label="商品名称"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['title', validatorRules.title]" placeholder="请输入商品标题"></a-input>
-      </a-form-item>
-
-      <a-form-item
-        label="副标题"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-         <a-input v-decorator="['subTitle']" placeholder="请输入商品副标题"></a-input>
+         <a-input v-decorator="['goodsName', validatorRules.goodsName]" placeholder="请输入商品名称"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -23,7 +15,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['code']" placeholder="请输入商品编码"></a-input>
+         <a-input v-decorator="['goodsSn']" placeholder="请输入商品编码"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -39,7 +31,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-          <j-category-select v-decorator="['cid3', validatorRules.cid]" pcode="A01" placeholder="请输入商品分类"/>
+          <a-input v-decorator="['catId', validatorRules.catId]" placeholder="请输入商品分类"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -56,7 +48,7 @@
         :wrapperCol="{span: 19}"
       >
       
-        <j-image-upload v-model="model.thumbs" :isMultiple="isMultiple"></j-image-upload>
+        <j-image-upload v-model="model.goodsThumb" :isMultiple="isMultiple"></j-image-upload>
       </a-form-item>
 
       <a-form-item
@@ -80,7 +72,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <j-dict-select-tag v-decorator="['isOnSale', validatorRules.isOnSale]" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+        <a-switch v-model="model.isOnSale"/>
       </a-form-item>
 
 
@@ -98,13 +90,11 @@
   import pick from 'lodash.pick'
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import { mapGetters, mapActions } from "vuex"; 
-  import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
     name: "Step1",
     components: {
-      JImageUpload,
-      JCategorySelect
+      JImageUpload
     },
     props: {
       //流程表单data
@@ -130,7 +120,7 @@
       return {
         form: this.$form.createForm(this),
         model: {
-          thumbs: [],
+          goodsThumb: [],
           isOnSale: false
         },
         labelCol: {
@@ -144,19 +134,19 @@
         confirmLoading: false,
         isMultiple: true,
         validatorRules: {
-          cId: {
+          catId: {
             rules: [
               { required: true, message: '请输入商品分类!'},
             ]
           },
-          title: {
-            rules: [
-              { required: true, message: '请输入商品名称!'},
-            ]
-          },
-          code: {
+          goodsSn: {
             rules: [
               { required: true, message: '请输入商品编号!'},
+            ]
+          },
+          goodsName: {
+            rules: [
+              { required: true, message: '请输入商品名称!'},
             ]
           },
           brandId: {
@@ -236,7 +226,9 @@
           },
         },
         url: {
-
+          add: "/goods/goodsInfo/add",
+          edit: "/goods/goodsInfo/edit",
+          queryById: "/goods/goodsInfo/queryById"
         }
       }
     },
@@ -246,7 +238,7 @@
       ...mapGetters(["goods"])
     },
     mounted() {
-      if (this.goods){
+      if (this.goods.id != null && this.goods.id != ""){
         let record = this.goods;
         this.edit(record);
       }
@@ -282,7 +274,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'catId','goodsSn','goodsName','goodsType','brandId','marketPrice', 'salePrice','keywords','originalImg','goodsThumb','goodsImg','goodsBrief','goodsDesc','isReal','extensionCode','isOnSale','isBest','isNew','isHot','isPromote','tenantId','enableSku','skuJsonData', 'enableAttribute','attributeJsonData','sortOrder','delFlag','createTime','updateBy','createBy','updateTime'))
         })
         //图片处理
         // let imageStr = this.model.goodsThumb;

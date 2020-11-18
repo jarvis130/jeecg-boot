@@ -35,7 +35,6 @@
         ref="table"
         size="middle"
         :scroll="{x:true}"
-        bordered
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -121,20 +120,20 @@
             }
           },
           {
-            title:'商品分类',
-            align:"center",
-            dataIndex: 'catId'
-          },
-          {
             title:'商品编号',
             align:"center",
-            dataIndex: 'goodsSn'
+            dataIndex: 'code'
           },
           {
             title:'商品名称',
             align:"center",
             width:150,
-            dataIndex: 'goodsName'
+            dataIndex: 'title'
+          },
+          {
+            title:'商品分类',
+            align:"center",
+            dataIndex: 'cid3_dictText'
           },
           {
             title:'品牌编号',
@@ -149,33 +148,23 @@
           {
             title:'是否上架',
             align:"center",
-            dataIndex: 'isOnSale'
+            dataIndex: 'isOnSale_dictText'
           },
-          {
-            title:'是否推荐',
-            align:"center",
-            dataIndex: 'isBest'
-          },
-          {
-            title:'是否新品',
-            align:"center",
-            dataIndex: 'isNew'
-          },
-          {
-            title:'是否热卖',
-            align:"center",
-            dataIndex: 'isHot'
-          },
-          {
-            title:'是否推荐',
-            align:"center",
-            dataIndex: 'isPromote'
-          },
-          {
-            title:'排序',
-            align:"center",
-            dataIndex: 'sortOrder'
-          },
+          // {
+          //   title:'是否新品',
+          //   align:"center",
+          //   dataIndex: 'isNew_dictText'
+          // },
+          // {
+          //   title:'是否热卖',
+          //   align:"center",
+          //   dataIndex: 'isHot_dictText'
+          // },
+          // {
+          //   title:'是否推荐',
+          //   align:"center",
+          //   dataIndex: 'isRecommend_dictText'
+          // },
           {
             title:'更新时间',
             align:"center",
@@ -194,11 +183,11 @@
           }
         ],
         url: {
-          list: "/goods/goodsInfo/list",
-          delete: "/goods/goodsInfo/delete",
-          deleteBatch: "/goods/goodsInfo/deleteBatch",
-          exportXlsUrl: "/goods/goodsInfo/exportXls",
-          importExcelUrl: "goods/goodsInfo/importExcel",
+          list: "/commodity/spuInfo/list",
+          delete: "/commodity/spuInfo/delete",
+          deleteBatch: "/commodity/spuInfo/deleteBatch",
+          exportXlsUrl: "/commodity/spuInfo/exportXls",
+          importExcelUrl: "commodity/spuInfo/importExcel",
           
         },
         dictOptions:{},

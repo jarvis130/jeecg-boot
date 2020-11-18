@@ -1,21 +1,21 @@
 package org.jeecg.modules.commodity.entity;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.jeecgframework.poi.excel.annotation.Excel;
-import org.jeecg.common.aspect.annotation.Dict;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.jeecg.common.aspect.annotation.Dict;
+import org.jeecgframework.poi.excel.annotation.Excel;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Description: spu_info
@@ -28,138 +28,143 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="spu_info对象", description="spu_info")
-public class SpuInfo implements Serializable {
+public class SpuInfoVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**spu id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "spu id")
-    private java.lang.String id;
+    private String id;
 
     /**商品编号*/
     @Excel(name = "商品编号", width = 15)
     @ApiModelProperty(value = "商品编号")
-    private java.lang.String code;
+    private String code;
 
 	/**标题*/
 	@Excel(name = "标题", width = 15)
     @ApiModelProperty(value = "标题")
-    private java.lang.String title;
+    private String title;
 
 	/**子标题*/
 	@Excel(name = "子标题", width = 15)
     @ApiModelProperty(value = "子标题")
-    private java.lang.String subTitle;
+    private String subTitle;
 
 	/**1级类目id*/
 	@Excel(name = "1级类目id", width = 15)
     @ApiModelProperty(value = "1级类目id")
-    private java.lang.String cid1;
+    private String cid1;
 
 	/**2级类目id*/
 	@Excel(name = "2级类目id", width = 15)
     @ApiModelProperty(value = "2级类目id")
-    private java.lang.String cid2;
+    private String cid2;
 
 	/**3级类目id*/
 	@Excel(name = "3级类目id", width = 15)
     @ApiModelProperty(value = "3级类目id")
     @Dict(dicCode = "id",dictTable="sys_category",dicText="name")
-    private java.lang.String cid3;
+    private String cid3;
 
 	/**商品所属品牌id*/
 	@Excel(name = "商品所属品牌id", width = 15)
     @ApiModelProperty(value = "商品所属品牌id")
-    private java.lang.Integer brandId;
+    private Integer brandId;
 
 	/**是否上架，0下架，1上架*/
 	@Excel(name = "是否上架，0下架，1上架", width = 15)
+    @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否上架，0下架，1上架")
-    private java.lang.Integer isOnSale;
+    private Integer isOnSale;
 
 	/**是否有效，0已删除，1有效*/
 	@Excel(name = "是否有效，0已删除，1有效", width = 15)
     @ApiModelProperty(value = "是否有效，0已删除，1有效")
-    private java.lang.Integer delFlag;
+    private Integer delFlag;
 
 	/**添加时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "添加时间")
-    private java.util.Date createTime;
+    private Date createTime;
 
 	/**最后修改时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "最后修改时间")
-    private java.util.Date updateTime;
+    private Date updateTime;
 
     /**更新者*/
     @ApiModelProperty(value = "更新者")
-    private java.lang.String updateBy;
+    private String updateBy;
 
     /**创建者*/
     @ApiModelProperty(value = "创建者")
-    private java.lang.String createBy;
+    private String createBy;
 
     /**是否实物商品，是1，否2*/
     @Excel(name = "是否实物商品，是1，否2", width = 15)
     @ApiModelProperty(value = "是否实物商品，是1，否2")
-    private java.lang.Integer isReal;
+    private String isReal;
 
     /**外部编码*/
     @Excel(name = "外部编码", width = 15)
     @ApiModelProperty(value = "外部编码")
-    private java.lang.String extensionCode;
+    private String extensionCode;
 
     /**是否新品*/
     @Excel(name = "是否新品", width = 15)
+    @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否新品")
-    private java.lang.Integer isNew;
+    private Integer isNew;
 
     /**是否热卖*/
     @Excel(name = "是否热卖", width = 15)
+    @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否热卖")
-    private java.lang.Integer isHot;
+    private Integer isHot;
 
     /**是否推荐*/
     @Excel(name = "是否推荐", width = 15)
+    @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否推荐")
-    private java.lang.Integer isRecommend;
+    private Integer isRecommend;
 
     /**租户编号*/
     @Excel(name = "租户编号", width = 15)
     @ApiModelProperty(value = "租户编号")
-    private java.lang.String tenantId;
+    private String tenantId;
 
     /**关键词*/
     @Excel(name = "关键词", width = 15)
     @ApiModelProperty(value = "关键词")
-    private java.lang.String keywords;
+    private String keywords;
 
     /**默认缩略图*/
     @Excel(name = "默认缩略图", width = 15)
     @ApiModelProperty(value = "默认缩略图")
-    private java.lang.String thumbs;
+    private String thumbs;
 
     /**默认压缩后图片*/
     @Excel(name = "默认压缩后图片", width = 15)
     @ApiModelProperty(value = "默认压缩后图片")
-    private java.lang.String images;
+    private String images;
 
-    /**市场价*/
-    @Excel(name = "市场价", width = 15)
-    @ApiModelProperty(value = "市场价")
-    private java.math.BigDecimal marketPrice;
+    /**商品描述信息*/
+    @Excel(name = "商品描述信息", width = 15)
+    @ApiModelProperty(value = "商品描述信息")
+    private java.lang.String description;
 
-    @Excel(name = "平台价", width = 15)
-    @ApiModelProperty(value = "平台价")
-    private java.math.BigDecimal salePrice;
+    /**通用规格参数数据*/
+    @Excel(name = "通用规格参数数据", width = 15)
+    @ApiModelProperty(value = "通用规格参数数据")
+    private java.lang.String genericSpec;
 
-    /**商品简述*/
-    @Excel(name = "商品简述", width = 15)
-    @ApiModelProperty(value = "商品简述")
-    private java.lang.String brief;
+    /**特有规格参数及可选值信息，json格式*/
+    @Excel(name = "特有规格参数及可选值信息，json格式", width = 15)
+    @ApiModelProperty(value = "特有规格参数及可选值信息，json格式")
+    private java.lang.String specialSpec;
 
     /**是否启用sku编辑，1是，0否*/
     @Excel(name = "是否启用sku编辑，1是，0否", width = 15)
@@ -170,5 +175,19 @@ public class SpuInfo implements Serializable {
     @Excel(name = "是否启用attribute编辑，1是，0否", width = 15)
     @ApiModelProperty(value = "是否启用sku编辑，1是，0否")
     private java.lang.Boolean enableGenericSpec;
+
+    /**商品简述*/
+    @Excel(name = "商品简述", width = 15)
+    @ApiModelProperty(value = "商品简述")
+    private java.lang.String brief;
+
+    /**市场价*/
+    @Excel(name = "市场价", width = 15)
+    @ApiModelProperty(value = "市场价")
+    private java.math.BigDecimal marketPrice;
+
+    @Excel(name = "平台价", width = 15)
+    @ApiModelProperty(value = "平台价")
+    private java.math.BigDecimal salePrice;
 
 }

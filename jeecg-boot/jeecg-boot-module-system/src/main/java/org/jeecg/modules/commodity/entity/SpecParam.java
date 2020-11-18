@@ -82,4 +82,9 @@ public class SpecParam implements Serializable {
     @Dict(dicCode = "enable_status")
     @ApiModelProperty(value = "状态")
     private java.lang.Integer status;
+
+    /**排序*/
+    @Excel(name = "排序", width = 15)
+    @ApiModelProperty(value = "排序")
+    private java.lang.Integer sortNo;
 }

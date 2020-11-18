@@ -10,10 +10,10 @@
         </a-steps>
         <div class="content">
           <step1 v-if="currentTab === 0" ref="step1Form" @nextStep="nextStep"/>
-          <step2 v-if="currentTab === 1" ref="step2Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <step3 v-if="currentTab === 2" ref="step3Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <step4 v-if="currentTab === 3" ref="step4Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <finish v-if="currentTab === 4" ref="step5Form" @nextStep="nextStep" @prevStep="prevStep"></finish>
+          <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
+          <step3 v-if="currentTab === 2" @nextStep="nextStep" @prevStep="prevStep"/>
+          <step4 v-if="currentTab === 3" @nextStep="nextStep" @prevStep="prevStep"/>
+          <finish v-if="currentTab === 4" @nextStep="nextStep" @prevStep="prevStep"></finish>
         </div>
       </a-card>
 
@@ -92,11 +92,6 @@
       //   //新增商品清空store
       //   this.ClearGoodsStore();
       // }
-    },
-    computed: {
-      // 用vuex读取数据(读取的是getters.js中的数据)
-      // 相当于this.$store.getters.goods(vuex语法糖)
-      ...mapGetters(["goods"])
     },
     methods: {
       ...mapActions([ "ClearGoodsStore", "SetGoodsStore" ]),

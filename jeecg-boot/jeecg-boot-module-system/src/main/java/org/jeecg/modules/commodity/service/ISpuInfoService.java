@@ -2,6 +2,7 @@ package org.jeecg.modules.commodity.service;
 
 import org.jeecg.modules.commodity.entity.SpuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.commodity.entity.SpuInfoVO;
 
 /**
  * @Description: spu_info
@@ -11,4 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISpuInfoService extends IService<SpuInfo> {
 
+    public SpuInfoVO saveSpu(SpuInfoVO spuInfoVO);
+
+    public SpuInfoVO updateSpu(SpuInfoVO spuInfoVO);
 }

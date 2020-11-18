@@ -133,6 +133,11 @@
             dataIndex: 'cid_dictText'
           },
           {
+            title:'备注',
+            align:"center",
+            dataIndex: 'remark'
+          },
+          {
             title:'状态',
             align:"center",
             dataIndex: 'status_dictText'

@@ -35,7 +35,6 @@
         ref="table"
         size="middle"
         :scroll="{x:true}"
-        bordered
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -67,7 +66,10 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-
+          <a-divider type="vertical" />
+          <a @click="handleEdit(record)">设置规格</a>
+          <a-divider type="vertical" />
+          <a @click="handleEdit(record)">设置属性</a>
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -125,39 +127,19 @@
             dataIndex: 'title'
           },
           {
-            title:'子标题',
-            align:"center",
-            dataIndex: 'subTitle'
-          },
-          {
-            title:'1级类目id',
+            title:'类目',
             align:"center",
             dataIndex: 'cid1'
           },
           {
-            title:'2级类目id',
-            align:"center",
-            dataIndex: 'cid2'
-          },
-          {
-            title:'3级类目id',
-            align:"center",
-            dataIndex: 'cid3'
-          },
-          {
-            title:'商品所属品牌id',
+            title:'品牌',
             align:"center",
             dataIndex: 'brandId'
           },
           {
-            title:'是否上架，0下架，1上架',
+            title:'是否上架',
             align:"center",
             dataIndex: 'onSale'
-          },
-          {
-            title:'是否有效，0已删除，1有效',
-            align:"center",
-            dataIndex: 'delFlag'
           },
           {
             title:'添加时间',
@@ -168,7 +150,7 @@
             }
           },
           {
-            title:'最后修改时间',
+            title:'修改时间',
             align:"center",
             dataIndex: 'updateTime',
             customRender:function (text) {
