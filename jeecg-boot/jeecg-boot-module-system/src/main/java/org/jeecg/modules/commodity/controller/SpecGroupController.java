@@ -281,7 +281,7 @@ public class SpecGroupController extends JeecgController<SpecGroup, ISpecGroupSe
 				 genericMap.put("groupName", (String)map.get(specParam.getGroupId()));
 				 genericMap.put("specId", specParam.getId());
 				 genericMap.put("specName", specParam.getName());
-				 genericMap.put("attributeValue", "");
+				 genericMap.put("specValue", "");
 				 genericList.add(genericMap);
 			 }
 		 }

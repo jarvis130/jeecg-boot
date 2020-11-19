@@ -55,10 +55,17 @@ const goods = {
       state.isNew = params.isNew = '' ? '' : params.isNew;
       state.isHot = params.isHot = '' ? '' : params.isHot;
       state.isRecommend = params.isRecommend = '' ? '' : params.isRecommend;
-      state.enableSpecialSpec = params.enableSpecialSpec = '' ? '' : params.enableSpecialSpec;
+      state.enableSpecialSpec = params.enableSpecialSpec = '' ? false : params.enableSpecialSpec;
       state.specialSpec = params.specialSpec = '' ? '' : params.specialSpec;
-      state.enableGenericSpec = params.enableGenericSpec = '' ? '' : params.enableGenericSpec;
+      state.enableGenericSpec = params.enableGenericSpec = '' ? false : params.enableGenericSpec;
       state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
+      if(params.enableSpecialSpec){
+        if(params.specialSpec){
+          let arr = JSON.parse(params.specialSpec);
+          state.specArr = arr['spec'];
+          state.tableData = arr['table'];
+        }
+      }
     },
     SET_GOODS1: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
@@ -85,11 +92,18 @@ const goods = {
       state.isRecommend = params.isRecommend = '' ? '' : params.isRecommend;
     },
     SET_GOODS3: (state, params) => {
-      state.enableSpecialSpec = params.enableSpecialSpec = '' ? '' : params.enableSpecialSpec;
-      state.specialSpec = params.specialSpec = '' ? '' : params.specialSpec;
+      state.enableSpecialSpec = params.enableSpecialSpec = '' ? false : params.enableSpecialSpec;
+      if(params.enableSpecialSpec){
+        let specialSpec = {
+          spec: state.specArr,
+          table: state.tableData
+        }
+        state.specialSpec = JSON.stringify(specialSpec);
+      }
+      
     },
     SET_GOODS4: (state, params) => {
-      state.enableGenericSpec = params.enableGenericSpec = '' ? '' : params.enableGenericSpec;
+      state.enableGenericSpec = params.enableGenericSpec = '' ? false : params.enableGenericSpec;
       state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
     },
     CLEAR_GOODS: (state) => {

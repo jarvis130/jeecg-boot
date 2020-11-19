@@ -1,108 +1,125 @@
 <template>
   <div>
     <a-form :form="form"  label-width="120px" @submit.native.prevent>
-      <a-form-item label="规格组和规格值" :labelCol="{span: 5}" :wrapperCol="{span: 19}">
+
+      <a-form-item
+        label="启用规格"
+        :labelCol="{span: 5}"
+        :wrapperCol="{span: 19}"
+      >
+         <a-switch v-model="model.enableSpecialSpec"/>
+      </a-form-item>
+
+      <div v-if="model.enableSpecialSpec == true">
+
+        <!-- <a-form-item label="规格组和规格值" :labelCol="{span: 5}" :wrapperCol="{span: 19}">
+          <a-input-search
+            addon-before="规格组" 
+            onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+            placeholder="请输入内容"
+            enter-button="设置"
+            size="default"
+            v-model="specName" 
+            style="width: 400px" 
+            @keyup.enter.native="createdSpecifi"
+            @search="createdSpecifi"
+          />
+        </a-form-item> -->
+
+        <a-form-item label="" :labelCol="{span: 0}" :wrapperCol="{span: 24}" style="margin: 10px 0 20px 0">
+            <div class="introTitle" v-for="(tab, indexs) in specArr" :key="indexs">
+                <span class="fontWidth">{{tab.name}}</span>
+                <span class="delete clear" @click="clearSpe(indexs)">×</span>
+                <div class="introCon">
+                    <ul>
+                        <li v-for="(val, index) in tab.conName" :key="index">
+                            <span>{{val}}</span>
+                            <span class="delete" @click="clearSpecif(indexs, index)">×</span>
+                        </li>
+                        <li>
+                            <a-input-search
+                              addon-before="规格值" 
+                              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+                              placeholder="请输入内容"
+                              enter-button="设置"
+                              size="default"
+                              v-model="tab.addField" 
+                              style="width: 250px" 
+                              @keyup.enter.native="clickSpecVal(indexs, tab.addField)"
+                              @search="clickSpecVal(indexs, tab.addField)"
+                            />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a-form-item>
+
+        <a-form-item label="批量设置" style="margin-bottom: 20px" :labelCol="{span: 5}" :wrapperCol="{span: 19}" v-if="tableData.length > 0">
+
+            <a-input-search
+              addon-before="单价" 
+              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+              placeholder="请输入单价"
+              enter-button="设置"
+              size="default"
+              v-model="setPrice" 
+              style="width: 250px;margin-right: 20px" 
+              @keyup.native="proving(2)"
+              @search="clicksSet(2)"
+            />
+
+            <a-input-search
+              addon-before="库存" 
+              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+              placeholder="请输入库存"
+              enter-button="设置"
+              size="default"
+              v-model="setStock" 
+              style="width: 250px;margin-right: 20px" 
+              @keyup.native="proving(1)"
+              @search="clicksSet(1)"
+            />
+        </a-form-item>
+
+        <a-form-item label="价格和库存" :labelCol="{span: 0}" :wrapperCol="{span: 24}" v-if="tableData.length > 0">
+          <a-table :dataSource="tableData" border :pagination="pagination">
           
-        <a-input-search
-          addon-before="规格组" 
-          onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
-          placeholder="请输入内容"
-          enter-button="设置"
-          size="default"
-          v-model="specName" 
-          style="width: 400px" 
-          @keyup.enter.native="createdSpecifi"
-          @search="createdSpecifi"
-        />
+              <a-table-column v-for="(item, index) in specArr" :key="index" :title="item.name" align="center" width="10%">
+                <template slot-scope="scope">
+                    <span>{{ scope.specs[index] }}</span>
+                </template>
+              </a-table-column>
+              <a-table-column key="price" title="单价" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.price" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column>
+              <a-table-column key="stock" title="库存" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.stock" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column>
+              
+              <a-table-column key="picture" title="图片" align="center">
+                <template slot-scope="scope">
+                    <!-- {{scope.picture}} -->
+
+                    <j-image-upload v-model="scope.picture" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
+
+                </template>
+              </a-table-column>
+          </a-table>
       </a-form-item>
+        <!-- <p>{{specArr}}</p> -->
+        <!--<p>{{allData}}</p>-->
+        <!--<p>{{tableData}}</p>-->
 
-      <a-form-item label="" :labelCol="{span: 0}" :wrapperCol="{span: 24}" style="margin: 10px 0 20px 0">
-          <div class="introTitle" v-for="(tab, indexs) in specArr" :key="indexs">
-              <span class="fontWidth">{{tab.name}}</span>
-              <span class="delete clear" @click="clearSpe(indexs)">×</span>
-              <div class="introCon">
-                  <ul>
-                      <li v-for="(val, index) in tab.conName" :key="index">
-                          <span>{{val}}</span>
-                          <span class="delete" @click="clearSpecif(indexs, index)">×</span>
-                      </li>
-                      <li>
-                          <a-input-search
-                            addon-before="规格值" 
-                            onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
-                            placeholder="请输入内容"
-                            enter-button="设置"
-                            size="default"
-                            v-model="tab.addField" 
-                            style="width: 250px" 
-                            @keyup.enter.native="clickSpecVal(indexs, tab.addField)"
-                            @search="clickSpecVal(indexs, tab.addField)"
-                          />
-                      </li>
-                  </ul>
-              </div>
-          </div>
+      </div>
+
+      <a-form-item :wrapperCol="{span: 14, offset: 10}">
+        <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
+        <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
-
-      <a-form-item label="批量设置" style="margin-bottom: 20px" :labelCol="{span: 5}" :wrapperCol="{span: 19}" v-if="tableData.length > 0">
-
-          <a-input-search
-            addon-before="单价" 
-            onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
-            placeholder="请输入单价"
-            enter-button="设置"
-            size="default"
-            v-model="setPrice" 
-            style="width: 250px;margin-right: 20px" 
-            @keyup.native="proving(2)"
-            @search="clicksSet(2)"
-          />
-
-          <a-input-search
-            addon-before="库存" 
-            onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
-            placeholder="请输入库存"
-            enter-button="设置"
-            size="default"
-            v-model="setStock" 
-            style="width: 250px;margin-right: 20px" 
-            @keyup.native="proving(1)"
-            @search="clicksSet(1)"
-          />
-      </a-form-item>
-
-      <a-form-item label="价格和库存" :labelCol="{span: 0}" :wrapperCol="{span: 24}" v-if="tableData.length > 0">
-        <a-table :dataSource="tableData" border :pagination="pagination">
-         
-            <a-table-column v-for="(item, index) in specArr" :key="index" :title="item.name" align="center" width="10%">
-              <template slot-scope="scope">
-                  <span>{{ scope.specs[index] }}</span>
-              </template>
-            </a-table-column>
-            <a-table-column key="price" title="单价" align="center" width="20%">
-              <template slot-scope="scope">
-                  <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.price" style="width: 100px;"></a-input>
-              </template>
-            </a-table-column>
-            <a-table-column key="stock" title="库存" align="center" width="20%">
-              <template slot-scope="scope">
-                  <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.stock" style="width: 100px;"></a-input>
-              </template>
-            </a-table-column>
-            
-            <a-table-column key="picture" title="图片" align="center">
-              <template slot-scope="scope">
-            
-
-                  <j-image-upload v-model="scope.picture" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
-
-              </template>
-            </a-table-column>
-        </a-table>
-    </a-form-item>
-      <!-- <p>{{specArr}}</p> -->
-      <!--<p>{{allData}}</p>-->
-      <!--<p>{{tableData}}</p>-->
 
     </a-form>
   </div>
@@ -134,7 +151,6 @@
 
   const defaultTable = {
         specs: [],
-        // name: "奶粉",
         stock: 0,
         price: "0.00",
         picture: "",
@@ -176,6 +192,7 @@
     },
     data () {
       return {
+        loading: false,
         form: this.$form.createForm(this),
         formItemLayout: {
           labelCol: {
@@ -195,7 +212,13 @@
         allData: [],
         setStock: "",
         setPrice: "",
-        pagination: false
+        pagination: false,
+        url: {
+          list: "/commodity/specGroup/querySpecialList"
+        },
+        model: {
+          enableSpecialSpec: false,
+        },
         //
       }
     },
@@ -212,10 +235,14 @@
       }
     },
     created(){
-      const token = Vue.ls.get(ACCESS_TOKEN);
-      this.headers = {"X-Access-Token":token}
+
     },
     mounted() {
+      if (this.goods){
+        let record = this.goods;
+        this.edit(record);
+      }else
+        this.loadSpecialData();
     },
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
@@ -223,7 +250,7 @@
       ...mapGetters(["goods"])
     },
     methods: {
-      ...mapActions([ "getSpecArr", "getTableData", "setOldTableData" ]),
+      ...mapActions([ "getSpecArr", "getTableData", "setOldTableData", "SetGoodsStore3" ]),
       // 点击添加规格组
       createdSpecifi() {
           if (this.specName) {
@@ -289,7 +316,9 @@
       // 整理数据
       changeDataTable(m, n) {
           //保存当前表格数据
-          this.$store.dispatch("setOldTableData", this.tableData);
+          if(this.tableData.length > 0){
+            this.$store.dispatch("setOldTableData", this.tableData);
+          }
           //
           this.tableData = []
           this.allData = descartes(m);
@@ -337,6 +366,89 @@
               this.setPrice = this.setPrice.replace(/[^\.\d]/g, "");
               this.setPrice = this.setPrice.replace(".", "");
           }
+      },
+      //功能方法
+      loadSpecialData() {
+        if(!this.url.list){
+          this.$message.error("请设置url.list属性!")
+          return
+        }
+        let that = this;
+        this.loading = true;
+        let param = {
+          cateId: this.goods.cid3
+        }
+        getAction(this.url.list, param).then((res) => {
+          if (res.success) {
+     
+            //渲染组件 
+            let skus = res.result;
+            if(skus instanceof Array){
+
+              for(var i=0; i<skus.length; i++){
+                let sku = skus[i];
+                let specName = sku.name;
+                if (specName) {
+                    const data = {
+                        name: "",
+                        conName: [],
+                        addField: ''
+                    };
+                    that.specContent = Object.assign({}, data);
+                    that.specContent.name = specName;
+                    that.specContent.conName = [];
+                    that.specArr.push(that.specContent);
+                    let obj = {};
+                    that.specArr = that.specArr.reduce((cur, next) => {
+                        obj[next.name] ? "" : (obj[next.name] = true && cur.push(next));
+                        return cur;
+                    }, []);
+                    that.specName = "";
+                    that.$store.dispatch("getSpecArr", that.specArr);
+                }
+              }
+
+            }
+            
+            //
+          }
+          if(res.code===510){
+            that.$message.warning(res.message)
+          }
+          that.loading = false;
+        })
+      },
+      nextStep () {
+        const that = this;
+        // 触发表单验证
+
+        that.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            that.model.id = that.goods.id;
+            let formData = Object.assign(that.model, values);
+     
+            that.SetGoodsStore3(formData).then((res) => {
+              that.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });  
+            
+            
+          }
+         
+        })
+      },
+      prevStep () {
+        this.$emit('prevStep')
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.tableData = this.model.tableData;
+        this.specArr = this.model.specArr;
       },
     }
   }
@@ -429,9 +541,23 @@
         text-align: center;
     }
 
-    .ant-upload.ant-upload-select-picture-card{
-      width: 30px;
+    /deep/ .ant-upload.ant-upload-select-picture-card{
+      width: 60px;
       height: 30px;
     }
+
+    /deep/ .ant-upload-list-picture-card .ant-upload-list-item {
+      float: left;
+      width: 60px;
+      height: 60px;
+      margin: 0 8px 8px 0;
+    }
+
+     /deep/ .ant-upload-list-picture-card-container {
+      float: left;
+      width: 60px;
+      height: 60px;
+      margin: 0 8px 8px 0;
+    } 
 
 </style>

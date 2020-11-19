@@ -34,16 +34,29 @@
       <p>同步配置将清空下表填写的内容，是否确定？</p>
     </a-modal>
 
-          <j-editable-table
-            border
-            ref="editableTable"
-            :loading="loading"
-            :columns="columns"
-            :dataSource="genericList"
-            style="margin-top: 8px;"
-            @selectRowChange="handleSelectRowChange">
+          <a-table :dataSource="tableData" border :pagination="pagination">
+          
+              <a-table-column key="groupName" title="属性组" align="center" width="20%">
+                <template slot-scope="scope">
+                  <span>{{ scope.groupName }}</span>
+                </template>
+              </a-table-column>
 
-          </j-editable-table>
+              <a-table-column key="specName" title="属性名称" align="center" width="20%">
+                <template slot-scope="scope">
+                  <span>{{ scope.specName }}</span>
+                </template>
+              </a-table-column>
+              
+              <a-table-column key="specValue" title="属性值" align="center">
+                <template slot-scope="scope">
+                    
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.specValue" style="width: 300px;"></a-input>
+
+                </template>
+              </a-table-column>
+
+          </a-table>
 
      
 
@@ -59,34 +72,21 @@
 
 <script>
 
-// 动态计算需要合并的单元格的行
-    const temp = {}; // 当前重复的值,支持多列
-    const mergeCells = (text, array, columns) => {
-        let i = 0;
-        if (text !== temp[columns]) {
-            temp[columns] = text;
-            array.forEach((item) => {
-                if (item.groupName === temp[columns]) {
-                    i += 1;
-                }
-            });
-        }
-        return i;
+  const defaultTable = {
+        groupName: '',
+        specname: '',
+        specValue: '',
     };
 
   import pick from 'lodash.pick'
   import moment from 'moment'
   import { FormTypes } from '@/utils/JEditableTableUtil'
-  import JEditor from '@/components/jeecg/JEditor'
-  import JEditableTable from '@/components/jeecg/JEditableTable'
   import { randomUUID, randomNumber } from '@/utils/util'
   import { mapGetters, mapActions } from "vuex";
   import { httpAction, getAction } from '@/api/manage'
   export default {
     name: "Step4",
     components: {
-      JEditor,
-      JEditableTable
     },
     data () {
       return {
@@ -114,48 +114,11 @@
         model: {
           enableGenericSpec: false
         },
-        columns: [
-          {
-            title: '属性组',
-            key: 'groupName',
-            width: '100px',
-            type: FormTypes.nomal,
-            dataIndex: 'groupName',
-            align: "center",
-            colSpan: 3,//合并表头
-            //自定义的渲染格式
-            customRender:(value, row, index) => {//合并行 和 标题头相同 本行合并几个其它行用colSpan = 0去取消显示
-                console.log(value,row,index)//本列的值,所有行数据包括本列,第几列
-                const obj = {
-                    children: value,
-                    attrs: {},
-                  };
-                    obj.attrs.colSpan = 3;//这里设置的是表格体的合并
-                    return obj;
-            }
-          },
-          {
-            title: '属性名称',
-            key: 'specName',
-            width: '200px',
-            type: FormTypes.nomal
-          },
-          {
-            title: '属性值',
-            key: 'attributeValue',
-            width: '300px',
-            type: FormTypes.input,
-            allowInput: true,
-            defaultValue: '',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          }
-
-        ],
-        dataSource: [],
+        tableData: [],
         selectedRowIds: [],
         genericList: [],
         visible: false,
+        pagination: false,
         url: {
           list: "/commodity/specGroup/queryGenericList"
         }
@@ -165,9 +128,9 @@
       if (this.goods){
         let record = this.goods;
         this.edit(record);
-      }else{
+      }else
         this.loadGenericData();
-      }
+      
     },
     computed: {
     // 用vuex读取数据(读取的是getters.js中的数据)
@@ -184,67 +147,27 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
+            if(that.model.enableGenericSpec){
+              formData.genericSpec = JSON.stringify(that.tableData);
+            }
             console.log("表单提交数据",formData)
             
-            if(that.model.enableGenericSpec){
-              
-              //将表格数据解析成字符串
-              that.$refs.editableTable.getValues((error, values) => {
-                // 错误数 = 0 则代表验证通过
-                if (error === 0) {
-             
-                    // this.$message.success('验证通过')
-                    // 将通过后的数组提交到后台或自行进行其他处理
-                    if(values != null){
-                      formData.genericSpec = JSON.stringify(values);
-                      console.log("表单提交数据",formData)
-           
-                      if(!that.model.id){
-                        that.SaveGoodsInfo(formData).then((res) => {
-                          that.$emit('nextStep');
-                        }).catch((err) => {
-                          that.$message.warning(err.message);
-                        }).finally(() => {
-                          that.confirmLoading = false;
-                        });
-                      }else{
-                        that.UpdateGoodsInfo(formData).then((res) => {
-                          that.$emit('nextStep');
-                        }).catch((err) => {
-                          that.$message.warning(err.message);
-                        }).finally(() => {
-                          that.confirmLoading = false;
-                        });
-                      }
-
-                    }
-                    
-
-                } else {
-                    this.$message.error('验证未通过');
-                    return;
-                }
-              })
-
+            if(!that.model.id){
+              that.SaveGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(err.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
             }else{
-
-              if(!that.model.id){
-                that.SaveGoodsInfo(formData).then((res) => {
-                  that.$emit('nextStep');
-                }).catch((err) => {
-                  that.$message.warning(err.message);
-                }).finally(() => {
-                  that.confirmLoading = false;
-                });
-              }else{
-                that.UpdateGoodsInfo(formData).then((res) => {
-                  that.$emit('nextStep');
-                }).catch((err) => {
-                  that.$message.warning(err.message);
-                }).finally(() => {
-                  that.confirmLoading = false;
-                });
-              }
+              that.UpdateGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(err.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
             }
 
           }
@@ -253,51 +176,6 @@
       },
       prevStep () {
         this.$emit('prevStep')
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-      removeDomain(item) {
-        let index = this.dynamicValidateForm.domains.indexOf(item);
-        if (index !== -1) {
-          this.dynamicValidateForm.domains.splice(index, 1);
-        }
-      },
-      addDomain() {
-        this.dynamicValidateForm.domains.push({
-          value: '',
-          key: Date.now(),
-        });
-      },
-      /**Jtable */
-       /** 表单验证 */
-      handleTableCheck() {
-        this.$refs.editableTable.getValues((error) => {
-          if (error === 0) {
-            this.$message.success('验证通过')
-          } else {
-            this.$message.error('验证未通过')
-          }
-        })
-      },
-      /** 获取值，忽略表单验证 */
-      handleTableGet() {
-        this.$refs.editableTable.getValues((error, values) => {
-          console.log('values:', values)
-        }, false)
-        console.log('deleteIds:', this.$refs.editableTable.getDeleteIds())
-
-        this.$message.info('获取值成功，请看控制台输出')
-
-      },
-
-      handleSelectRowChange(selectedRowIds) {
-        this.selectedRowIds = selectedRowIds
-      },
-
-      handleDelete(props) {
-        let { rowId, target } = props
-        target.removeRows(rowId)
       },
       edit (record) {
         this.form.resetFields();
@@ -310,19 +188,7 @@
           let that = this;
           let arr = JSON.parse(genericSpec);
           if(arr instanceof Array){
-            that.genericList = arr;
-            // let tmp = [];
-            // for(var i=0; i<arr.length; i++){
-            //   let item = arr[i];
-            //   tmp.push({
-            //     rowKey: item['id'], // 行的id
-            //     values: { // 在这里 values 中的 name 是你 columns 中配置的 key
-            //         'attributeValue': item['attributeValue']
-            //     }    
-            //   });
-            // }
-            // debugger;
-            // that.$refs.editableTable.setValues(tmp);
+            that.tableData = arr;
           }
         }
       },
@@ -338,9 +204,8 @@
         }
         getAction(this.url.list, param).then((res) => {
           if (res.success) {
-            // debugger
             //渲染组件
-            that.genericList = res.result;
+            that.tableData = res.result;
             //
           }
           if(res.code===510){
@@ -360,29 +225,11 @@
   }
 </script>
 
-<style lang="less" scoped>
-  .stepFormText {
-    margin-bottom: 24px;
+<style scoped>
 
-    .ant-form-item-label,
-    .ant-form-item-control {
-      line-height: 22px;
-    }
-  }
+.td span {
+  margin-left: 10px !important;
+}
 
-  .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all 0.3s;
-  }
-  .dynamic-delete-button:hover {
-    color: #777;
-  }
-  .dynamic-delete-button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+
 </style>
