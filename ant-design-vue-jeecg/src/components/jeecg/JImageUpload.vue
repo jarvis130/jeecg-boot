@@ -80,16 +80,34 @@
       }
     },
     watch:{
-      value(val){
-        if (val instanceof Array) {
-          this.initFileList(val.join(','))
-        } else {
-          this.initFileList(val)
-        }
-        if(!val || val.length==0){
-          this.picUrl = false;
-        }
-      }
+      // value(val){
+      //   debugger;
+      //   if (val instanceof Array) {
+      //     this.initFileList(val.join(','))
+      //   } else {
+      //     this.initFileList(val)
+      //   }
+      //   if(!val || val.length==0){
+      //     this.picUrl = false;
+      //   },
+      //   deep: true,
+	    //   immediate: true,
+      // }
+
+      'value': {
+	      handler (val) {
+          if (val instanceof Array) {
+            this.initFileList(val.join(','))
+          } else {
+            this.initFileList(val)
+          }
+          if(!val || val.length==0){
+            this.picUrl = false;
+          }
+        },
+	      deep: true,
+	      immediate: true,
+	    }
     },
     created(){
       const token = Vue.ls.get(ACCESS_TOKEN);
