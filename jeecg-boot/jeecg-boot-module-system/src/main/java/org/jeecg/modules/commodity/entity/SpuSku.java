@@ -51,10 +51,12 @@ public class SpuSku implements Serializable {
 	@Excel(name = "销售价格，单位为分", width = 15)
     @ApiModelProperty(value = "销售价格，单位为分")
     private java.lang.Integer price;
+
 	/**特有规格属性在spu属性模板中的对应下标组合*/
 	@Excel(name = "特有规格属性在spu属性模板中的对应下标组合", width = 15)
     @ApiModelProperty(value = "特有规格属性在spu属性模板中的对应下标组合")
-    private java.lang.String indexes;
+    private java.lang.String skuKey;
+
 	/**sku的特有规格参数，json格式*/
 	@Excel(name = "sku的特有规格参数，json格式", width = 15)
     @ApiModelProperty(value = "sku的特有规格参数，json格式")
@@ -79,4 +81,8 @@ public class SpuSku implements Serializable {
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.String updateBy;
+
+    /**库存*/
+    @ApiModelProperty(value = "库存")
+    private java.lang.Integer stock;
 }

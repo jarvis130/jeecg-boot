@@ -31,24 +31,33 @@ import lombok.experimental.Accessors;
 public class InventoryInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键*/
-	@TableId(type = IdType.ASSIGN_ID)
-    @ApiModelProperty(value = "主键")
+    /**规格主键*/
+    @Excel(name = "规格主键", width = 15)
+    @ApiModelProperty(value = "规格主键")
     private java.lang.String id;
+
 	/**商品编号*/
 	@Excel(name = "商品编号", width = 15)
     @ApiModelProperty(value = "商品编号")
-    private java.lang.String goodsId;
-	/**规格主键*/
-	@Excel(name = "规格主键", width = 15)
-    @ApiModelProperty(value = "规格主键")
-    private java.lang.String skuId;
+    private java.lang.String spuId;
+
 	/**有效库存*/
 	@Excel(name = "有效库存", width = 15)
     @ApiModelProperty(value = "有效库存")
-    private java.lang.Integer validAmount;
+    private java.lang.Integer validStock;
+
 	/**无效库存*/
 	@Excel(name = "无效库存", width = 15)
     @ApiModelProperty(value = "无效库存")
-    private java.lang.Integer invalidAmount;
+    private java.lang.Integer invalidStock;
+
+    /**秒杀库存*/
+    @Excel(name = "秒杀库存", width = 15)
+    @ApiModelProperty(value = "秒杀库存")
+    private java.lang.Integer seckillStock;
+
+    /**秒杀总数量*/
+    @Excel(name = "秒杀总数量", width = 15)
+    @ApiModelProperty(value = "秒杀总数量")
+    private java.lang.Integer seckillTotal;
 }

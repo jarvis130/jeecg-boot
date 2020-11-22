@@ -112,7 +112,7 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
                                     goodsSkuMapper.updateById(goodsSku);
                                     //更新库存表
                                     InventoryInfo inventoryInfo = new InventoryInfo();
-                                    inventoryInfo.setValidAmount(Integer.parseInt(stock));
+//                                    inventoryInfo.setValidAmount(Integer.parseInt(stock));
                                     QueryWrapper<InventoryInfo> wrapper = new QueryWrapper();
                                     wrapper.eq("goods_id", goodsId);
                                     wrapper.eq("sku_id", skuId);
@@ -141,10 +141,10 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
                                 goodsSkuMapper.insert(goodsSku);
                                 //插入库存表
                                 InventoryInfo inventoryInfo = new InventoryInfo();
-                                inventoryInfo.setValidAmount(Integer.parseInt(stock));
-                                inventoryInfo.setGoodsId(goodsId);
-                                inventoryInfo.setSkuId(skuId);
-                                inventoryInfo.setInvalidAmount(0);
+//                                inventoryInfo.setValidAmount(Integer.parseInt(stock));
+//                                inventoryInfo.setGoodsId(goodsId);
+//                                inventoryInfo.setSkuId(skuId);
+//                                inventoryInfo.setInvalidAmount(0);
                                 inventoryInfoMapper.insert(inventoryInfo);
                             }
                         }
@@ -171,10 +171,10 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
                             String skuId = goodsSku.getId();
                             //插入库存表
                             InventoryInfo inventoryInfo = new InventoryInfo();
-                            inventoryInfo.setValidAmount(Integer.parseInt(stock));
-                            inventoryInfo.setGoodsId(goodsId);
-                            inventoryInfo.setSkuId(skuId);
-                            inventoryInfo.setInvalidAmount(0);
+//                            inventoryInfo.setValidAmount(Integer.parseInt(stock));
+//                            inventoryInfo.setGoodsId(goodsId);
+//                            inventoryInfo.setSkuId(skuId);
+//                            inventoryInfo.setInvalidAmount(0);
                             inventoryInfoMapper.insert(inventoryInfo);
                         }
 

@@ -99,7 +99,7 @@
       ...mapGetters(["goods"])
     },
     methods: {
-      ...mapActions([ "ClearGoodsStore", "SetGoodsStore" ]),
+      ...mapActions([ "ClearGoodsStore", "SetGoodsStore"]),
       add () {
         this.ClearGoodsStore();
         this.$refs.step1Form.add();
@@ -107,7 +107,7 @@
       edit (record) {
         this.currentTab = 0;
         this.SetGoodsStore(record);
-        this.$refs.step1Form.edit(record);
+        this.$refs.step1Form.edit(record);   
       },
       nextStep () {
         if (this.currentTab < 4) {

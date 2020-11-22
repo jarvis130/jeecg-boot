@@ -108,9 +108,9 @@ const goods = {
     },
     CLEAR_GOODS: (state) => {
       state.id = '';
-      state.cId1 = '';
-      state.cId2 = '';
-      state.cId3 = '';
+      state.cid1 = '';
+      state.cid2 = '';
+      state.cid3 = '';
       state.code = '';
       state.title = '';
       state.brandId = '';
@@ -129,6 +129,7 @@ const goods = {
       state.specialSpec = '';
       state.enableGenericSpec = '';
       state.genericSpec = '';
+      state.tableData = '';
     },
     getSpecArr(state, data) {
       state.specArr = data
@@ -171,6 +172,19 @@ const goods = {
           if(response.success){
             const result = response.result
             commit('SET_GOODS', result);
+            resolve(response)
+          }else{
+            resolve(response)
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getSpuSkuBySpuId({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        getAction("/commodity/spuSku/queryBySpuId", params).then(response => {
+          if(response.success){
             resolve(response)
           }else{
             resolve(response)

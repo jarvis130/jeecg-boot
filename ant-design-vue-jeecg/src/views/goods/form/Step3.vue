@@ -99,12 +99,18 @@
                     <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.stock" style="width: 100px;"></a-input>
                 </template>
               </a-table-column>
+
+              <!-- <a-table-column key="indexs" title="indexs" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.indexes" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column> -->
               
-              <a-table-column key="picture" title="图片" align="center">
+              <a-table-column key="images" title="图片" align="center">
                 <template slot-scope="scope">
                     <!-- {{scope.picture}} -->
 
-                    <j-image-upload v-model="scope.picture" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
+                    <j-image-upload v-model="scope.images" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
 
                 </template>
               </a-table-column>
@@ -153,8 +159,8 @@
         specs: [],
         stock: 0,
         price: "0.00",
-        picture: "",
-  
+        images: "",
+        id: ""
     };
 
   export default {
@@ -206,6 +212,7 @@
         },
         specName: "",
         specArr: [],
+        specIdArr: [],
         specContent: {},
         tableData: [],
         changeTableData: [],
@@ -241,8 +248,8 @@
       if (this.goods){
         let record = this.goods;
         this.edit(record);
-      }else
-        this.loadSpecialData();
+      }
+      this.loadSpecialData();
     },
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
@@ -255,19 +262,23 @@
       createdSpecifi() {
           if (this.specName) {
               const data = {
+                  id: "",
                   name: "",
                   conName: [],
                   addField: ''
               };
               this.specContent = Object.assign({}, data);
+              this.specContent.id = this.id;
               this.specContent.name = this.specName;
               this.specContent.conName = [];
               this.specArr.push(this.specContent);
               let obj = {};
+  
               this.specArr = this.specArr.reduce((cur, next) => {
                   obj[next.name] ? "" : (obj[next.name] = true && cur.push(next));
                   return cur;
               }, []);
+
               this.specName = "";
               this.$store.dispatch("getSpecArr", this.specArr);
           }
@@ -330,6 +341,14 @@
                   } else {
                       dataArr.specs = this.allData[i];
                   }
+          
+                  //设置indexs
+                  let indexes = dataArr.specs.join(",");
+                  if(indexes.substr(indexes.length-1, 1) == ","){
+                    indexes = indexes.substr(0, indexes.length - 1);
+                  }
+
+                  dataArr['skuKey'] = indexes;
                   this.tableData.push(dataArr);
                   this.$store.dispatch("getTableData", this.tableData);
               }
@@ -337,16 +356,24 @@
               for (const i in this.allData) {
                   const dataArr = Object.assign({}, defaultTable);
                   dataArr.specs = [this.allData[i]];
+        
+                  //设置indexs
+                  let indexes = dataArr.specs.join(",");
+                  if(indexes.substr(indexes.length-1, 1) == ","){
+                    indexes = indexes.substr(0, indexes.length - 1);
+                  }
+                  dataArr['skuKey'] = indexes;
                   this.tableData.push(dataArr);
                   this.$store.dispatch("getTableData", this.tableData);
               }
           }
+          debugger;
           //取出old数据，然后向当前表格赋值
           let oldData = this.goods.oldTableData;
           for(var i=0;i<this.tableData.length-1;i++){
             this.tableData[i]['price'] = oldData[i]['price']
             this.tableData[i]['stock'] = oldData[i]['stock']
-            this.tableData[i]['picture'] = oldData[i]['picture']
+            this.tableData[i]['images'] = oldData[i]['images']
           }
       },
       clicksSet(name) {
@@ -380,7 +407,7 @@
         }
         getAction(this.url.list, param).then((res) => {
           if (res.success) {
-     
+  
             //渲染组件 
             let skus = res.result;
             if(skus instanceof Array){
@@ -390,11 +417,13 @@
                 let specName = sku.name;
                 if (specName) {
                     const data = {
+                        id: "",
                         name: "",
                         conName: [],
                         addField: ''
                     };
                     that.specContent = Object.assign({}, data);
+                    that.specContent.id = sku.id;
                     that.specContent.name = specName;
                     that.specContent.conName = [];
                     that.specArr.push(that.specContent);
@@ -447,6 +476,7 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
+        if(this.model.enableSpecialSpec == "") this.model.enableSpecialSpec = false;
         this.tableData = this.model.tableData;
         this.specArr = this.model.specArr;
       },

@@ -39,7 +39,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-          <j-category-select v-decorator="['cid3', validatorRules.cid]" pcode="A01" placeholder="请输入商品分类"/>
+          <j-category-select v-decorator="['cid3', validatorRules.cid3]" pcode="A01" placeholder="请输入商品分类"/>
       </a-form-item>
 
       <a-form-item
@@ -144,7 +144,7 @@
         confirmLoading: false,
         isMultiple: true,
         validatorRules: {
-          cId: {
+          cid3: {
             rules: [
               { required: true, message: '请输入商品分类!'},
             ]
@@ -252,7 +252,7 @@
       }
     },
     methods: {
-      ...mapActions([ "SetGoodsStore1" ]),
+      ...mapActions([ "SetGoodsStore1", "getSpuSkuBySpuId", "getTableData", "SetGoodsStore" ]),
       nextStep () {
         const that = this;
         this.model.id = this.goods.id;
@@ -278,41 +278,43 @@
         // this.edit({});
       },
       edit (record) {
+        let that = this;
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'id', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
         })
-        //图片处理
-        // let imageStr = this.model.goodsThumb;
-        // if(imageStr != '' && imageStr != undefined){
-        //   let images = imageStr.split(',');
-        //   let tmpArr = [];
-        //   if(images.length > 0){
-        //     let url = '';
-        //     if(images.length > 0){
-        //       for(var i=0;i<images.length;i++){
-        //         let tmp = images[i];
-  
-        //         tmpArr.push(
-        //           {
-        //             uid: Date.now(),
-        //             name: tmp,
-        //             status: 'done',
-        //             url: window._CONFIG['domianURL']+"/"+ tmp,
-        //             // thumbUrl: tmp['thumbUrl'],
-        //             // type: tmp['type']
-        //           }
-        //         );
 
-        //       }
-  
-        //     }
-        //     // this.goodsThumb.splice(0, this.goodsThumb.length);// 清空fileList,重新赋值
-        //     this.goodsThumb = tmpArr;
-        //   }
-        // }//
+        this.SetGoodsStore(record);
+        if(record.enableSpecialSpec){
+          let param = {
+            spuId: record.id
+          }
+          //根据spuId得到最新的sku数据
+          this.getSpuSkuBySpuId(param).then((res) => {
+    
+            if (res.success) {
+              const result = res.result
+              let list = this.goods.tableData;
+              for(var i=0; i<list.length; i++){
+                let item = list[i];
+                for(var j=0; j<result.length; j++){
+                  if(item.skuKey == result[j].skuKey){
+                    list[i].id = result[j].id;
+                    list[i].stock = result[j].stock;
+                    break;
+                  }
+                }
+              }
+              that.getTableData(list);
+            }
+          });
+
+          
+        }else{
+          that.SetGoodsStore(record); 
+        }
       },
     }
   }
