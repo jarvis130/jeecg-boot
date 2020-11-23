@@ -19,15 +19,15 @@
 </template>
 
 <script>
-  import Step1 from './Step1';
-  import Step2 from './Step2';
-  import Step3 from './Step3';
-  import Step4 from './Step4';
-  import Finish from './Finish';
+  import Step1 from './CaseStep1';
+  import Step2 from './CaseStep2';
+  import Step3 from './CaseStep3';
+  import Step4 from './CaseStep4';
+  import Finish from './CaseFinish';
   import { mapGetters, mapActions } from "vuex";
 
   export default {
-    name: "CaseForm",
+    name: "CaseIndex",
     components: {
       Step1,
       Step2,

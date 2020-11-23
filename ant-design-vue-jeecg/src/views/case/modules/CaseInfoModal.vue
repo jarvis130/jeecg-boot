@@ -10,20 +10,20 @@
     :okButtonProps="{ class:{'jee-hidden': true} }"
     @cancel="handleCancel"
     cancelText="关闭">
-    <goods-info-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></goods-info-form>
+    <case-info-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></case-info-form>
   </j-modal>
 </template>
 
 <script>
 
   // import GoodsInfoForm from './GoodsInfoForm'
-  import GoodsInfoForm from '../form/Index'
+  import CaseInfoForm from '../form/CaseIndex'
   import { mapGetters, mapActions } from "vuex"; 
   
   export default {
-    name: 'GoodsInfoModal',
+    name: 'CaseInfoModal',
     components: {
-      GoodsInfoForm
+      CaseInfoForm
     },
     data () {
       return {

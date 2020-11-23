@@ -85,7 +85,7 @@
   import { mapGetters, mapActions } from "vuex";
   import { httpAction, getAction } from '@/api/manage'
   export default {
-    name: "Step4",
+    name: "CaseStep4",
     components: {
     },
     data () {

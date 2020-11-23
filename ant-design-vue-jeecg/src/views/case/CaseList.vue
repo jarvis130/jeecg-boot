@@ -86,7 +86,7 @@
       </a-table>
     </div>
 
-    <goods-info-modal ref="modalForm" @ok="modalFormOk"></goods-info-modal>
+    <case-info-modal ref="modalForm" @ok="modalFormOk"></case-info-modal>
   </a-card>
 </template>
 
@@ -95,14 +95,14 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import GoodsInfoModal from './modules/GoodsInfoModal'
+  import CaseInfoModal from './modules/CaseInfoModal'
   import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: 'CaseList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      GoodsInfoModal
+     CaseInfoModal
     },
     data () {
       return {

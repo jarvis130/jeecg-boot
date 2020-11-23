@@ -16,7 +16,7 @@
   import Result from '../../result/Result'
 
   export default {
-    name: "Step3",
+    name: "CaseFinish",
     components: {
       Result
     },
