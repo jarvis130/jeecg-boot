@@ -5,32 +5,27 @@
         <a-row>
           <a-col :span="24">
             <a-form-item label="商品编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['spuId', validatorRules.spuId]" placeholder="请输入商品编号"></a-input>
+              <a-input v-decorator="['spuId']" placeholder="请输入商品编号"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="有效库存" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['validStock']" placeholder="请输入有效库存" style="width: 100%"/>
+            <a-form-item label="关联的商品编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['relationId']" placeholder="请输入关联的商品编号"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="无效库存,残次品" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['invalidStock']" placeholder="请输入无效库存,残次品" style="width: 100%"/>
+            <a-form-item label="使用商品数量，医药方案场景使用" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="['useNum']" placeholder="请输入使用商品数量，医药方案场景使用" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="可秒杀库存" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['seckillStock']" placeholder="请输入可秒杀库存" style="width: 100%"/>
+            <a-form-item label="使用的商品规格" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['skuId']" placeholder="请输入使用的商品规格"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="秒杀总数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="['seckillTotal']" placeholder="请输入秒杀总数量" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-item label="仓库编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['deptId']" placeholder="请输入仓库编号"></a-input>
+            <a-form-item label="商品价格" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="['price']" placeholder="请输入商品价格" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
@@ -50,7 +45,7 @@
   import JFormContainer from '@/components/jeecg/JFormContainer'
 
   export default {
-    name: 'InventoryInfoForm',
+    name: 'SpuRelationForm',
     components: {
       JFormContainer,
     },
@@ -88,16 +83,11 @@
         },
         confirmLoading: false,
         validatorRules: {
-          spuId: {
-            rules: [
-              { required: true, message: '请输入商品编号!'},
-            ]
-          },
         },
         url: {
-          add: "/inventory/inventoryInfo/add",
-          edit: "/inventory/inventoryInfo/edit",
-          queryById: "/inventory/inventoryInfo/queryById"
+          add: "/commodity/spuRelation/add",
+          edit: "/commodity/spuRelation/edit",
+          queryById: "/commodity/spuRelation/queryById"
         }
       }
     },
@@ -133,7 +123,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'spuId','validStock','invalidStock','seckillStock','seckillTotal','deptId'))
+          this.form.setFieldsValue(pick(this.model,'spuId','relationId','useNum','skuId','price'))
         })
       },
       //渲染流程表单数据
@@ -179,7 +169,7 @@
         })
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'spuId','validStock','invalidStock','seckillStock','seckillTotal','deptId'))
+        this.form.setFieldsValue(pick(row,'spuId','relationId','useNum','skuId','price'))
       },
     }
   }

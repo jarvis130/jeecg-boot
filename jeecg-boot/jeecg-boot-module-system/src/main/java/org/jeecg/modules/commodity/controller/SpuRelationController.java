@@ -1,4 +1,4 @@
-package org.jeecg.modules.inventory.controller;
+package org.jeecg.modules.commodity.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.inventory.entity.InventoryInfo;
-import org.jeecg.modules.inventory.service.IInventoryInfoService;
+import org.jeecg.modules.commodity.entity.SpuRelation;
+import org.jeecg.modules.commodity.service.ISpuRelationService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,66 +37,66 @@ import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 
  /**
- * @Description: inventory_info
+ * @Description: spu_relation
  * @Author: jeecg-boot
  * @Date:   2020-11-23
  * @Version: V1.0
  */
-@Api(tags="inventory_info")
+@Api(tags="spu_relation")
 @RestController
-@RequestMapping("/inventory/inventoryInfo")
+@RequestMapping("/commodity/spuRelation")
 @Slf4j
-public class InventoryInfoController extends JeecgController<InventoryInfo, IInventoryInfoService> {
+public class SpuRelationController extends JeecgController<SpuRelation, ISpuRelationService> {
 	@Autowired
-	private IInventoryInfoService inventoryInfoService;
+	private ISpuRelationService spuRelationService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param inventoryInfo
+	 * @param spuRelation
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-分页列表查询")
-	@ApiOperation(value="inventory_info-分页列表查询", notes="inventory_info-分页列表查询")
+	@AutoLog(value = "spu_relation-分页列表查询")
+	@ApiOperation(value="spu_relation-分页列表查询", notes="spu_relation-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(InventoryInfo inventoryInfo,
+	public Result<?> queryPageList(SpuRelation spuRelation,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<InventoryInfo> queryWrapper = QueryGenerator.initQueryWrapper(inventoryInfo, req.getParameterMap());
-		Page<InventoryInfo> page = new Page<InventoryInfo>(pageNo, pageSize);
-		IPage<InventoryInfo> pageList = inventoryInfoService.page(page, queryWrapper);
+		QueryWrapper<SpuRelation> queryWrapper = QueryGenerator.initQueryWrapper(spuRelation, req.getParameterMap());
+		Page<SpuRelation> page = new Page<SpuRelation>(pageNo, pageSize);
+		IPage<SpuRelation> pageList = spuRelationService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 *   添加
 	 *
-	 * @param inventoryInfo
+	 * @param spuRelation
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-添加")
-	@ApiOperation(value="inventory_info-添加", notes="inventory_info-添加")
+	@AutoLog(value = "spu_relation-添加")
+	@ApiOperation(value="spu_relation-添加", notes="spu_relation-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody InventoryInfo inventoryInfo) {
-		inventoryInfoService.save(inventoryInfo);
+	public Result<?> add(@RequestBody SpuRelation spuRelation) {
+		spuRelationService.save(spuRelation);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 *  编辑
 	 *
-	 * @param inventoryInfo
+	 * @param spuRelation
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-编辑")
-	@ApiOperation(value="inventory_info-编辑", notes="inventory_info-编辑")
+	@AutoLog(value = "spu_relation-编辑")
+	@ApiOperation(value="spu_relation-编辑", notes="spu_relation-编辑")
 	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody InventoryInfo inventoryInfo) {
-		inventoryInfoService.updateById(inventoryInfo);
+	public Result<?> edit(@RequestBody SpuRelation spuRelation) {
+		spuRelationService.updateById(spuRelation);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -106,11 +106,11 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-通过id删除")
-	@ApiOperation(value="inventory_info-通过id删除", notes="inventory_info-通过id删除")
+	@AutoLog(value = "spu_relation-通过id删除")
+	@ApiOperation(value="spu_relation-通过id删除", notes="spu_relation-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		inventoryInfoService.removeById(id);
+		spuRelationService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -120,11 +120,11 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-批量删除")
-	@ApiOperation(value="inventory_info-批量删除", notes="inventory_info-批量删除")
+	@AutoLog(value = "spu_relation-批量删除")
+	@ApiOperation(value="spu_relation-批量删除", notes="spu_relation-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.inventoryInfoService.removeByIds(Arrays.asList(ids.split(",")));
+		this.spuRelationService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功!");
 	}
 	
@@ -134,26 +134,26 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "inventory_info-通过id查询")
-	@ApiOperation(value="inventory_info-通过id查询", notes="inventory_info-通过id查询")
+	@AutoLog(value = "spu_relation-通过id查询")
+	@ApiOperation(value="spu_relation-通过id查询", notes="spu_relation-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		InventoryInfo inventoryInfo = inventoryInfoService.getById(id);
-		if(inventoryInfo==null) {
+		SpuRelation spuRelation = spuRelationService.getById(id);
+		if(spuRelation==null) {
 			return Result.error("未找到对应数据");
 		}
-		return Result.OK(inventoryInfo);
+		return Result.OK(spuRelation);
 	}
 
     /**
     * 导出excel
     *
     * @param request
-    * @param inventoryInfo
+    * @param spuRelation
     */
     @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, InventoryInfo inventoryInfo) {
-        return super.exportXls(request, inventoryInfo, InventoryInfo.class, "inventory_info");
+    public ModelAndView exportXls(HttpServletRequest request, SpuRelation spuRelation) {
+        return super.exportXls(request, spuRelation, SpuRelation.class, "spu_relation");
     }
 
     /**
@@ -165,7 +165,7 @@ public class InventoryInfoController extends JeecgController<InventoryInfo, IInv
     */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        return super.importExcel(request, response, InventoryInfo.class);
+        return super.importExcel(request, response, SpuRelation.class);
     }
 
 }

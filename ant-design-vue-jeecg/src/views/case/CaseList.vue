@@ -10,9 +10,9 @@
     <!-- 查询区域-END -->
 
     <!-- 操作按钮区域 -->
-    <!-- <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('inventory_info')">导出</a-button>
+    <div class="table-operator">
+      <a-button @click="handleAdd2" type="primary" icon="plus">新增</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -22,7 +22,7 @@
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
-    </div> -->
+    </div>
 
     <!-- table区域-begin -->
     <div>
@@ -35,7 +35,6 @@
         ref="table"
         size="middle"
         :scroll="{x:true}"
-        bordered
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -65,8 +64,8 @@
           </a-button>
         </template>
 
-        <!-- <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+        <span slot="action" slot-scope="text, record">
+          <a @click="handleEdit2(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -82,12 +81,12 @@
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-        </span> -->
+        </span>
 
       </a-table>
     </div>
 
-    <inventory-info-modal ref="modalForm" @ok="modalFormOk"></inventory-info-modal>
+    <goods-info-modal ref="modalForm" @ok="modalFormOk"></goods-info-modal>
   </a-card>
 </template>
 
@@ -96,17 +95,18 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import InventoryInfoModal from './modules/InventoryInfoModal'
+  import GoodsInfoModal from './modules/GoodsInfoModal'
+  import { mapGetters, mapActions } from "vuex";
 
   export default {
-    name: 'InventoryInfoList',
+    name: 'CaseList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      InventoryInfoModal
+      GoodsInfoModal
     },
     data () {
       return {
-        description: 'inventory_info管理页面',
+        description: 'goods_info管理页面',
         // 表头
         columns: [
           {
@@ -120,66 +120,69 @@
             }
           },
           {
-            title:'商品编号',
+            title:'方案编号',
             align:"center",
-            width: 100,
-            dataIndex: 'spuId'
+            dataIndex: 'code'
           },
           {
-            title:'商品名称',
+            title:'方案名称',
             align:"center",
-            dataIndex: 'spuId_dictText'
+            width:150,
+            dataIndex: 'title'
           },
           {
-            title:'规格',
-            width: 200,
+            title:'方案分类',
             align:"center",
-            dataIndex: 'id_dictText'
+            dataIndex: 'cid3_dictText'
           },
           {
-            title:'可用库存',
-            width: 80,
+            title:'售价',
             align:"center",
-            dataIndex: 'validStock'
+            dataIndex: 'salePrice'
           },
           {
-            title:'无效库存(残次品)',
-            width: 80,
+            title:'是否上架',
             align:"center",
-            dataIndex: 'invalidStock'
-          },
-          {
-            title:'可秒杀库存',
-            width: 80,
-            align:"center",
-            dataIndex: 'seckillStock'
-          },
-          {
-            title:'秒杀总数量',
-            width: 80,
-            align:"center",
-            dataIndex: 'seckillTotal'
-          },
-          {
-            title:'仓库',
-            align:"center",
-            dataIndex: 'deptId'
+            dataIndex: 'isOnSale_dictText'
           },
           // {
-          //   title: '操作',
-          //   dataIndex: 'action',
+          //   title:'是否新品',
           //   align:"center",
-          //   fixed:"right",
-          //   width:147,
-          //   scopedSlots: { customRender: 'action' }
-          // }
+          //   dataIndex: 'isNew_dictText'
+          // },
+          // {
+          //   title:'是否热卖',
+          //   align:"center",
+          //   dataIndex: 'isHot_dictText'
+          // },
+          // {
+          //   title:'是否推荐',
+          //   align:"center",
+          //   dataIndex: 'isRecommend_dictText'
+          // },
+          {
+            title:'更新时间',
+            align:"center",
+            dataIndex: 'updateTime',
+            customRender:function (text) {
+              return !text?"":(text.length>10?text.substr(0,10):text)
+            }
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            align:"center",
+            fixed:"right",
+            width:147,
+            scopedSlots: { customRender: 'action' }
+          }
         ],
         url: {
-          list: "/inventory/inventoryInfo/list",
-          delete: "/inventory/inventoryInfo/delete",
-          deleteBatch: "/inventory/inventoryInfo/deleteBatch",
-          exportXlsUrl: "/inventory/inventoryInfo/exportXls",
-          importExcelUrl: "inventory/inventoryInfo/importExcel",
+          list: "/commodity/spuInfo/list",
+          delete: "/commodity/spuInfo/delete",
+          deleteBatch: "/commodity/spuInfo/deleteBatch",
+          exportXlsUrl: "/commodity/spuInfo/exportXls",
+          importExcelUrl: "commodity/spuInfo/importExcel",
           
         },
         dictOptions:{},
@@ -193,7 +196,27 @@
       },
     },
     methods: {
+      ...mapActions([ "SetGoodsStore", "ClearGoodsStore" ]),
       initDictConfig(){
+      },
+      handleAdd1(){
+        this.$router.push('/goods/form/index');
+      },
+      handleEdit1(record){
+        this.SetGoodsStore(record);
+        this.$router.push('/goods/form/index?flag=edit');
+      },
+      handleAdd2(){
+        this.ClearGoodsStore();//清空store数据
+        this.$refs.modalForm.add();
+        this.$refs.modalForm.title = "新增方案";
+        this.$refs.modalForm.disableSubmit = false;
+      },
+      handleEdit2(record){
+        this.SetGoodsStore(record);
+        this.$refs.modalForm.edit(record);
+        this.$refs.modalForm.title = "编辑方案";
+        this.$refs.modalForm.disableSubmit = false;
       }
     }
   }

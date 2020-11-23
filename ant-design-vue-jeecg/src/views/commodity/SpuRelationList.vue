@@ -10,9 +10,9 @@
     <!-- 查询区域-END -->
 
     <!-- 操作按钮区域 -->
-    <!-- <div class="table-operator">
+    <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('inventory_info')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('spu_relation')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -22,7 +22,7 @@
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
-    </div> -->
+    </div>
 
     <!-- table区域-begin -->
     <div>
@@ -65,7 +65,7 @@
           </a-button>
         </template>
 
-        <!-- <span slot="action" slot-scope="text, record">
+        <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
@@ -82,12 +82,12 @@
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-        </span> -->
+        </span>
 
       </a-table>
     </div>
 
-    <inventory-info-modal ref="modalForm" @ok="modalFormOk"></inventory-info-modal>
+    <spu-relation-modal ref="modalForm" @ok="modalFormOk"></spu-relation-modal>
   </a-card>
 </template>
 
@@ -96,17 +96,17 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import InventoryInfoModal from './modules/InventoryInfoModal'
+  import SpuRelationModal from './modules/SpuRelationModal'
 
   export default {
-    name: 'InventoryInfoList',
+    name: 'SpuRelationList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      InventoryInfoModal
+      SpuRelationModal
     },
     data () {
       return {
-        description: 'inventory_info管理页面',
+        description: 'spu_relation管理页面',
         // 表头
         columns: [
           {
@@ -122,64 +122,43 @@
           {
             title:'商品编号',
             align:"center",
-            width: 100,
             dataIndex: 'spuId'
           },
           {
-            title:'商品名称',
+            title:'关联的商品编号',
             align:"center",
-            dataIndex: 'spuId_dictText'
+            dataIndex: 'relationId'
           },
           {
-            title:'规格',
-            width: 200,
+            title:'使用商品数量，医药方案场景使用',
             align:"center",
-            dataIndex: 'id_dictText'
+            dataIndex: 'useNum'
           },
           {
-            title:'可用库存',
-            width: 80,
+            title:'使用的商品规格',
             align:"center",
-            dataIndex: 'validStock'
+            dataIndex: 'skuId'
           },
           {
-            title:'无效库存(残次品)',
-            width: 80,
+            title:'商品价格',
             align:"center",
-            dataIndex: 'invalidStock'
+            dataIndex: 'price'
           },
           {
-            title:'可秒杀库存',
-            width: 80,
+            title: '操作',
+            dataIndex: 'action',
             align:"center",
-            dataIndex: 'seckillStock'
-          },
-          {
-            title:'秒杀总数量',
-            width: 80,
-            align:"center",
-            dataIndex: 'seckillTotal'
-          },
-          {
-            title:'仓库',
-            align:"center",
-            dataIndex: 'deptId'
-          },
-          // {
-          //   title: '操作',
-          //   dataIndex: 'action',
-          //   align:"center",
-          //   fixed:"right",
-          //   width:147,
-          //   scopedSlots: { customRender: 'action' }
-          // }
+            fixed:"right",
+            width:147,
+            scopedSlots: { customRender: 'action' }
+          }
         ],
         url: {
-          list: "/inventory/inventoryInfo/list",
-          delete: "/inventory/inventoryInfo/delete",
-          deleteBatch: "/inventory/inventoryInfo/deleteBatch",
-          exportXlsUrl: "/inventory/inventoryInfo/exportXls",
-          importExcelUrl: "inventory/inventoryInfo/importExcel",
+          list: "/commodity/spuRelation/list",
+          delete: "/commodity/spuRelation/delete",
+          deleteBatch: "/commodity/spuRelation/deleteBatch",
+          exportXlsUrl: "/commodity/spuRelation/exportXls",
+          importExcelUrl: "commodity/spuRelation/importExcel",
           
         },
         dictOptions:{},
