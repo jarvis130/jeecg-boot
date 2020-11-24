@@ -2,70 +2,66 @@
   <div>
     <a-form :form="form"  label-width="120px" @submit.native.prevent>
 
-      <a-card :bordered="false">
+      <spu-sku-list ref="spuSkuList" @getSelectData="getSelectData"></spu-sku-list>
 
 
-    <!-- table区域-begin -->
-    <div>
+      <a-form-item label="批量设置" style="margin-bottom: 20px" :labelCol="{span: 5}" :wrapperCol="{span: 19}">
 
-      <a-table
-        ref="table"
-        size="middle"
-        :scroll="{x:true}"
-        bordered
-        rowKey="id"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        class="j-table-force-nowrap"
-        @change="handleTableChange">
+            <a-input-search
+              addon-before="数量" 
+              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+              placeholder="请输入数量"
+              enter-button="设置"
+              size="default"
+              v-model="setStock" 
+              style="width: 250px;margin-right: 20px" 
+              @keyup.native="proving(1)"
+              @search="clicksSet(1)"
+            />
 
-        <template slot="htmlSlot" slot-scope="text">
-          <div v-html="text"></div>
-        </template>
-        <template slot="imgSlot" slot-scope="text">
-          <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
-        </template>
-        <template slot="fileSlot" slot-scope="text">
-          <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
-          <a-button
-            v-else
-            :ghost="true"
-            type="primary"
-            icon="download"
-            size="small"
-            @click="downloadFile(text)">
-            下载
-          </a-button>
-        </template>
+        </a-form-item>
 
-        <!-- <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+      <a-form-item label="物品列表" :labelCol="{span: 0}" :wrapperCol="{span: 24}">
+          <a-table :dataSource="tableData" border :pagination="pagination">
+          
+              <a-table-column  key="spuId" title="物品编号" align="center" width="100">
+                <template slot-scope="scope">
+                    <span>{{ scope.spuId }}</span>
+                </template>
+              </a-table-column>
 
-          <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        </span> -->
+              <a-table-column  key="title" title="物品名称" align="center" width="120">
+                <template slot-scope="scope">
+                    <span>{{ scope.title }}</span>
+                </template>
+              </a-table-column>
 
-      </a-table>
-    </div>
+              <a-table-column  key="skuKey" title="规格" align="center" width="80">
+                <template slot-scope="scope">
+                    <span>{{ scope.skuKey }}</span>
+                </template>
+              </a-table-column>
 
-    <spu-relation-modal ref="modalForm" @ok="modalFormOk"></spu-relation-modal>
-  </a-card>
+              <a-table-column key="price" title="单价" align="center" width="60">
+                <template slot-scope="scope">
+                    <span>{{ scope.price }}</span>
+                </template>
+              </a-table-column>
+
+              <a-table-column key="useNum" title="数量" align="center" width="150">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.useNum" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column>
+
+              <a-table-column key="action" title="操作" align="center" width="80">
+                <template slot-scope="scope">
+                    <button @click="del(scope)">删除</button>
+                </template>
+              </a-table-column>
+    
+          </a-table>
+        </a-form-item>
 
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
@@ -73,21 +69,30 @@
       </a-form-item>
 
     </a-form>
+
   </div>
 </template>
 
 <script>
 
+    const defaultTable = {
+        spuId: '',
+        title: '',
+        skuKey: '',
+        price: '',
+        useNum: '',
+    };
+
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
-    import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  // import SpuRelationModal from './modules/SpuRelationModal'
+  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import SpuSkuList from '../SpuSkuList'
 
   export default {
     name: 'CaseStep3',
     mixins:[ mixinDevice, JeecgListMixin],
     components: {
-      // SpuRelationModal
+      SpuSkuList
     },
     data () {
       return {
@@ -104,49 +109,6 @@
           },
         },
         description: 'spu_relation管理页面',
-        // 表头
-        columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
-            }
-          },
-          {
-            title:'商品编号',
-            align:"center",
-            dataIndex: 'relationId'
-          },
-          {
-            title:'规格',
-            align:"center",
-            dataIndex: 'skuId'
-          },
-          {
-            title:'价格',
-            align:"center",
-            dataIndex: 'price'
-          },
-          {
-            title:'数量',
-            align:"center",
-            dataIndex: 'useNum'
-          },
-          
-          
-          // {
-          //   title: '操作',
-          //   dataIndex: 'action',
-          //   align:"center",
-          //   fixed:"right",
-          //   width:147,
-          //   scopedSlots: { customRender: 'action' }
-          // }
-        ],
         url: {
           list: "/commodity/spuRelation/list",
           delete: "/commodity/spuRelation/delete",
@@ -155,7 +117,9 @@
           importExcelUrl: "commodity/spuRelation/importExcel",
           
         },
-        dictOptions:{},
+        tableData: [],
+        selectionRows: [],
+        pagination: false
       }
     },
     created(){
@@ -204,6 +168,27 @@
         this.tableData = this.model.tableData;
         this.specArr = this.model.specArr;
       },
+      getSelectData (val) {
+        let that = this;
+        this.selectionRows = val;
+        
+        for(var i=0; i< this.selectionRows.length; i++){
+
+          let dataArr = {
+            id: that.selectionRows[i].id,
+            spuId: that.selectionRows[i].spuId,
+            title: that.selectionRows[i].spuId_dictText,
+            skuKey: that.selectionRows[i].skuKey,
+            price: that.selectionRows[i].price,
+            useNum: 0
+          }
+
+          that.tableData.push(dataArr);
+        }
+      },
+      del(scope){
+        debugger;
+      }
     }
   }
 </script>

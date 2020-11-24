@@ -38,11 +38,9 @@ public class SpuSku implements Serializable {
 	/**spu id*/
 	@Excel(name = "spu id", width = 15)
     @ApiModelProperty(value = "spu id")
+    @Dict(dicCode = "id",dictTable="spu_info",dicText="title")
     private java.lang.String spuId;
-	/**商品标题*/
-	@Excel(name = "商品标题", width = 15)
-    @ApiModelProperty(value = "商品标题")
-    private java.lang.String title;
+
 	/**商品的图片，多个图片以‘,’分割*/
 	@Excel(name = "商品的图片，多个图片以‘,’分割", width = 15)
     @ApiModelProperty(value = "商品的图片，多个图片以‘,’分割")

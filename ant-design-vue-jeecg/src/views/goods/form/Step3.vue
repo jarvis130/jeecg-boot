@@ -115,7 +115,7 @@
                 </template>
               </a-table-column>
           </a-table>
-      </a-form-item>
+        </a-form-item>
         <!-- <p>{{specArr}}</p> -->
         <!--<p>{{allData}}</p>-->
         <!--<p>{{tableData}}</p>-->
