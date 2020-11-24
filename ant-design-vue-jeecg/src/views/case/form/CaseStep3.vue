@@ -173,21 +173,39 @@
         this.selectionRows = val;
         
         for(var i=0; i< this.selectionRows.length; i++){
-
-          let dataArr = {
-            id: that.selectionRows[i].id,
-            spuId: that.selectionRows[i].spuId,
-            title: that.selectionRows[i].spuId_dictText,
-            skuKey: that.selectionRows[i].skuKey,
-            price: that.selectionRows[i].price,
-            useNum: 0
+          var isExist = false;
+          for(var j=0; j<that.tableData.length; j++){
+            if(that.selectionRows[i].id == that.tableData[j].id){
+              isExist = true;
+              break;
+            }
           }
 
-          that.tableData.push(dataArr);
+          if(isExist == false){
+            let dataArr = {
+              id: that.selectionRows[i].id,
+              spuId: that.selectionRows[i].spuId,
+              title: that.selectionRows[i].spuId_dictText,
+              skuKey: that.selectionRows[i].skuKey,
+              price: that.selectionRows[i].price,
+              useNum: 0
+            }
+            that.tableData.push(dataArr);
+          }
+          
         }
       },
       del(scope){
-        debugger;
+        // debugger;
+        let id = scope.id;
+        let that = this;
+
+        for(var j=0; j<that.tableData.length; j++){
+          if(id == that.tableData[j].id){
+            that.tableData.splice(j, 1);
+            break;
+          }
+        }
       }
     }
   }
