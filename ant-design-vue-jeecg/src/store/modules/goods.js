@@ -67,6 +67,10 @@ const goods = {
           state.tableData = arr['table'];
         }
       }
+
+      if(state.enableGenericSpec || state.genericSpec!=""){
+        state.tableData = JSON.parse(params.genericSpec);
+      }
     },
     SET_GOODS1: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
