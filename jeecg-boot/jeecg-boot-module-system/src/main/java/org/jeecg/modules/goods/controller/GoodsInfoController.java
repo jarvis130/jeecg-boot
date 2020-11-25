@@ -59,8 +59,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-分页列表查询")
-	@ApiOperation(value="goods_info-分页列表查询", notes="goods_info-分页列表查询")
+	@AutoLog(value = "商品管理-分页列表查询")
+	@ApiOperation(value="商品管理-分页列表查询", notes="商品管理-分页列表查询")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(GoodsInfo goodsInfo,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -78,25 +78,25 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	 * @param goodsInfo
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-添加")
-	@ApiOperation(value="goods_info-添加", notes="goods_info-添加")
+	@AutoLog(value = "商品管理-添加")
+	@ApiOperation(value="商品管理-添加", notes="商品管理-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody GoodsInfo goodsInfo) {
-		goodsInfoService.save(goodsInfo);
-		return Result.OK("添加成功！");
+		GoodsInfo result = goodsInfoService.insertGoodsInfo(goodsInfo);
+		return Result.OK(result);
 	}
-	
+
 	/**
 	 *  编辑
 	 *
 	 * @param goodsInfo
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-编辑")
-	@ApiOperation(value="goods_info-编辑", notes="goods_info-编辑")
+	@AutoLog(value = "商品管理-编辑")
+	@ApiOperation(value="商品管理-编辑", notes="商品管理-编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody GoodsInfo goodsInfo) {
-		goodsInfoService.updateById(goodsInfo);
+        goodsInfoService.updateGoodsInfo(goodsInfo);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -106,8 +106,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-通过id删除")
-	@ApiOperation(value="goods_info-通过id删除", notes="goods_info-通过id删除")
+	@AutoLog(value = "商品管理-通过id删除")
+	@ApiOperation(value="商品管理-通过id删除", notes="商品管理-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		goodsInfoService.removeById(id);
@@ -120,8 +120,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-批量删除")
-	@ApiOperation(value="goods_info-批量删除", notes="goods_info-批量删除")
+	@AutoLog(value = "商品管理-批量删除")
+	@ApiOperation(value="商品管理-批量删除", notes="商品管理-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.goodsInfoService.removeByIds(Arrays.asList(ids.split(",")));
@@ -134,8 +134,8 @@ public class GoodsInfoController extends JeecgController<GoodsInfo, IGoodsInfoSe
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "goods_info-通过id查询")
-	@ApiOperation(value="goods_info-通过id查询", notes="goods_info-通过id查询")
+	@AutoLog(value = "商品管理-通过id查询")
+	@ApiOperation(value="商品管理-通过id查询", notes="商品管理-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		GoodsInfo goodsInfo = goodsInfoService.getById(id);

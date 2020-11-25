@@ -11,4 +11,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsInfoService extends IService<GoodsInfo> {
 
+    /**
+     *
+     * @param goodsInfo
+     * @return
+     */
+    public GoodsInfo insertGoodsInfo(GoodsInfo goodsInfo);
+
+    /**
+     *
+     * @param goodsInfo
+     * @return
+     */
+    public void updateGoodsInfo(GoodsInfo goodsInfo);
 }

@@ -59,6 +59,9 @@ public class GoodsInfo implements Serializable {
 	@Excel(name = "市场价", width = 15)
     @ApiModelProperty(value = "市场价")
     private java.math.BigDecimal marketPrice;
+    @Excel(name = "平台价", width = 15)
+    @ApiModelProperty(value = "平台价")
+    private java.math.BigDecimal salePrice;
 	/**关键词*/
 	@Excel(name = "关键词", width = 15)
     @ApiModelProperty(value = "关键词")
@@ -94,7 +97,7 @@ public class GoodsInfo implements Serializable {
 	/**是否上架*/
 	@Excel(name = "是否上架", width = 15)
     @ApiModelProperty(value = "是否上架")
-    private java.lang.String isOnSale;
+    private java.lang.Boolean isOnSale;
 	/**是否推荐*/
 	@Excel(name = "是否推荐", width = 15)
     @ApiModelProperty(value = "是否推荐")
@@ -115,14 +118,21 @@ public class GoodsInfo implements Serializable {
 	@Excel(name = "租户编号", width = 15)
     @ApiModelProperty(value = "租户编号")
     private java.lang.String tenantId;
-	/**是否启用sku编辑，1是，2否*/
-	@Excel(name = "是否启用sku编辑，1是，2否", width = 15)
-    @ApiModelProperty(value = "是否启用sku编辑，1是，2否")
-    private java.lang.Integer enableSku;
+
+	/**是否启用sku编辑，1是，0否*/
+	@Excel(name = "是否启用sku编辑，1是，0否", width = 15)
+    @ApiModelProperty(value = "是否启用sku编辑，1是，0否")
+    private java.lang.Boolean enableSku;
 	/**规格json数据，用于前台页面展示*/
 	@Excel(name = "规格json数据，用于前台页面展示", width = 15)
     @ApiModelProperty(value = "规格json数据，用于前台页面展示")
     private java.lang.String skuJsonData;
+
+    /**是否启用attribute编辑，1是，0否*/
+    @Excel(name = "是否启用attribute编辑，1是，0否", width = 15)
+    @ApiModelProperty(value = "是否启用sku编辑，1是，0否")
+    private java.lang.Boolean enableAttribute;
+
 	/**属性json数据，用于前台页面展示*/
 	@Excel(name = "属性json数据，用于前台页面展示", width = 15)
     @ApiModelProperty(value = "属性json数据，用于前台页面展示")

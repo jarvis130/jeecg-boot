@@ -27,4 +27,9 @@ public class FillRuleConstant {
      */
     public static final String WORK_ORDER = "work_order_code_rule";
 
+    /**
+     * 商品编码
+     */
+    public static final String GOODS_CODE = "goods_code_rule";
+
 }

@@ -1,104 +1,205 @@
 <template>
   <div>
-    <a-form style="margin: 40px auto 0;">
+    <a-form :form="form"  label-width="120px" @submit.native.prevent>
 
       <a-form-item
         label="启用规格"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-switch v-model="model.enableSku"/>
+         <a-switch v-model="model.enableSpecialSpec"/>
       </a-form-item>
 
-      <div v-if="model.enableSku == true">
-        <a-form-model
-          ref="dynamicValidateForm"
-          :model="dynamicValidateForm"
-          v-bind="formItemLayoutWithOutLabel"
-        >
-          <a-form-model-item v-bind="formItemLayoutWithOutLabel">
-            <a-button type="primary" style="width: 20%" @click="addDomain">
-              <a-icon type="plus" /> 添加规格
-            </a-button>
-          </a-form-model-item>
+      <div v-if="model.enableSpecialSpec == true">
 
-          <a-form-model-item
-            v-for="(domain, index) in dynamicValidateForm.domains"
-            :key="domain.key"
-            v-bind="index === 0 ? formItemLayout : {}"
-            :label="index === 0 ? '规格' : ''"
-            :prop="'domains.' + index + '.value'"
-            :rules="{
-              required: true,
-              message: '规格不能为空',
-              trigger: 'blur',
-            }"
-          >
-            <a-input
-              v-model="domain.value"
-              placeholder="请输入规格"
-              style="width: 20%; margin-right: 8px"
+        <!-- <a-form-item label="规格组和规格值" :labelCol="{span: 5}" :wrapperCol="{span: 19}">
+          <a-input-search
+            addon-before="规格组" 
+            onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+            placeholder="请输入内容"
+            enter-button="设置"
+            size="default"
+            v-model="specName" 
+            style="width: 400px" 
+            @keyup.enter.native="createdSpecifi"
+            @search="createdSpecifi"
+          />
+        </a-form-item> -->
+
+        <a-form-item label="" :labelCol="{span: 0}" :wrapperCol="{span: 24}" style="margin: 10px 0 20px 0">
+            <div class="introTitle" v-for="(tab, indexs) in specArr" :key="indexs">
+                <span class="fontWidth">{{tab.name}}</span>
+                <span class="delete clear" @click="clearSpe(indexs)">×</span>
+                <div class="introCon">
+                    <ul>
+                        <li v-for="(val, index) in tab.conName" :key="index">
+                            <span>{{val}}</span>
+                            <span class="delete" @click="clearSpecif(indexs, index)">×</span>
+                        </li>
+                        <li>
+                            <a-input-search
+                              addon-before="规格值" 
+                              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+                              placeholder="请输入内容"
+                              enter-button="设置"
+                              size="default"
+                              v-model="tab.addField" 
+                              style="width: 250px" 
+                              @keyup.enter.native="clickSpecVal(indexs, tab.addField)"
+                              @search="clickSpecVal(indexs, tab.addField)"
+                            />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a-form-item>
+
+        <a-form-item label="批量设置" style="margin-bottom: 20px" :labelCol="{span: 5}" :wrapperCol="{span: 19}" v-if="tableData.length > 0">
+
+            <a-input-search
+              addon-before="单价" 
+              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+              placeholder="请输入单价"
+              enter-button="设置"
+              size="default"
+              v-model="setPrice" 
+              style="width: 250px;margin-right: 20px" 
+              @keyup.native="proving(2)"
+              @search="clicksSet(2)"
             />
-            <a-icon
-              v-if="dynamicValidateForm.domains.length > 1"
-              class="dynamic-delete-button"
-              type="minus-circle-o"
-              :disabled="dynamicValidateForm.domains.length === 1"
-              @click="removeDomain(domain)"
+
+            <a-input-search
+              addon-before="库存" 
+              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
+              placeholder="请输入库存"
+              enter-button="设置"
+              size="default"
+              v-model="setStock" 
+              style="width: 250px;margin-right: 20px" 
+              @keyup.native="proving(1)"
+              @search="clicksSet(1)"
             />
-          </a-form-model-item>
+        </a-form-item>
+
+        <a-form-item label="价格和库存" :labelCol="{span: 0}" :wrapperCol="{span: 24}" v-if="tableData.length > 0">
+          <a-table :dataSource="tableData" border :pagination="pagination">
           
-          <a-divider></a-divider>
+              <a-table-column v-for="(item, index) in specArr" :key="index" :title="item.name" align="center" width="10%">
+                <template slot-scope="scope">
+                    <span>{{ scope.specs[index] }}</span>
+                </template>
+              </a-table-column>
+              <a-table-column key="price" title="单价" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.price" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column>
+              <a-table-column key="stock" title="库存" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.stock" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column>
 
-          <a-form-item
-            label=""
-            :labelCol="{span: 2}"
-            :wrapperCol="{span: 24}"
-          >
-            <j-editable-table
-              ref="editableTable"
-              :loading="loading"
-              :columns="columns"
-              :dataSource="dataSource"
-              :dragSort="true"
-              style="margin-top: 8px;"
-              @selectRowChange="handleSelectRowChange">
+              <!-- <a-table-column key="indexs" title="indexs" align="center" width="20%">
+                <template slot-scope="scope">
+                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.indexes" style="width: 100px;"></a-input>
+                </template>
+              </a-table-column> -->
+              
+              <a-table-column key="images" title="图片" align="center">
+                <template slot-scope="scope">
+                    <!-- {{scope.picture}} -->
 
-              <template v-slot:action="props">
-                <a @click="handleDelete(props)">删除</a>
-              </template>
+                    <j-image-upload v-model="scope.images" :data="{biz:bizPath}" :isMultiple="isMultiple"></j-image-upload>
 
-            </j-editable-table>
-          </a-form-item>
-
-        </a-form-model>
+                </template>
+              </a-table-column>
+          </a-table>
+        </a-form-item>
+        <!-- <p>{{specArr}}</p> -->
+        <!--<p>{{allData}}</p>-->
+        <!--<p>{{tableData}}</p>-->
 
       </div>
-      
-      <br>
-     
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
+
+      <a-form-item :wrapperCol="{span: 14, offset: 10}">
+        <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
+
     </a-form>
   </div>
 </template>
 
 <script>
+
+  import Vue from 'vue'
+  import pick from 'lodash.pick'
   import moment from 'moment'
-  import { FormTypes } from '@/utils/JEditableTableUtil'
-  import JEditor from '@/components/jeecg/JEditor'
-  import JEditableTable from '@/components/jeecg/JEditableTable'
+  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { mapGetters, mapActions } from "vuex";
   import { randomUUID, randomNumber } from '@/utils/util'
+  import { ACCESS_TOKEN } from "@/store/mutation-types"
+  import { getFileAccessHttpUrl, httpAction, getAction } from '@/api/manage'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
+  import descartes from "@/utils/descartes"
+
+  const uidGenerator=()=>{
+    return '-'+parseInt(Math.random()*10000+1,10);
+  }
+  const getFileName=(path)=>{
+    if(path.lastIndexOf("\\")>=0){
+      let reg=new RegExp("\\\\","g");
+      path = path.replace(reg,"/");
+    }
+    return path.substring(path.lastIndexOf("/")+1);
+  }
+
+  const defaultTable = {
+        specs: [],
+        stock: 0,
+        price: "0.00",
+        images: "",
+        id: ""
+    };
+
   export default {
     name: "Step3",
     components: {
-      JEditor,
-      JEditableTable
+      JImageUpload,
+      JeecgListMixin
+    },
+    props:{
+      text:{
+        type:String,
+        required:false,
+        default:"上传"
+      },
+      /*这个属性用于控制文件上传的业务路径*/
+      bizPath:{
+        type:String,
+        required:false,
+        default:"skupic"
+      },
+      value:{
+        type:[String,Array],
+        required:false
+      },
+      disabled:{
+        type:Boolean,
+        required:false,
+        default: false
+      },
+      isMultiple:{
+        type:Boolean,
+        required:false,
+        default: true
+      }
     },
     data () {
       return {
+        loading: false,
+        form: this.$form.createForm(this),
         formItemLayout: {
           labelCol: {
             xs: { span: 24 },
@@ -109,250 +210,384 @@
             sm: { span: 20 },
           },
         },
-        formItemLayoutWithOutLabel: {
-          wrapperCol: {
-            xs: { span: 24, offset: 0 },
-            sm: { span: 20, offset: 4 },
-          },
+        specName: "",
+        specArr: [],
+        specIdArr: [],
+        specContent: {},
+        tableData: [],
+        changeTableData: [],
+        allData: [],
+        setStock: "",
+        setPrice: "",
+        pagination: false,
+        url: {
+          list: "/commodity/specGroup/querySpecialList"
         },
-        dynamicValidateForm: {
-          domains: [],
-        },
-        loading: false,
         model: {
-          enableSku: false
+          enableSpecialSpec: false,
         },
-        columns: [
-          // {
-          //   title: '字段名称',
-          //   key: 'dbFieldName',
-          //   width: '150px',
-          //   type: FormTypes.input,
-          //   defaultValue: '',
-          //   placeholder: '请输入${title}',
-          //   validateRules: [
-          //     {
-          //       required: true, // 必填
-          //       message: '请输入${title}' // 显示的文本
-          //     },
-          //     {
-          //       pattern: /^[a-z|A-Z][a-z|A-Z\d_-]{0,}$/, // 正则
-          //       message: '${title}必须以字母开头，可包含数字、下划线、横杠'
-          //     },
-          //     {
-          //       unique: true,
-          //       message: '${title}不能重复'
-          //     },
-          //     {
-          //       handler(type, value, row, column, callback, target) {
-          //         if (type === 'blur') {
-          //           if (value === 'abc') {
-          //             callback(false, '${title}不能是abc')  // false = 未通过校验
-          //           } else {
-          //             callback(true) // true = 通过验证
-          //           }
-          //         } else {
-          //           callback(true) // 不填写或者填写 null 代表不进行任何操作
-          //         }
-          //       },
-          //       message: '${title}默认提示'
-          //     }
-          //   ]
-          // },
-          {
-            title: '单价',
-            key: 'price',
-            width: '120px',
-            type: FormTypes.inputNumber,
-            defaultValue: 32,
-            placeholder: '${title}',
-            // 是否是统计列，只有 inputNumber 才能设置统计列
-            statistics: true,
-            validateRules: [{ required: true, message: '请输入${title}' }]
-          },
-          {
-            title: '库存',
-            key: 'stock',
-            width: '120px',
-            type: FormTypes.inputNumber,
-            defaultValue: '100.32',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          },
-          // {
-          //   title: '文件域',
-          //   key: 'upload',
-          //   type: FormTypes.upload,
-          //   // width: '19%',
-          //   width: '300px',
-          //   placeholder: '点击上传',
-          //   token: true,
-          //   responseName: 'message',
-          //   action: window._CONFIG['domianURL'] + '/sys/common/upload'
-          // },
-          {
-            title: '操作',
-            key: 'action',
-            // width: '8%',
-            width: '100px',
-            type: FormTypes.slot,
-            slotName: 'action',
-          }
-
-        ],
-        dataSource: [],
-        selectedRowIds: []
+        //
       }
     },
+    watch:{
+      value(val){
+        if (val instanceof Array) {
+          this.initFileList(val.join(','))
+        } else {
+          this.initFileList(val)
+        }
+        if(!val || val.length==0){
+          this.picUrl = false;
+        }
+      }
+    },
+    created(){
+
+    },
     mounted() {
-      this.randomData(23, false)
+      if (this.goods){
+        let record = this.goods;
+        this.edit(record);
+      }
+      this.loadSpecialData();
+    },
+    computed: {
+      // 用vuex读取数据(读取的是getters.js中的数据)
+      // 相当于this.$store.getters.goods(vuex语法糖)
+      ...mapGetters(["goods"])
     },
     methods: {
+      ...mapActions([ "getSpecArr", "getTableData", "setOldTableData", "SetGoodsStore3" ]),
+      // 点击添加规格组
+      createdSpecifi() {
+          if (this.specName) {
+              const data = {
+                  id: "",
+                  name: "",
+                  conName: [],
+                  addField: ''
+              };
+              this.specContent = Object.assign({}, data);
+              this.specContent.id = this.id;
+              this.specContent.name = this.specName;
+              this.specContent.conName = [];
+              this.specArr.push(this.specContent);
+              let obj = {};
+  
+              this.specArr = this.specArr.reduce((cur, next) => {
+                  obj[next.name] ? "" : (obj[next.name] = true && cur.push(next));
+                  return cur;
+              }, []);
+
+              this.specName = "";
+              this.$store.dispatch("getSpecArr", this.specArr);
+          }
+      },
+      // 点击添加规格值
+      clickSpecVal(indexs, name) {
+          if (name) {
+              this.specArr[indexs].conName.push(name);
+              this.specArr[indexs].conName = [
+                  ...new Set(this.specArr[indexs].conName)
+              ];
+              for(const val in this.specArr) {
+                  if(this.specArr[val].conName.length === 0) {
+                      this.changeTableData[val] = ['']
+                  } else {
+                      this.changeTableData[val] = this.specArr[val].conName
+                  }
+              }
+              this.changeDataTable(this.changeTableData, this.specArr);
+              this.specArr[indexs].addField = "";
+              this.$store.dispatch("getSpecArr", this.specArr);
+          }
+      },
+      // 删除规格组
+      clearSpe(indexs) {
+          this.specArr.splice(indexs, 1);
+          this.changeTableData = [];
+          for (const item of this.specArr) {
+              this.changeTableData.push(item.conName);
+          }
+          this.changeDataTable(this.changeTableData, this.specArr);
+          this.$store.dispatch("getSpecArr", this.specArr);
+      },
+      // 删除规格值
+      clearSpecif(indexs, index) {
+          this.specArr[indexs].conName.splice(index, 1);
+          this.changeTableData[indexs] = this.specArr[indexs].conName;
+          for (const item in this.changeTableData) {
+              if (this.changeTableData[item].length === 0) {
+                  this.changeTableData.splice(item, 1);
+              }
+          }
+          this.changeDataTable(this.changeTableData, this.specArr);
+          this.$store.dispatch("getSpecArr", this.specArr);
+      },
+      // 整理数据
+      changeDataTable(m, n) {
+          //保存当前表格数据
+          if(this.tableData.length > 0){
+            this.$store.dispatch("setOldTableData", this.tableData);
+          }
+          //
+          this.tableData = []
+          this.allData = descartes(m);
+          if (n.length > 1) {
+              for (const i in this.allData) {
+                  const dataArr = Object.assign({}, defaultTable);
+                  if (typeof this.allData[i] === "string") {
+                      dataArr.specs[i] = this.allData[i];
+                  } else {
+                      dataArr.specs = this.allData[i];
+                  }
+          
+                  //设置indexs
+                  let indexes = dataArr.specs.join(",");
+                  if(indexes.substr(indexes.length-1, 1) == ","){
+                    indexes = indexes.substr(0, indexes.length - 1);
+                  }
+
+                  dataArr['skuKey'] = indexes;
+                  this.tableData.push(dataArr);
+                  this.$store.dispatch("getTableData", this.tableData);
+              }
+          } else {
+              for (const i in this.allData) {
+                  const dataArr = Object.assign({}, defaultTable);
+                  dataArr.specs = [this.allData[i]];
+        
+                  //设置indexs
+                  let indexes = dataArr.specs.join(",");
+                  if(indexes.substr(indexes.length-1, 1) == ","){
+                    indexes = indexes.substr(0, indexes.length - 1);
+                  }
+                  dataArr['skuKey'] = indexes;
+                  this.tableData.push(dataArr);
+                  this.$store.dispatch("getTableData", this.tableData);
+              }
+          }
+          debugger;
+          //取出old数据，然后向当前表格赋值
+          let oldData = this.goods.oldTableData;
+          for(var i=0;i<this.tableData.length-1;i++){
+            this.tableData[i]['price'] = oldData[i]['price']
+            this.tableData[i]['stock'] = oldData[i]['stock']
+            this.tableData[i]['images'] = oldData[i]['images']
+          }
+      },
+      clicksSet(name) {
+        for (const item of this.tableData) {
+            if (name === 1 && this.setStock != '') {
+                item.stock = this.setStock;
+            } else if (name === 2 && this.setPrice != '') {
+                item.price = this.setPrice;
+            }
+        }
+      },
+      proving(num) {
+          if (num === 1) {
+              this.setStock = this.setStock.replace(/[^\.\d]/g, "");
+              this.setStock = this.setStock.replace(".", "");
+          } else if (num === 2) {
+              this.setPrice = this.setPrice.replace(/[^\.\d]/g, "");
+              this.setPrice = this.setPrice.replace(".", "");
+          }
+      },
+      //功能方法
+      loadSpecialData() {
+        if(!this.url.list){
+          this.$message.error("请设置url.list属性!")
+          return
+        }
+        let that = this;
+        this.loading = true;
+        let param = {
+          cateId: this.goods.cid3
+        }
+        getAction(this.url.list, param).then((res) => {
+          if (res.success) {
+  
+            //渲染组件 
+            let skus = res.result;
+            if(skus instanceof Array){
+
+              for(var i=0; i<skus.length; i++){
+                let sku = skus[i];
+                let specName = sku.name;
+                if (specName) {
+                    const data = {
+                        id: "",
+                        name: "",
+                        conName: [],
+                        addField: ''
+                    };
+                    that.specContent = Object.assign({}, data);
+                    that.specContent.id = sku.id;
+                    that.specContent.name = specName;
+                    that.specContent.conName = [];
+                    that.specArr.push(that.specContent);
+                    let obj = {};
+                    that.specArr = that.specArr.reduce((cur, next) => {
+                        obj[next.name] ? "" : (obj[next.name] = true && cur.push(next));
+                        return cur;
+                    }, []);
+                    that.specName = "";
+                    that.$store.dispatch("getSpecArr", that.specArr);
+                }
+              }
+
+            }
+            
+            //
+          }
+          if(res.code===510){
+            that.$message.warning(res.message)
+          }
+          that.loading = false;
+        })
+      },
       nextStep () {
-        let that = this
-        that.loading = true
-        setTimeout(function () {
-          that.$emit('nextStep')
-        }, 1500)
+        const that = this;
+        // 触发表单验证
+
+        that.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            that.model.id = that.goods.id;
+            let formData = Object.assign(that.model, values);
+     
+            that.SetGoodsStore3(formData).then((res) => {
+              that.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });  
+            
+            
+          }
+         
+        })
       },
       prevStep () {
         this.$emit('prevStep')
       },
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        if(this.model.enableSpecialSpec == "") this.model.enableSpecialSpec = false;
+        this.tableData = this.model.tableData;
+        this.specArr = this.model.specArr;
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-      removeDomain(item) {
-        let index = this.dynamicValidateForm.domains.indexOf(item);
-        if (index !== -1) {
-          this.dynamicValidateForm.domains.splice(index, 1);
-        }
-      },
-      addDomain() {
-        this.dynamicValidateForm.domains.push({
-          value: '',
-          key: Date.now(),
-        });
-        this.columns.unshift(
-          {
-            title: '库存1',
-            key: 'stock',
-            width: '120px',
-            type: FormTypes.inputNumber,
-            defaultValue: '100.32',
-            placeholder: '请选择${title}',
-            validateRules: [{ required: true, message: '请选择${title}' }]
-          }
-        );
-      },
-      /**Jtable */
-       /** 表单验证 */
-      handleTableCheck() {
-        this.$refs.editableTable.getValues((error) => {
-          if (error === 0) {
-            this.$message.success('验证通过')
-          } else {
-            this.$message.error('验证未通过')
-          }
-        })
-      },
-      /** 获取值，忽略表单验证 */
-      handleTableGet() {
-        this.$refs.editableTable.getValues((error, values) => {
-          console.log('values:', values)
-        }, false)
-        console.log('deleteIds:', this.$refs.editableTable.getDeleteIds())
-
-        this.$message.info('获取值成功，请看控制台输出')
-
-      },
-      /** 模拟加载1000条数据 */
-      handleTableSet() {
-        this.randomData(1000, true)
-      },
-
-      handleSelectRowChange(selectedRowIds) {
-        this.selectedRowIds = selectedRowIds
-      },
-
-      /* 随机生成数据 */
-      randomData(size, loading = false) {
-        if (loading) {
-          this.loading = true
-        }
-
-        let randomDatetime = () => {
-          let time = parseInt(randomNumber(1000, 9999999999999))
-          return moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss')
-        }
-
-        let begin = Date.now()
-        let values = []
-        for (let i = 0; i < size; i++) {
-          values.push({
-            id: randomUUID(),
-            dbFieldName: `name_${i + 1}`,
-            // dbFieldTxt: randomString(10),
-            multipleSelect: ['string', ['int', 'double', 'boolean'][randomNumber(0, 2)]],
-            dbFieldType: ['string', 'int', 'double', 'boolean'][randomNumber(0, 3)],
-            dbLength: randomNumber(0, 233),
-            datetime: randomDatetime(),
-            isNull: ['Y', 'N'][randomNumber(0, 1)]
-          })
-        }
-
-        this.dataSource = values
-        let end = Date.now()
-        let diff = end - begin
-
-        if (loading && diff < size) {
-          setTimeout(() => {
-            this.loading = false
-          }, size - diff)
-        }
-
-      },
-
-      handleDelete(props) {
-        let { rowId, target } = props
-        target.removeRows(rowId)
-      }
     }
   }
 </script>
 
-<style lang="less" scoped>
-  .stepFormText {
-    margin-bottom: 24px;
-
-    .ant-form-item-label,
-    .ant-form-item-control {
-      line-height: 22px;
+<style scoped>
+    html,
+    body,
+    div,
+    span,
+    p,
+    i,
+    ul,
+    li {
+        margin: 0;
+        padding: 0;
     }
-  }
 
-  .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all 0.3s;
-  }
-  .dynamic-delete-button:hover {
-    color: #777;
-  }
-  .dynamic-delete-button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+    .a-row {
+        margin-bottom: 20px;
+    }
+
+    .a-col {
+        border-radius: 4px;
+    }
+
+    .introTitle {
+        border: 1px solid rgb(238, 238, 238);
+        padding-left: 10px;
+        padding-top: 10px;
+        line-height: 30px;
+        margin-bottom: 10px;
+    }
+
+    .fontWidth {
+        font-weight: 500;
+        font-size: 16px;
+        display: inline-block;
+        padding: 0 10px;
+        vertical-align: middle;
+    }
+
+    .introTitle i {
+        cursor: pointer;
+    }
+
+    .introCon ul {
+        list-style: none;
+        padding: 5px 0 10px 0;
+    }
+
+    .introCon ul li {
+        display: inline-block;
+        margin: 5px 10px;
+        background-color: rgb(238, 238, 238);
+        line-height: 30px;
+    }
+
+    .introCon ul li:last-child {
+        background-color: #ffffff;
+        width: 300px;
+    }
+
+    .introCon ul li span:nth-child(1) {
+        display: inline-block;
+        padding: 0 10px;
+        text-align: center;
+    }
+
+    .introCon ul li span:nth-child(2) {
+        display: inline-block;
+        width: 30px;
+        background-color: rgb(211, 207, 208);
+        text-align: center;
+    }
+
+    .delete {
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .clear {
+        background-color: rgb(238, 238, 238);
+        display: inline-block;
+        width: 15px;
+        line-height: 15px;
+        height: 15px;
+        vertical-align: middle;
+        border-radius: 50%;
+        text-align: center;
+    }
+
+    /deep/ .ant-upload.ant-upload-select-picture-card{
+      width: 60px;
+      height: 30px;
+    }
+
+    /deep/ .ant-upload-list-picture-card .ant-upload-list-item {
+      float: left;
+      width: 60px;
+      height: 60px;
+      margin: 0 8px 8px 0;
+    }
+
+     /deep/ .ant-upload-list-picture-card-container {
+      float: left;
+      width: 60px;
+      height: 60px;
+      margin: 0 8px 8px 0;
+    } 
+
 </style>
