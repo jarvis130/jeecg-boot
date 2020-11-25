@@ -107,6 +107,9 @@
     data () {
       return {
         description: 'goods_info管理页面',
+        queryParam: {
+          spuType: 1
+        },
         // 表头
         columns: [
           {

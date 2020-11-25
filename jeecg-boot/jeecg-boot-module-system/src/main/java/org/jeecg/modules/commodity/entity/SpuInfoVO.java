@@ -38,7 +38,7 @@ public class SpuInfoVO implements Serializable {
 
     /**spu类型*/
     @ApiModelProperty(value = "spu类型")
-    private Integer type; //1是商品；2是方案；3是视频
+    private Integer spuType; //1是商品；2是方案；3是视频
 
     /**商品编号*/
     @Excel(name = "商品编号", width = 15)
