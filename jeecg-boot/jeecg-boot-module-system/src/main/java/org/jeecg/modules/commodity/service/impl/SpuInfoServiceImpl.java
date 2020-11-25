@@ -64,12 +64,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         spuDetailMapper.insert(spuDetail);
         spuInfoVO.setId(id);
 
-        if(spuInfoVO.getType().equals(1)){
+        if(spuInfoVO.getSpuType().equals(1)){
             //商品，处理特殊规格
             if(spuInfoVO.getEnableSpecialSpec()){
                 updateSku(id, spuInfoVO.getSpecialSpec());
             }
-        }else if(spuInfoVO.getType().equals(2)){
+        }else if(spuInfoVO.getSpuType().equals(2)){
             //方案，处理关联物品
             updateSpuRelation(id, spuInfoVO.getGenericSpec());
         }
@@ -91,12 +91,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         spuDetailMapper.updateById(spuDetail);
         spuInfoVO.setId(id);
 
-        if(spuInfoVO.getType().equals(1)){
+        if(spuInfoVO.getSpuType().equals(1)){
             //商品，处理特殊规格
             if(spuInfoVO.getEnableSpecialSpec()){
                 updateSku(id, spuInfoVO.getSpecialSpec());
             }
-        }else if(spuInfoVO.getType().equals(2)){
+        }else if(spuInfoVO.getSpuType().equals(2)){
             //方案，处理关联物品
             updateSpuRelation(id, spuInfoVO.getGenericSpec());
         }

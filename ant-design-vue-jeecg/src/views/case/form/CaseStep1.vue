@@ -259,7 +259,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'type', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'spuType', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
         })
 
         this.SetGoodsStore(record);

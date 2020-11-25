@@ -4,14 +4,13 @@ import { putAction, postAction, getAction } from '@/api/manage'
 const goods = {
   state: {
     id: '',
-    type: '',
+    spuType: '',
     cid1: '',
     cid2: '',
     cid3: '',
     code: '',
     title: '',
     subTitle: '',
-    type: '',
     brandId: '',
     marketPrice: '',
     salePrice: '',
@@ -37,7 +36,7 @@ const goods = {
   mutations: {
     SET_GOODS: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
-      state.type = params.type = '' ? '' : params.type;
+      state.spuType = params.spuType = '' ? '' : params.spuType;
       state.cid1 = params.cid1 = '' ? '' : params.cid1;
       state.cid2 = params.cid2 = '' ? '' : params.cid2;
       state.cid3 = params.cid3 = '' ? '' : params.cid3;
@@ -71,7 +70,7 @@ const goods = {
     },
     SET_GOODS1: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
-      state.type = params.type = '' ? '' : params.type;
+      state.spuType = params.spuType = '' ? '' : params.spuType;
       state.cid1 = params.cid1 = '' ? '' : params.cid1;
       state.cid2 = params.cid2 = '' ? '' : params.cid2;
       state.cid3 = params.cid3 = '' ? '' : params.cid3;
@@ -111,7 +110,7 @@ const goods = {
     },
     CLEAR_GOODS: (state) => {
       state.id = '';
-      state.type = '';
+      state.spuType = '';
       state.cid1 = '';
       state.cid2 = '';
       state.cid3 = '';

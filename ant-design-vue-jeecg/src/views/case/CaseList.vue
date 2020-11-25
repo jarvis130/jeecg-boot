@@ -7,7 +7,7 @@
 
           <!-- <a-col :md="6" :sm="12">
             <a-form-item label="账号">
-              <a-input placeholder="输入账号模糊查询" v-model="queryParam.type"></a-input>
+              <j-input placeholder="输入账号模糊查询" v-model="queryParam.spuType"></j-input>
             </a-form-item>
           </a-col>
 
@@ -111,18 +111,19 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import CaseInfoModal from './modules/CaseInfoModal'
   import { mapGetters, mapActions } from "vuex";
+    import JInput from '@/components/jeecg/JInput'
 
   export default {
     name: 'CaseList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-     CaseInfoModal
+     CaseInfoModal, JInput
     },
     data () {
       return {
         description: 'goods_info管理页面',
         queryParam: {
-          type: '2'
+          spuType: 2
         },
         // 表头
         columns: [
