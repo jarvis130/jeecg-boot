@@ -150,7 +150,7 @@
             if(that.model.enableGenericSpec){
               formData.genericSpec = JSON.stringify(that.tableData);
             }
-            formData.spuType = "1"; //spu类型1=商品
+            formData.spuType = "3"; //spu类型1=视频
             console.log("表单提交数据",formData)
             
             if(!that.model.id){

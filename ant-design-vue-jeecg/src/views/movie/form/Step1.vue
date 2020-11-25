@@ -3,11 +3,11 @@
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
-        label="商品标题"
+        label="视频标题"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['title', validatorRules.title]" placeholder="请输入商品标题"></a-input>
+         <a-input v-decorator="['title', validatorRules.title]" placeholder="请输入视频标题"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -15,56 +15,32 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['subTitle']" placeholder="请输入商品副标题"></a-input>
+         <a-input v-decorator="['subTitle']" placeholder="请输入视频副标题"></a-input>
       </a-form-item>
 
       <a-form-item
-        label="商品编码"
+        label="视频编码"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['code']" placeholder="请输入商品编码"></a-input>
+         <a-input v-decorator="['code']" placeholder="请输入视频编码"></a-input>
       </a-form-item>
 
       <a-form-item
-        label="外部编码"
+        label="视频分类"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['extensionCode']" placeholder="请输入外部编码"></a-input>
+          <j-category-select v-decorator="['cid3', validatorRules.cid3]" pcode="A01" placeholder="请输入视频分类"/>
       </a-form-item>
 
       <a-form-item
-        label="商品分类"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-          <j-category-select v-decorator="['cid3', validatorRules.cid3]" pcode="A01" placeholder="请输入商品分类"/>
-      </a-form-item>
-
-      <a-form-item
-        label="商品品牌"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-        <a-input v-decorator="['brandId', validatorRules.brandId]" placeholder="请输入品牌编号"></a-input>
-      </a-form-item>
-
-      <a-form-item
-        label="商品图片"
+        label="视频图片"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
       
         <j-image-upload v-model="model.thumbs" :isMultiple="isMultiple"></j-image-upload>
-      </a-form-item>
-
-      <a-form-item
-        label="市场价格"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-        <a-input v-decorator="['marketPrice', validatorRules.marketPrice]" placeholder="请输入市场价格"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -146,17 +122,17 @@
         validatorRules: {
           cid3: {
             rules: [
-              { required: true, message: '请输入商品分类!'},
+              { required: true, message: '请输入视频分类!'},
             ]
           },
           title: {
             rules: [
-              { required: true, message: '请输入商品名称!'},
+              { required: true, message: '请输入视频名称!'},
             ]
           },
           code: {
             rules: [
-              { required: true, message: '请输入商品编号!'},
+              { required: true, message: '请输入视频编号!'},
             ]
           },
           brandId: {
@@ -181,12 +157,12 @@
           },
           goodsBrief: {
             rules: [
-              { required: true, message: '请输入商品简述!'},
+              { required: true, message: '请输入视频简述!'},
             ]
           },
           isReal: {
             rules: [
-              { required: true, message: '请输入是否实物商品，是1，否2!'},
+              { required: true, message: '请输入是否实物视频，是1，否2!'},
             ]
           },
           extensionCode: {

@@ -99,7 +99,7 @@
   import { mapGetters, mapActions } from "vuex";
 
   export default {
-    name: 'GoodsInfoList',
+    name: 'MovieList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
       MovieInfoModal
@@ -108,7 +108,7 @@
       return {
         description: 'goods_info管理页面',
         queryParam: {
-          spuType: 1
+          spuType: 3
         },
         // 表头
         columns: [
@@ -123,30 +123,25 @@
             }
           },
           {
-            title:'商品编号',
+            title:'视频编号',
             align:"center",
             dataIndex: 'code'
           },
           {
-            title:'商品名称',
+            title:'视频名称',
             align:"center",
             width:150,
             dataIndex: 'title'
           },
           {
-            title:'商品分类',
+            title:'视频分类',
             align:"center",
             dataIndex: 'cid3_dictText'
           },
           {
-            title:'品牌编号',
+            title:'售价',
             align:"center",
-            dataIndex: 'brandId'
-          },
-          {
-            title:'市场价',
-            align:"center",
-            dataIndex: 'marketPrice'
+            dataIndex: 'salePrice'
           },
           {
             title:'是否上架',
@@ -217,13 +212,13 @@
       handleAdd2(){
         this.ClearGoodsStore();//清空store数据
         this.$refs.modalForm.add();
-        this.$refs.modalForm.title = "新增商品";
+        this.$refs.modalForm.title = "新增视频";
         this.$refs.modalForm.disableSubmit = false;
       },
       handleEdit2(record){
         this.SetGoodsStore(record);
         this.$refs.modalForm.edit(record);
-        this.$refs.modalForm.title = "编辑商品";
+        this.$refs.modalForm.title = "编辑视频";
         this.$refs.modalForm.disableSubmit = false;
       }
     }
