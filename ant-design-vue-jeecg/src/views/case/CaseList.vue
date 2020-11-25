@@ -4,6 +4,20 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+
+          <!-- <a-col :md="6" :sm="12">
+            <a-form-item label="账号">
+              <a-input placeholder="输入账号模糊查询" v-model="queryParam.type"></a-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="6" :sm="8">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+            </span>
+          </a-col> -->
+
         </a-row>
       </a-form>
     </div>
@@ -107,6 +121,9 @@
     data () {
       return {
         description: 'goods_info管理页面',
+        queryParam: {
+          type: '2'
+        },
         // 表头
         columns: [
           {
@@ -145,21 +162,6 @@
             align:"center",
             dataIndex: 'isOnSale_dictText'
           },
-          // {
-          //   title:'是否新品',
-          //   align:"center",
-          //   dataIndex: 'isNew_dictText'
-          // },
-          // {
-          //   title:'是否热卖',
-          //   align:"center",
-          //   dataIndex: 'isHot_dictText'
-          // },
-          // {
-          //   title:'是否推荐',
-          //   align:"center",
-          //   dataIndex: 'isRecommend_dictText'
-          // },
           {
             title:'更新时间',
             align:"center",

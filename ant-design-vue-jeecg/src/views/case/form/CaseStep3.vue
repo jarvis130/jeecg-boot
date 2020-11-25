@@ -87,6 +87,7 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import SpuSkuList from '../SpuSkuList'
+  import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: 'CaseStep3',
@@ -126,37 +127,51 @@
 
     },
     mounted() {
-      // if (this.goods){
-      //   let record = this.goods;
-      //   this.edit(record);
-      // }
+      if (this.goods){
+        let record = this.goods;
+        this.edit(record);
+      }
     },
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
       // 相当于this.$store.getters.goods(vuex语法糖)
-      // ...mapGetters(["goods"])
+      ...mapGetters(["goods"])
     },
     methods: {
-      // ...mapActions([ "getSpecArr", "getTableData", "setOldTableData", "SetGoodsStore3" ]),
+      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo", "getTableData" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
-        that.$emit('nextStep');
-        // that.form.validateFields((err, values) => {
-        //   if (!err) {
-        //     that.confirmLoading = true;
-        //     that.model.id = that.goods.id;
-        //     let formData = Object.assign(that.model, values);
-     
-        //     that.SetGoodsStore3(formData).then((res) => {
-        //       that.$emit('nextStep');
-        //     }).catch((err) => {
-        //       that.$message.warning(res.message);
-        //     }).finally(() => {
-        //       that.confirmLoading = false;
-        //     });  
-        //   }
-        // })
+        that.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            that.model.id = that.goods.id;
+            let formData = Object.assign(that.model, values);
+            formData.genericSpec = JSON.stringify(that.tableData);
+            formData.type = "2"; //spu类型2=方案
+            console.log("表单提交数据",formData)
+            
+            if(!that.model.id){
+              that.SaveGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(err.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
+            }else{
+              that.UpdateGoodsInfo(formData).then((res) => {
+                that.$emit('nextStep');
+              }).catch((err) => {
+                that.$message.warning(err.message);
+              }).finally(() => {
+                that.confirmLoading = false;
+              });
+            }
+
+          }
+         
+        })
       },
       prevStep () {
         this.$emit('prevStep')
@@ -164,18 +179,18 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        if(this.model.enableSpecialSpec == "") this.model.enableSpecialSpec = false;
-        this.tableData = this.model.tableData;
-        this.specArr = this.model.specArr;
+        if(this.model.tableData != ""){
+          this.tableData = this.model.tableData;
+        }
       },
       getSelectData (val) {
         let that = this;
         this.selectionRows = val;
-        
+  
         for(var i=0; i< this.selectionRows.length; i++){
           var isExist = false;
           for(var j=0; j<that.tableData.length; j++){
-            if(that.selectionRows[i].id == that.tableData[j].id){
+            if(that.selectionRows[i].id == that.tableData[j].skuId){
               isExist = true;
               break;
             }
@@ -183,7 +198,7 @@
 
           if(isExist == false){
             let dataArr = {
-              id: that.selectionRows[i].id,
+              skuId: that.selectionRows[i].id,
               spuId: that.selectionRows[i].spuId,
               title: that.selectionRows[i].spuId_dictText,
               skuKey: that.selectionRows[i].skuKey,
@@ -194,6 +209,7 @@
           }
           
         }
+        this.$store.dispatch("getTableData", this.tableData);
       },
       del(scope){
         // debugger;
@@ -206,7 +222,25 @@
             break;
           }
         }
-      }
+      },
+      clicksSet(name) {
+        for (const item of this.tableData) {
+            if (name === 1 && this.setStock != '') {
+                item.useNum = this.setStock;
+            } else if (name === 2 && this.setPrice != '') {
+                item.price = this.setPrice;
+            }
+        }
+      },
+      proving(num) {
+          if (num === 1) {
+              this.useNum = this.setStock.replace(/[^\.\d]/g, "");
+              this.useNum = this.setStock.replace(".", "");
+          } else if (num === 2) {
+              this.setPrice = this.setPrice.replace(/[^\.\d]/g, "");
+              this.setPrice = this.setPrice.replace(".", "");
+          }
+      },
     }
   }
 </script>

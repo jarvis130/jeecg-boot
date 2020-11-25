@@ -4,6 +4,7 @@ import { putAction, postAction, getAction } from '@/api/manage'
 const goods = {
   state: {
     id: '',
+    type: '',
     cid1: '',
     cid2: '',
     cid3: '',
@@ -36,6 +37,7 @@ const goods = {
   mutations: {
     SET_GOODS: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
+      state.type = params.type = '' ? '' : params.type;
       state.cid1 = params.cid1 = '' ? '' : params.cid1;
       state.cid2 = params.cid2 = '' ? '' : params.cid2;
       state.cid3 = params.cid3 = '' ? '' : params.cid3;
@@ -69,6 +71,7 @@ const goods = {
     },
     SET_GOODS1: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
+      state.type = params.type = '' ? '' : params.type;
       state.cid1 = params.cid1 = '' ? '' : params.cid1;
       state.cid2 = params.cid2 = '' ? '' : params.cid2;
       state.cid3 = params.cid3 = '' ? '' : params.cid3;
@@ -108,6 +111,7 @@ const goods = {
     },
     CLEAR_GOODS: (state) => {
       state.id = '';
+      state.type = '';
       state.cid1 = '';
       state.cid2 = '';
       state.cid3 = '';

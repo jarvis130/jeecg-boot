@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.jeecg.modules.commodity.entity.*;
 import org.jeecg.modules.commodity.mapper.SpuDetailMapper;
 import org.jeecg.modules.commodity.mapper.SpuInfoMapper;
+import org.jeecg.modules.commodity.mapper.SpuRelationMapper;
 import org.jeecg.modules.commodity.mapper.SpuSkuMapper;
 import org.jeecg.modules.commodity.service.ISpuInfoService;
 import org.jeecg.modules.inventory.entity.InventoryInfo;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
     @Autowired
     private InventoryInfoMapper inventoryInfoMapper;
 
+    @Autowired
+    private SpuRelationMapper spuRelationMapper;
+
     @Override
     @Transactional
     public SpuInfoVO saveSpu(SpuInfoVO spuInfoVO) {
@@ -58,11 +63,16 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         spuDetail.setId(id);
         spuDetailMapper.insert(spuDetail);
         spuInfoVO.setId(id);
-        //处理特殊规格
-        if(spuInfoVO.getEnableSpecialSpec()){
-            updateSku(id, spuInfoVO.getSpecialSpec());
-        }
 
+        if(spuInfoVO.getType().equals(1)){
+            //商品，处理特殊规格
+            if(spuInfoVO.getEnableSpecialSpec()){
+                updateSku(id, spuInfoVO.getSpecialSpec());
+            }
+        }else if(spuInfoVO.getType().equals(2)){
+            //方案，处理关联物品
+            updateSpuRelation(id, spuInfoVO.getGenericSpec());
+        }
 
         return spuInfoVO;
     }
@@ -80,14 +90,21 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         BeanUtils.copyProperties(spuInfoVO, spuDetail);
         spuDetailMapper.updateById(spuDetail);
         spuInfoVO.setId(id);
-        //处理特殊规格
-        if(spuInfoVO.getEnableSpecialSpec()){
-            updateSku(id, spuInfoVO.getSpecialSpec());
+
+        if(spuInfoVO.getType().equals(1)){
+            //商品，处理特殊规格
+            if(spuInfoVO.getEnableSpecialSpec()){
+                updateSku(id, spuInfoVO.getSpecialSpec());
+            }
+        }else if(spuInfoVO.getType().equals(2)){
+            //方案，处理关联物品
+            updateSpuRelation(id, spuInfoVO.getGenericSpec());
         }
 
         return spuInfoVO;
     }
 
+    //商品规格
     private void updateSku(String spuId, String specialSpec){
         //将字符串转化给Json对象
         JsonSpecialSpec jsonSpecialSpec = JSON.parseObject(specialSpec, JsonSpecialSpec.class);
@@ -129,4 +146,23 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         }
     }
 
+    //方案-关联物品
+    private void updateSpuRelation(String spuId, String generidSpec){
+        //将字符串转化给Json对象
+        List<JsonSpuRelation> list = JSON.parseArray(generidSpec, JsonSpuRelation.class);
+        //清空
+        QueryWrapper<SpuRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("spu_id", spuId);
+        spuRelationMapper.delete(queryWrapper);
+        //查询是否存在
+        for(JsonSpuRelation item: list){
+            SpuRelation spuRelation = new SpuRelation();
+            spuRelation.setSpuId(spuId);
+            spuRelation.setRelationId(item.getSpuId());
+            spuRelation.setSkuId(item.getSkuId());
+            spuRelation.setPrice(new BigDecimal(item.getPrice()));
+            spuRelation.setUseNum(new Integer(item.getUseNum()));
+            spuRelationMapper.insert(spuRelation);
+        }
+    }
 }

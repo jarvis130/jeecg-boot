@@ -232,7 +232,7 @@
       nextStep () {
         const that = this;
         this.model.id = this.goods.id;
-     
+        this.model.type = 2;
         // 触发表单验证
         that.form.validateFields((err, values) => {
           if (!err) {
@@ -259,7 +259,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'type', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
         })
 
         this.SetGoodsStore(record);
