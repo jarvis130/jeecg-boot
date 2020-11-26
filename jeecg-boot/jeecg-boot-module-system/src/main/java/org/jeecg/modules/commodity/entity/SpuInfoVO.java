@@ -78,9 +78,9 @@ public class SpuInfoVO implements Serializable {
 
 	/**是否上架，0下架，1上架*/
 	@Excel(name = "是否上架，0下架，1上架", width = 15)
-    @Dict(dicCode = "sf_status")
+    @Dict(dicCode = "spu_status")
     @ApiModelProperty(value = "是否上架，0下架，1上架")
-    private Integer isOnSale;
+    private Boolean isOnSale;
 
 	/**是否有效，0已删除，1有效*/
 	@Excel(name = "是否有效，0已删除，1有效", width = 15)
@@ -121,19 +121,19 @@ public class SpuInfoVO implements Serializable {
     @Excel(name = "是否新品", width = 15)
     @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否新品")
-    private Integer isNew;
+    private Boolean isNew;
 
     /**是否热卖*/
     @Excel(name = "是否热卖", width = 15)
     @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否热卖")
-    private Integer isHot;
+    private Boolean isHot;
 
     /**是否推荐*/
     @Excel(name = "是否推荐", width = 15)
     @Dict(dicCode = "sf_status")
     @ApiModelProperty(value = "是否推荐")
-    private Integer isRecommend;
+    private Boolean isRecommend;
 
     /**租户编号*/
     @Excel(name = "租户编号", width = 15)
