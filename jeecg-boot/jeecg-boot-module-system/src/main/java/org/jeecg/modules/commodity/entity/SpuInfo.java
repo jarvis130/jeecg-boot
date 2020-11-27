@@ -79,7 +79,8 @@ public class SpuInfo implements Serializable {
 	/**是否上架，0下架，1上架*/
 	@Excel(name = "是否上架，0下架，1上架", width = 15)
     @ApiModelProperty(value = "是否上架，0下架，1上架")
-    private java.lang.Boolean isOnSale;
+    @Dict(dicCode = "spu_status")
+    private java.lang.Integer isOnSale;
 
 	/**是否有效，0已删除，1有效*/
 	@Excel(name = "是否有效，0已删除，1有效", width = 15)

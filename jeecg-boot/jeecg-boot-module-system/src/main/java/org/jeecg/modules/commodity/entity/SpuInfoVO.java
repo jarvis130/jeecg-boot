@@ -80,7 +80,7 @@ public class SpuInfoVO implements Serializable {
 	@Excel(name = "是否上架，0下架，1上架", width = 15)
     @Dict(dicCode = "spu_status")
     @ApiModelProperty(value = "是否上架，0下架，1上架")
-    private Boolean isOnSale;
+    private Integer isOnSale;
 
 	/**是否有效，0已删除，1有效*/
 	@Excel(name = "是否有效，0已删除，1有效", width = 15)

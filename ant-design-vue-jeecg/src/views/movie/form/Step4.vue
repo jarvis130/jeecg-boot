@@ -184,7 +184,7 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'enableGenericSpec'))
         })
-        if(this.model.enableGenericSpec == "") this.model.enableGenericSpec = false;
+   
         let genericSpec = this.model.genericSpec;
         if(genericSpec){
           let that = this;

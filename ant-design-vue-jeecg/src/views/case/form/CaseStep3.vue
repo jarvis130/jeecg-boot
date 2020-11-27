@@ -179,8 +179,14 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        if(this.model.tableData != ""){
-          this.tableData = this.model.tableData;
+   
+        let genericSpec = this.model.genericSpec;
+        if(genericSpec){
+          let that = this;
+          let arr = JSON.parse(genericSpec);
+          if(arr instanceof Array){
+            that.tableData = arr;
+          }
         }
       },
       getSelectData (val) {

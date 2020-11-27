@@ -10,29 +10,41 @@
          <a-input v-model="model.keywords" placeholder="请输入关键词"></a-input>
       </a-form-item>
 
-            <a-form-item
+
+    <a-row>
+      <a-col :span="8">
+        <a-form-item
         label="是否新品"
-           :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
+           :labelCol="{span: 6}"
+        :wrapperCol="{span: 6}"
       >
-         <j-dict-select-tag v-decorator="['isNew']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+        <a-switch default-unchecked v-model="model.isNew"/>
       </a-form-item>
+      </a-col>
 
-            <a-form-item
+      <a-col :span="8">
+        <a-form-item
         label="是否热卖"
-         :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
+         :labelCol="{span: 6}"
+        :wrapperCol="{span: 6}"
       >
-         <j-dict-select-tag v-decorator="['isHot']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+         <a-switch default-unchecked v-model="model.isHot"/>
       </a-form-item>
+      </a-col>
 
-            <a-form-item
+      <a-col :span="8">
+        <a-form-item
         label="是否推荐"
-        :labelCol="{span: 2}"
-        :wrapperCol="{span: 10}"
+        :labelCol="{span: 6}"
+        :wrapperCol="{span: 6}"
       >
-         <j-dict-select-tag v-decorator="['isRecommend']" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+         <a-switch default-unchecked v-model="model.isRecommend"/>
       </a-form-item>
+      </a-col>
+
+    </a-row>
+
+            
 
       <a-form-item
         label="商品简述"

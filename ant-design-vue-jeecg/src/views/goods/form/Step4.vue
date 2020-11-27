@@ -7,7 +7,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-switch v-model="model.enableGenericSpec"/>
+         <a-switch default-unchecked v-model="model.enableGenericSpec"/>
       </a-form-item>
 
       <div v-if="model.enableGenericSpec == true">
@@ -184,7 +184,7 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'enableGenericSpec'))
         })
-        if(this.model.enableGenericSpec == "") this.model.enableGenericSpec = false;
+    
         let genericSpec = this.model.genericSpec;
         if(genericSpec){
           let that = this;
