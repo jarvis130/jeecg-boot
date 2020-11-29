@@ -1,5 +1,6 @@
 package org.jeecg.modules.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.user.entity.UserAccount;
@@ -60,6 +61,11 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
      */
     @Override
     public UserAccount getUserAccountByMobile(String mobile){
-        return userAccountMapper.selectUserAccountByMobile(mobile);
+        return userAccountMapper.selectOne(new QueryWrapper<UserAccount>().eq("mobile", mobile));
+    }
+
+    @Override
+    public UserAccount getUserAccountByUserName(String userName) {
+        return userAccountMapper.selectOne(new QueryWrapper<UserAccount>().eq("user_name", userName));
     }
 }

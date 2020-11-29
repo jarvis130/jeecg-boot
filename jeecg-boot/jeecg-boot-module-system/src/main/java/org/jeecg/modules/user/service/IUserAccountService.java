@@ -15,12 +15,14 @@ public interface IUserAccountService extends IService<UserAccount> {
      * 创建会员账号
      * @param userAccount
      */
-    public void createUserAccount(UserAccount userAccount);
+   void createUserAccount(UserAccount userAccount);
 
     /**
      *  根据手机号获取会员账号信息
      * @return
      */
-    public UserAccount getUserAccountByMobile(String mobile);
+    UserAccount getUserAccountByMobile(String mobile);
+
+    UserAccount getUserAccountByUserName(String userName);
 
 }

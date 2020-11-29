@@ -68,7 +68,7 @@ public class ShiroConfig {
                 filterChainDefinitionMap.put(url,"anon");
             }
         }
-
+        filterChainDefinitionMap.put("/api/**", "anon");
         //cas验证登录
         filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");
         // 配置不会被拦截的链接 顺序判断

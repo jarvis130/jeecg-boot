@@ -45,6 +45,25 @@ public class RedisUtil {
 	}
 
 	/**
+	 * key并设置过期时间，单位 秒
+	 *
+	 * @param key  键
+	 * @param time 时间(秒)
+	 * @return
+	 */
+	public boolean setEx(String key, String value, long time) {
+		try {
+			if (time > 0) {
+				redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
 	 * 根据key 获取过期时间
 	 * 
 	 * @param key 键 不能为null

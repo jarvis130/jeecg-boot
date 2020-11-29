@@ -48,13 +48,13 @@ public class UserAccountCodeRule implements IFillRuleHandler {
      * 生成用户编号
      * @return
      */
-    public Integer createUserAccountCode(){
-        Integer value = (Integer)redisUtil.get(gKey);
+    public Long createUserAccountCode(){
+        Long value = (Long)redisUtil.get(gKey);
         if(value != null){
             value = value + 1;
         }else{
             //从数据库中获取最大值
-            Integer iValue = userAccountMapper.getUserMaxAccountId();
+            Long iValue = Long.valueOf(userAccountMapper.getUserMaxAccountId());
             value = iValue + 1;
             redisUtil.set(gKey, value);
         }

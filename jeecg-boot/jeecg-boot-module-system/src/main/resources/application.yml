@@ -28,3 +28,9 @@ justauth:
     type: default
     prefix: 'demo::'
     timeout: 1h
+jwt:
+  # 加密秘钥
+  secret: tsrQ57nBzTBPbXM5AR08T4ZS1yPkIKGz
+  # token有效时长，7天，单位秒
+  expire: 604800
+  header: token

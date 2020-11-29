@@ -16,22 +16,15 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
       routes:
-        - id: jeecg-demo
-          uri: lb://jeecg-demo
+        - id: jeecg-boot
+          uri: http://127.0.0.1:8080
           predicates:
-            - Path=/test/**,/api/**
-        - id: jeecg-system
-          uri: lb://jeecg-system
+          - Path=/jeecg-boot/sys/**,/jeecg-system/sys/**,/sys/**,/webSocketApi/**,/online/**,/message/**,/test/**,/api/**,/vxeSocket/**
+        - id: jeecg-b
+          uri: http://127.0.0.1:8080
           predicates:
-            - Path=/sys/**,/webSocketApi/**,/online/**,/message/**
-        - id: jeecg-system-websocket
-          uri: lb:ws://jeecg-system
-          predicates:
-            - Path=/websocket/**
-        - id: jeecg-demo-websocket
-          uri: lb:ws://jeecg-demo
-          predicates:
-            - Path=/vxeSocket/**
+          - Path=/jeecg-boot/api/**
+
 management:
   endpoints:
     web:
