@@ -151,7 +151,7 @@
     },
     data () {
       return {
-        description: 'goods_info管理页面',
+        description: '',
         queryParam: {
           spuType: 1
         },
