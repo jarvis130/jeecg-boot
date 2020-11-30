@@ -4,6 +4,37 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+
+          <a-col :md="6" :sm="8">
+              <a-form-item label="编号">
+                <a-input placeholder="请输入编号" v-model="queryParam.code"></a-input>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="6" :sm="12">
+            <a-form-item label="名称">
+              <j-input placeholder="输入名称模糊查询" v-model="queryParam.title"></j-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="6" :sm="8">
+              <a-form-item label="状态">
+                <a-select v-model="queryParam.status" placeholder="请选择">
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="1">上架</a-select-option>
+                  <a-select-option value="2">审核中</a-select-option>
+                  <a-select-option value="0">下架</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="6" :sm="8">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+            </span>
+          </a-col>
+
         </a-row>
       </a-form>
     </div>
@@ -43,6 +74,18 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
         @change="handleTableChange">
+
+        <template slot="isOnSale" slot-scope="text, record">
+          <a-tag color="#2db7f5" v-if="record.isOnSale == 2">
+            审核中
+          </a-tag>
+          <a-tag color="#87d068" v-if="record.isOnSale == 1">
+            上架
+          </a-tag>
+          <a-tag color="#f50" v-if="record.isOnSale == 0">
+            下架
+          </a-tag>
+        </template>
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
@@ -97,12 +140,13 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import MovieInfoModal from './modules/MovieInfoModal'
   import { mapGetters, mapActions } from "vuex";
+  import JInput from '@/components/jeecg/JInput'
 
   export default {
     name: 'MovieList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      MovieInfoModal
+      MovieInfoModal, JInput
     },
     data () {
       return {
@@ -144,25 +188,11 @@
             dataIndex: 'salePrice'
           },
           {
-            title:'是否上架',
+            title:'状态',
             align:"center",
-            dataIndex: 'isOnSale_dictText'
+            dataIndex: 'isOnSale_dictText',
+            scopedSlots: { customRender: 'isOnSale' }
           },
-          // {
-          //   title:'是否新品',
-          //   align:"center",
-          //   dataIndex: 'isNew_dictText'
-          // },
-          // {
-          //   title:'是否热卖',
-          //   align:"center",
-          //   dataIndex: 'isHot_dictText'
-          // },
-          // {
-          //   title:'是否推荐',
-          //   align:"center",
-          //   dataIndex: 'isRecommend_dictText'
-          // },
           {
             title:'更新时间',
             align:"center",

@@ -1,40 +1,9 @@
 <template>
-
   <a-card :bordered="false">
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-
-          <a-col :md="6" :sm="8">
-              <a-form-item label="编号">
-                <a-input placeholder="请输入编号" v-model="queryParam.code"></a-input>
-              </a-form-item>
-            </a-col>
-
-          <a-col :md="6" :sm="12">
-            <a-form-item label="名称">
-              <j-input placeholder="输入名称模糊查询" v-model="queryParam.title"></j-input>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="6" :sm="8">
-              <a-form-item label="状态">
-                <a-select v-model="queryParam.status" placeholder="请选择">
-                  <a-select-option value="">请选择</a-select-option>
-                  <a-select-option value="1">上架</a-select-option>
-                  <a-select-option value="2">审核中</a-select-option>
-                  <a-select-option value="0">下架</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-
-          <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-            </span>
-          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -42,8 +11,8 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd1" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('spu_brand')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -75,16 +44,8 @@
         class="j-table-force-nowrap"
         @change="handleTableChange">
 
-        <template slot="isOnSale" slot-scope="text, record">
-          <a-tag color="#2db7f5" v-if="record.isOnSale == 2">
-            审核中
-          </a-tag>
-          <a-tag color="#87d068" v-if="record.isOnSale == 1">
-            上架
-          </a-tag>
-          <a-tag color="#f50" v-if="record.isOnSale == 0">
-            下架
-          </a-tag>
+        <template slot="brandLogo" slot-scope="text">
+           <img :src="imageUrl + '/' + text" style="width:60px;height:60px;">
         </template>
 
         <template slot="htmlSlot" slot-scope="text">
@@ -108,7 +69,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit2(record)">编辑</a>
+          <a @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -129,9 +90,8 @@
       </a-table>
     </div>
 
-    <goods-info-modal ref="modalForm" @ok="modalFormOk"></goods-info-modal>
+    <spu-brand-modal ref="modalForm" @ok="modalFormOk"></spu-brand-modal>
   </a-card>
-
 </template>
 
 <script>
@@ -139,22 +99,18 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import GoodsInfoModal from './modules/GoodsInfoModal'
-  import { mapGetters, mapActions } from "vuex";
-    import JInput from '@/components/jeecg/JInput'
+  import SpuBrandModal from './modules/SpuBrandModal'
 
   export default {
-    name: 'GoodsInfoList',
+    name: 'SpuBrandList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      GoodsInfoModal, JInput
+      SpuBrandModal
     },
     data () {
       return {
-        description: 'goods_info管理页面',
-        queryParam: {
-          spuType: 1
-        },
+        description: 'spu_brand管理页面',
+        imageUrl: window._CONFIG['domianURL'],
         // 表头
         columns: [
           {
@@ -168,44 +124,21 @@
             }
           },
           {
-            title:'商品编号',
+            title:'',
             align:"center",
-            dataIndex: 'code'
+            dataIndex: 'brandLogo',
+            width: 80,
+            scopedSlots: { customRender: 'brandLogo' }
           },
           {
-            title:'商品名称',
+            title:'品牌名称',
             align:"center",
-            width:150,
-            dataIndex: 'title'
-          },
-          {
-            title:'商品分类',
-            align:"center",
-            dataIndex: 'cid3_dictText'
-          },
-          {
-            title:'品牌编号',
-            align:"center",
-            dataIndex: 'brandId'
-          },
-          {
-            title:'市场价',
-            align:"center",
-            dataIndex: 'marketPrice'
+            dataIndex: 'brandName'
           },
           {
             title:'状态',
             align:"center",
-            dataIndex: 'isOnSale_dictText',
-            scopedSlots: { customRender: 'isOnSale' }
-          },
-          {
-            title:'更新时间',
-            align:"center",
-            dataIndex: 'updateTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
+            dataIndex: 'status_dictText'
           },
           {
             title: '操作',
@@ -217,11 +150,11 @@
           }
         ],
         url: {
-          list: "/commodity/spuInfo/list",
-          delete: "/commodity/spuInfo/delete",
-          deleteBatch: "/commodity/spuInfo/deleteBatch",
-          exportXlsUrl: "/commodity/spuInfo/exportXls",
-          importExcelUrl: "commodity/spuInfo/importExcel",
+          list: "/commodity/spuBrand/list",
+          delete: "/commodity/spuBrand/delete",
+          deleteBatch: "/commodity/spuBrand/deleteBatch",
+          exportXlsUrl: "/commodity/spuBrand/exportXls",
+          importExcelUrl: "commodity/spuBrand/importExcel",
           
         },
         dictOptions:{},
@@ -230,35 +163,12 @@
     created() {
     },
     computed: {
-      title () {
-        return this.$route.meta.title
-      },
       importExcelUrl: function(){
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       },
     },
     methods: {
-      ...mapActions([ "SetGoodsStore", "ClearGoodsStore" ]),
       initDictConfig(){
-      },
-      handleAdd1(){
-        this.$router.push('/goods/form/Index');
-      },
-      handleEdit1(record){
-        this.SetGoodsStore(record);
-        this.$router.push('/goods/form/index?flag=edit');
-      },
-      handleAdd2(){
-        this.ClearGoodsStore();//清空store数据
-        this.$refs.modalForm.add();
-        this.$refs.modalForm.title = "新增商品";
-        this.$refs.modalForm.disableSubmit = false;
-      },
-      handleEdit2(record){
-        this.SetGoodsStore(record);
-        this.$refs.modalForm.edit(record);
-        this.$refs.modalForm.title = "编辑商品";
-        this.$refs.modalForm.disableSubmit = false;
       }
     }
   }

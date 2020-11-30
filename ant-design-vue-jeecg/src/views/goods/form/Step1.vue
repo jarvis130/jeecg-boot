@@ -47,7 +47,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-input v-decorator="['brandId', validatorRules.brandId]" placeholder="请输入品牌编号"></a-input>
+        <j-select-brand  v-model="model.brandId" />
       </a-form-item>
 
       <a-form-item
@@ -90,6 +90,8 @@
       </a-form-item>
 
     </a-form>
+  
+
   </div>
 </template>
 
@@ -100,12 +102,14 @@
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import { mapGetters, mapActions } from "vuex"; 
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
+  import JSelectBrand from '@comp/jeecgbiz/JSelectBrand'
 
   export default {
     name: "Step1",
     components: {
       JImageUpload,
-      JCategorySelect
+      JCategorySelect,
+        JSelectBrand
     },
     props: {
       //流程表单data
@@ -130,6 +134,7 @@
     data () {
       return {
         form: this.$form.createForm(this),
+        brandVisible: false,
         model: {
           thumbs: [],
           isOnSale: false
@@ -324,6 +329,9 @@
           that.SetGoodsStore(record); 
         }
       },
+      onBrand(){
+        this.brandVisible = true;
+      }
     }
   }
 </script>
