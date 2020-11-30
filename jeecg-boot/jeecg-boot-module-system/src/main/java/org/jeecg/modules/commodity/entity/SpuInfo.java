@@ -79,6 +79,7 @@ public class SpuInfo implements Serializable {
 	/**是否上架，0下架，1上架*/
 	@Excel(name = "是否上架，0下架，1上架", width = 15)
     @ApiModelProperty(value = "是否上架，0下架，1上架")
+    @Dict(dicCode = "spu_status")
     private java.lang.Integer isOnSale;
 
 	/**是否有效，0已删除，1有效*/
@@ -119,17 +120,17 @@ public class SpuInfo implements Serializable {
     /**是否新品*/
     @Excel(name = "是否新品", width = 15)
     @ApiModelProperty(value = "是否新品")
-    private java.lang.Integer isNew;
+    private java.lang.Boolean isNew;
 
     /**是否热卖*/
     @Excel(name = "是否热卖", width = 15)
     @ApiModelProperty(value = "是否热卖")
-    private java.lang.Integer isHot;
+    private java.lang.Boolean isHot;
 
     /**是否推荐*/
     @Excel(name = "是否推荐", width = 15)
     @ApiModelProperty(value = "是否推荐")
-    private java.lang.Integer isRecommend;
+    private java.lang.Boolean isRecommend;
 
     /**租户编号*/
     @Excel(name = "租户编号", width = 15)

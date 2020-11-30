@@ -1,5 +1,4 @@
 <template>
-
   <a-card :bordered="false">
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
@@ -35,6 +34,7 @@
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
             </span>
           </a-col>
+
         </a-row>
       </a-form>
     </div>
@@ -42,7 +42,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd1" type="primary" icon="plus">新增</a-button>
+      <a-button @click="handleAdd2" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -129,9 +129,8 @@
       </a-table>
     </div>
 
-    <goods-info-modal ref="modalForm" @ok="modalFormOk"></goods-info-modal>
+    <movie-info-modal ref="modalForm" @ok="modalFormOk"></movie-info-modal>
   </a-card>
-
 </template>
 
 <script>
@@ -139,21 +138,21 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import GoodsInfoModal from './modules/GoodsInfoModal'
+  import MovieInfoModal from './modules/MovieInfoModal'
   import { mapGetters, mapActions } from "vuex";
-    import JInput from '@/components/jeecg/JInput'
+  import JInput from '@/components/jeecg/JInput'
 
   export default {
-    name: 'GoodsInfoList',
+    name: 'MovieList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      GoodsInfoModal, JInput
+      MovieInfoModal, JInput
     },
     data () {
       return {
         description: 'goods_info管理页面',
         queryParam: {
-          spuType: 1
+          spuType: 3
         },
         // 表头
         columns: [
@@ -168,30 +167,25 @@
             }
           },
           {
-            title:'商品编号',
+            title:'视频编号',
             align:"center",
             dataIndex: 'code'
           },
           {
-            title:'商品名称',
+            title:'视频名称',
             align:"center",
             width:150,
             dataIndex: 'title'
           },
           {
-            title:'商品分类',
+            title:'视频分类',
             align:"center",
             dataIndex: 'cid3_dictText'
           },
           {
-            title:'品牌编号',
+            title:'售价',
             align:"center",
-            dataIndex: 'brandId'
-          },
-          {
-            title:'市场价',
-            align:"center",
-            dataIndex: 'marketPrice'
+            dataIndex: 'salePrice'
           },
           {
             title:'状态',
@@ -230,9 +224,6 @@
     created() {
     },
     computed: {
-      title () {
-        return this.$route.meta.title
-      },
       importExcelUrl: function(){
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       },
@@ -242,7 +233,7 @@
       initDictConfig(){
       },
       handleAdd1(){
-        this.$router.push('/goods/form/Index');
+        this.$router.push('/goods/form/index');
       },
       handleEdit1(record){
         this.SetGoodsStore(record);
@@ -251,13 +242,13 @@
       handleAdd2(){
         this.ClearGoodsStore();//清空store数据
         this.$refs.modalForm.add();
-        this.$refs.modalForm.title = "新增商品";
+        this.$refs.modalForm.title = "新增视频";
         this.$refs.modalForm.disableSubmit = false;
       },
       handleEdit2(record){
         this.SetGoodsStore(record);
         this.$refs.modalForm.edit(record);
-        this.$refs.modalForm.title = "编辑商品";
+        this.$refs.modalForm.title = "编辑视频";
         this.$refs.modalForm.disableSubmit = false;
       }
     }

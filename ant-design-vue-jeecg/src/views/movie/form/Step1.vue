@@ -3,11 +3,11 @@
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
-        label="商品标题"
+        label="视频标题"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['title', validatorRules.title]" placeholder="请输入商品标题"></a-input>
+         <a-input v-decorator="['title', validatorRules.title]" placeholder="请输入视频标题"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -15,56 +15,32 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['subTitle']" placeholder="请输入商品副标题"></a-input>
+         <a-input v-decorator="['subTitle']" placeholder="请输入视频副标题"></a-input>
       </a-form-item>
 
       <a-form-item
-        label="商品编码"
+        label="视频编码"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['code']" placeholder="请输入商品编码"></a-input>
+         <a-input v-decorator="['code']" placeholder="请输入视频编码"></a-input>
       </a-form-item>
 
       <a-form-item
-        label="外部编码"
+        label="视频分类"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-input v-decorator="['extensionCode']" placeholder="请输入外部编码"></a-input>
+          <j-category-select v-decorator="['cid3', validatorRules.cid3]" pcode="A01" placeholder="请输入视频分类"/>
       </a-form-item>
 
       <a-form-item
-        label="商品分类"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-          <j-category-select v-decorator="['cid3', validatorRules.cid3]" pcode="A01" placeholder="请输入商品分类"/>
-      </a-form-item>
-
-      <a-form-item
-        label="商品品牌"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-        <j-select-brand  v-model="model.brandId" />
-      </a-form-item>
-
-      <a-form-item
-        label="商品图片"
+        label="视频图片"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
       
         <j-image-upload v-model="model.thumbs" :isMultiple="isMultiple"></j-image-upload>
-      </a-form-item>
-
-      <a-form-item
-        label="市场价格"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-        <a-input v-decorator="['marketPrice', validatorRules.marketPrice]" placeholder="请输入市场价格"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -80,7 +56,6 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-      
         <a-switch default-unchecked v-model="model.isOnSale"/>
       </a-form-item>
 
@@ -90,8 +65,6 @@
       </a-form-item>
 
     </a-form>
-  
-
   </div>
 </template>
 
@@ -102,14 +75,12 @@
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import { mapGetters, mapActions } from "vuex"; 
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
-  import JSelectBrand from '@comp/jeecgbiz/JSelectBrand'
 
   export default {
     name: "Step1",
     components: {
       JImageUpload,
-      JCategorySelect,
-        JSelectBrand
+      JCategorySelect
     },
     props: {
       //流程表单data
@@ -134,7 +105,6 @@
     data () {
       return {
         form: this.$form.createForm(this),
-        brandVisible: false,
         model: {
           thumbs: [],
           isOnSale: false
@@ -152,17 +122,17 @@
         validatorRules: {
           cid3: {
             rules: [
-              { required: true, message: '请输入商品分类!'},
+              { required: true, message: '请输入视频分类!'},
             ]
           },
           title: {
             rules: [
-              { required: true, message: '请输入商品名称!'},
+              { required: true, message: '请输入视频名称!'},
             ]
           },
           code: {
             rules: [
-              { required: true, message: '请输入商品编号!'},
+              { required: true, message: '请输入视频编号!'},
             ]
           },
           brandId: {
@@ -187,12 +157,12 @@
           },
           goodsBrief: {
             rules: [
-              { required: true, message: '请输入商品简述!'},
+              { required: true, message: '请输入视频简述!'},
             ]
           },
           isReal: {
             rules: [
-              { required: true, message: '请输入是否实物商品，是1，否2!'},
+              { required: true, message: '请输入是否实物视频，是1，否2!'},
             ]
           },
           extensionCode: {
@@ -258,7 +228,7 @@
       }
     },
     methods: {
-      ...mapActions([ "SetGoodsStore1", "getSpuSkuBySpuId", "getTableData", "SetGoodsStore", "ClearGoodsStore" ]),
+      ...mapActions([ "SetGoodsStore1", "getSpuSkuBySpuId", "getTableData", "SetGoodsStore" ]),
       nextStep () {
         const that = this;
         this.model.id = this.goods.id;
@@ -284,7 +254,6 @@
         // this.edit({});
       },
       edit (record) {
-
         let that = this;
         this.form.resetFields();
         this.model = Object.assign({}, record);
@@ -293,7 +262,7 @@
           this.form.setFieldsValue(pick(this.model, 'id', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
         })
 
-        if(this.model.isOnSale == 1  || this.model.isOnSale){
+        if(this.model.isOnSale == 1 || this.model.isOnSale){
           this.model.isOnSale = true;
         }else{
           this.model.isOnSale = false;
@@ -329,9 +298,6 @@
           that.SetGoodsStore(record); 
         }
       },
-      onBrand(){
-        this.brandVisible = true;
-      }
     }
   }
 </script>

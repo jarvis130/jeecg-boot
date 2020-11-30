@@ -1,20 +1,17 @@
 <template>
-
   <a-spin :spinning="confirmLoading">
  
       <a-card :bordered="false">
         <a-steps class="steps" :current="currentTab">
-          <a-step title="填写商品信息" />
-          <a-step title="设置商品详情" />
-          <a-step title="设置商品规格" />
-          <a-step title="设置商品属性" />
+          <a-step title="填写视频信息" />
+          <a-step title="设置视频详情" />
+          <a-step title="设置视频属性" />
         </a-steps>
         <div class="content">
           <step1 v-if="currentTab === 0" ref="step1Form" @nextStep="nextStep"/>
           <step2 v-if="currentTab === 1" ref="step2Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <step3 v-if="currentTab === 2" ref="step3Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <step4 v-if="currentTab === 3" ref="step4Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <finish v-if="currentTab === 4" ref="step5Form" @nextStep="nextStep" @prevStep="prevStep"></finish>
+          <step4 v-if="currentTab === 2" ref="step4Form" @nextStep="nextStep" @prevStep="prevStep"/>
+          <finish v-if="currentTab === 3" ref="step5Form" @nextStep="nextStep" @prevStep="prevStep"></finish>
         </div>
       </a-card>
 
@@ -90,7 +87,7 @@
     mounted(){
       // this.flag = this.$route.query.flag
       // if( this.flag != 'edit' || this.flag == undefined){
-      //   //新增商品清空store
+      //   //新增视频清空store
       //   this.ClearGoodsStore();
       // }
     },

@@ -10,8 +10,7 @@
          <a-input v-model="model.keywords" placeholder="请输入关键词"></a-input>
       </a-form-item>
 
-
-    <a-row>
+            <a-row>
       <a-col :span="8">
         <a-form-item
         label="是否新品"
@@ -43,8 +42,6 @@
       </a-col>
 
     </a-row>
-
-            
 
       <a-form-item
         label="商品简述"

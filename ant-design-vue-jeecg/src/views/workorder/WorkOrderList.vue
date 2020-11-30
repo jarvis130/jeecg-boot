@@ -4,6 +4,50 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+
+          <a-col :md="4" :sm="6">
+              <a-form-item label="工单编号">
+                <a-input placeholder="请输入工单编号" v-model="queryParam.code"></a-input>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="4" :sm="6">
+            <a-form-item label="工单名称">
+              <j-input placeholder="输入工单名称模糊查询" v-model="queryParam.title"></j-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="6">
+              <a-form-item label="优先级">
+                <a-select v-model="queryParam.priorityLevel" placeholder="请选择">
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="1">低</a-select-option>
+                  <a-select-option value="2">一般</a-select-option>
+                  <a-select-option value="3">紧急</a-select-option>
+                  <a-select-option value="4">非常紧急</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="4" :sm="6">
+              <a-form-item label="状态">
+                <a-select v-model="queryParam.status" placeholder="请选择">
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="1">待分配</a-select-option>
+                  <a-select-option value="2">已指派</a-select-option>
+                  <a-select-option value="3">受理中</a-select-option>
+                  <a-select-option value="4">关闭</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="4" :sm="6">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+            </span>
+          </a-col>
+
         </a-row>
       </a-form>
     </div>
@@ -43,6 +87,36 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
         @change="handleTableChange">
+
+        <template slot="priorityLevel" slot-scope="text, record">
+          <a-tag color="blue" v-if="record.priorityLevel == 1">
+            低
+          </a-tag>
+          <a-tag color="orange" v-if="record.priorityLevel == 2">
+            一般
+          </a-tag>
+          <a-tag color="pink" v-if="record.priorityLevel == 3">
+            紧急
+          </a-tag>
+          <a-tag color="red" v-if="record.priorityLevel == 4">
+            非常紧急
+          </a-tag>
+        </template>
+
+        <template slot="status" slot-scope="text, record">
+          <a-tag color="#f50" v-if="record.status == 1">
+            待分配
+          </a-tag>
+          <a-tag color="#87d068" v-if="record.status == 2">
+            已指派
+          </a-tag>
+          <a-tag color="#yelow" v-if="record.status == 3">
+            受理中
+          </a-tag>
+          <a-tag color="#2db7f5" v-if="record.status == 4">
+            关闭
+          </a-tag>
+        </template>
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
@@ -98,13 +172,15 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import WorkOrderModal from './modules/WorkOrderModal'
   import WorkOrderDetailModal from './modules/WorkOrderDetailModal'
+  import JInput from '@/components/jeecg/JInput'
 
   export default {
     name: 'WorkOrderList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
       WorkOrderModal,
-      WorkOrderDetailModal
+      WorkOrderDetailModal,
+      JInput
     },
     data () {
       return {
@@ -137,13 +213,15 @@
             title:'优先级',
             align:"center",
             width:60,
-            dataIndex: 'priorityLevel_dictText'
+            dataIndex: 'priorityLevel_dictText',
+            scopedSlots: { customRender: 'priorityLevel' }
           },
           {
             title:'状态',
             align:"center",
             width:60,
-            dataIndex: 'status_dictText'
+            dataIndex: 'status_dictText',
+            scopedSlots: { customRender: 'status' }
           },
           {
             title:'创建时间',

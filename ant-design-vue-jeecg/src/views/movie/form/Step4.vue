@@ -85,7 +85,7 @@
   import { mapGetters, mapActions } from "vuex";
   import { httpAction, getAction } from '@/api/manage'
   export default {
-    name: "CaseStep4",
+    name: "Step4",
     components: {
     },
     data () {
@@ -150,6 +150,7 @@
             if(that.model.enableGenericSpec){
               formData.genericSpec = JSON.stringify(that.tableData);
             }
+            formData.spuType = "3"; //spu类型1=视频
             console.log("表单提交数据",formData)
             
             if(!that.model.id){
@@ -183,7 +184,7 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'enableGenericSpec'))
         })
-    
+   
         let genericSpec = this.model.genericSpec;
         if(genericSpec){
           let that = this;

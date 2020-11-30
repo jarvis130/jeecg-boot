@@ -7,7 +7,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-switch default-unchecked v-model="model.enableSpecialSpec"/>
+         <a-switch v-model="model.enableSpecialSpec"/>
       </a-form-item>
 
       <div v-if="model.enableSpecialSpec == true">
@@ -367,7 +367,7 @@
                   this.$store.dispatch("getTableData", this.tableData);
               }
           }
-     
+          debugger;
           //取出old数据，然后向当前表格赋值
           let oldData = this.goods.oldTableData;
           for(var i=0;i<this.tableData.length-1;i++){
@@ -476,14 +476,9 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-
-        if(this.model.enableSpecialSpec){
-          if(this.model.specialSpec){
-            let arr = JSON.parse(this.model.specialSpec);
-            this.specArr = arr['spec'];
-            this.tableData = arr['table'];
-          }
-        }
+        if(this.model.enableSpecialSpec == "") this.model.enableSpecialSpec = false;
+        this.tableData = this.model.tableData;
+        this.specArr = this.model.specArr;
       },
     }
   }

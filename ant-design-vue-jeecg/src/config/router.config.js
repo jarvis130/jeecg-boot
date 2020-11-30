@@ -282,11 +282,38 @@ export const asyncRouterMap = [
       //     },
       //   ]
       // }
+
+      // goods
+      // {
+      //   path: '/goods',
+      //   name: 'goods',
+      //   meta: {title: '商品中心'},
+      //   redirect: '#',
+      //   component: PageView,
+      //   children: [
+      //     {
+      //       path: '/goods/GoodsInfoList',
+      //       name: 'GoodsInfoList',
+      //       redirect: '/goods/GoodsInfoList',
+      //       meta: {title: '商品管理'},
+      //       children: [
+      //         {
+      //           path: '/goods/form/Index',
+      //           name: 'GoodsForm',
+      //           meta: {title: '商品发布'},
+      //           // component: () => import('@/views/goods/form/Index')
+      //           redirect: '/goods/form/Index',
+      //         },
+      //       ]
+      //     },
+      //   ]
+      // },
     ]
   },
   {
     path: '*', redirect: '/404', hidden: true
-  }
+  },
+
 ]
 
 /**

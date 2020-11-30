@@ -56,7 +56,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <j-dict-select-tag v-decorator="['isOnSale', validatorRules.isOnSale]" placeholder="请输入状态" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+        <a-switch default-unchecked v-model="model.isOnSale"/>
       </a-form-item>
 
 
@@ -261,6 +261,12 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'id', 'spuType', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
         })
+
+        if(this.model.isOnSale == 1  || this.model.isOnSale){
+          this.model.isOnSale = true;
+        }else{
+          this.model.isOnSale = false;
+        }
 
         this.SetGoodsStore(record);
         if(record.enableSpecialSpec){

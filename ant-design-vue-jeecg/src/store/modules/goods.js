@@ -25,9 +25,9 @@ const goods = {
     isNew: '',
     isHot: '',
     isRecommend: '',
-    enableSpecialSpec: '',
+    enableSpecialSpec: false,
     specialSpec: '',
-    enableGenericSpec: '',
+    enableGenericSpec: false,
     genericSpec: '',
     specArr: [],
     tableData: [],
@@ -60,17 +60,17 @@ const goods = {
       state.specialSpec = params.specialSpec = '' ? '' : params.specialSpec;
       state.enableGenericSpec = params.enableGenericSpec = '' ? false : params.enableGenericSpec;
       state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
-      if(params.enableSpecialSpec){
-        if(params.specialSpec){
-          let arr = JSON.parse(params.specialSpec);
-          state.specArr = arr['spec'];
-          state.tableData = arr['table'];
-        }
-      }
+      // if(params.enableSpecialSpec){
+      //   if(params.specialSpec){
+      //     let arr = JSON.parse(params.specialSpec);
+      //     state.specArr = arr['spec'];
+      //     state.tableData = arr['table'];
+      //   }
+      // }
 
-      if(state.enableGenericSpec || state.genericSpec!=""){
-        state.tableData = JSON.parse(params.genericSpec);
-      }
+      // if(state.enableGenericSpec || state.genericSpec!=""){
+      //   state.tableData = JSON.parse(params.genericSpec);
+      // }
     },
     SET_GOODS1: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
@@ -132,9 +132,9 @@ const goods = {
       state.isNew = '';
       state.isHot = '';
       state.isRecommend = '';
-      state.enableSpecialSpec = '';
+      state.enableSpecialSpec = false;
       state.specialSpec = '';
-      state.enableGenericSpec = '';
+      state.enableGenericSpec = false;
       state.genericSpec = '';
       state.tableData = '';
     },

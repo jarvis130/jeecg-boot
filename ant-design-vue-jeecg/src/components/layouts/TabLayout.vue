@@ -74,7 +74,8 @@
         if (this.isMobile()) {
           return false
         } else {
-          return this.$store.state.app.multipage
+          // return this.$store.state.app.multipage
+          return false
         }
       }
     },
