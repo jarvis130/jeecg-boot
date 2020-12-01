@@ -30,7 +30,7 @@
         this.$router.push('/goods/form/Index')
       },
       toList () {
-        this.$router.push('/goods/goodsInfoList')
+        this.$router.push('/goods/GoodsInfoList')
       }
     }
   }

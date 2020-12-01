@@ -2,35 +2,39 @@
   <div>
     <a-form :form="form"  label-width="120px" @submit.native.prevent>
 
-      <spu-sku-list ref="spuSkuList" @getSelectData="getSelectData"></spu-sku-list>
+      <a-row>
+        <a-col :span="4">
+ 
+        </a-col>
+        <a-col :span="4">
+       
+        </a-col>
+        <a-col :span="4">
+      
+        </a-col>
+        <a-col :span="4">
+      
+        </a-col>
+        <a-col :span="4">
+      
+        </a-col>
+        <a-col :span="4">
+          <a-button type="primary" icon="search">
+            搜索商品
+          </a-button>
+        </a-col>
+      </a-row>
 
-
-      <a-form-item label="批量设置" style="margin-bottom: 20px" :labelCol="{span: 5}" :wrapperCol="{span: 19}">
-
-            <a-input-search
-              addon-before="数量" 
-              onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"
-              placeholder="请输入数量"
-              enter-button="设置"
-              size="default"
-              v-model="setStock" 
-              style="width: 250px;margin-right: 20px" 
-              @keyup.native="proving(1)"
-              @search="clicksSet(1)"
-            />
-
-        </a-form-item>
-
-      <a-form-item label="物品列表" :labelCol="{span: 0}" :wrapperCol="{span: 24}">
+      <a-form-item label="商品列表" :labelCol="{span: 0}" :wrapperCol="{span: 24}">
           <a-table :dataSource="tableData" border :pagination="pagination">
           
-              <a-table-column  key="spuId" title="物品编号" align="center" width="100">
+              <a-table-column  key="spuId" title="商品编号" align="center" width="100">
                 <template slot-scope="scope">
                     <span>{{ scope.spuId }}</span>
                 </template>
               </a-table-column>
 
-              <a-table-column  key="title" title="物品名称" align="center" width="120">
+              <a-table-column  key="title" title="商品名称" align="center" width="120">
                 <template slot-scope="scope">
                     <span>{{ scope.title }}</span>
                 </template>
@@ -85,20 +89,20 @@
 
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import SpuSkuList from '../SpuSkuList'
+    import JSelectSpu from '@comp/biz/SelectSpu'
   import { mapGetters, mapActions } from "vuex";
 
   export default {
-    name: 'CaseStep3',
-    mixins:[ mixinDevice, JeecgListMixin],
+    name: 'Step5',
+    mixins:[ mixinDevice],
     components: {
-      SpuSkuList
+      JSelectSpu
     },
     data () {
       return {
         loading: false,
         form: this.$form.createForm(this),
+        model: {},
         formItemLayout: {
           labelCol: {
             xs: { span: 24 },
@@ -109,7 +113,7 @@
             sm: { span: 20 },
           },
         },
-        description: 'spu_relation管理页面',
+        description: '',
         url: {
           list: "/commodity/spuRelation/list",
           delete: "/commodity/spuRelation/delete",
@@ -147,9 +151,17 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
-            formData.linkData = JSON.stringify(that.tableData);
-            formData.spuType = "2"; //spu类型2=方案
+            if(that.tableData.length > 0){
+              formData.linkData = JSON.stringify(that.tableData);
+            }
+           
+            formData.spuType = "1"; //spu类型1=商品
             console.log("表单提交数据",formData)
+            if(formData.isOnSale){
+              formData.isOnSale = 1;
+            }else{
+              formData.isOnSale = 0;
+            }
             
             if(!that.model.id){
               that.SaveGoodsInfo(formData).then((res) => {
@@ -180,14 +192,14 @@
         this.form.resetFields();
         this.model = Object.assign({}, record);
    
-        let genericSpec = this.model.genericSpec;
-        if(genericSpec){
-          let that = this;
-          let arr = JSON.parse(genericSpec);
-          if(arr instanceof Array){
-            that.tableData = arr;
-          }
-        }
+        // let genericSpec = this.model.genericSpec;
+        // if(genericSpec){
+        //   let that = this;
+        //   let arr = JSON.parse(genericSpec);
+        //   if(arr instanceof Array){
+        //     that.tableData = arr;
+        //   }
+        // }
       },
       getSelectData (val) {
         let that = this;

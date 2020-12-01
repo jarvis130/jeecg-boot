@@ -10,41 +10,49 @@
          <a-input v-model="model.keywords" placeholder="请输入关键词"></a-input>
       </a-form-item>
 
-            <a-row>
-      <a-col :span="8">
-        <a-form-item
-        label="是否新品"
-           :labelCol="{span: 6}"
-        :wrapperCol="{span: 6}"
+      <a-form-item
+        label="参数设置"
+        :labelCol="{span: 2}"
+        :wrapperCol="{span: 10}"
       >
-        <a-switch default-unchecked v-model="model.isNew"/>
-      </a-form-item>
-      </a-col>
+         <a-row>
+          <a-col :span="8">
+            <a-form-item
+            label="是否新品"
+              :labelCol="{span: 6}"
+            :wrapperCol="{span: 6}"
+          >
+            <a-switch default-unchecked v-model="model.isNew"/>
+          </a-form-item>
+          </a-col>
 
-      <a-col :span="8">
-        <a-form-item
-        label="是否热卖"
-         :labelCol="{span: 6}"
-        :wrapperCol="{span: 6}"
-      >
-         <a-switch default-unchecked v-model="model.isHot"/>
-      </a-form-item>
-      </a-col>
+          <a-col :span="8">
+            <a-form-item
+            label="是否热卖"
+            :labelCol="{span: 6}"
+            :wrapperCol="{span: 6}"
+          >
+            <a-switch default-unchecked v-model="model.isHot"/>
+          </a-form-item>
+          </a-col>
 
-      <a-col :span="8">
-        <a-form-item
-        label="是否推荐"
-        :labelCol="{span: 6}"
-        :wrapperCol="{span: 6}"
-      >
-         <a-switch default-unchecked v-model="model.isRecommend"/>
-      </a-form-item>
-      </a-col>
+          <a-col :span="8">
+            <a-form-item
+            label="是否推荐"
+            :labelCol="{span: 6}"
+            :wrapperCol="{span: 6}"
+          >
+            <a-switch default-unchecked v-model="model.isRecommend"/>
+          </a-form-item>
+          </a-col>
 
-    </a-row>
+        </a-row>
+      </a-form-item>
+
+            
 
       <a-form-item
-        label="商品简述"
+        label="视频简述"
         :labelCol="{span: 2}"
         :wrapperCol="{span: 20}"
       >
@@ -52,7 +60,7 @@
       </a-form-item>
 
       <a-form-item
-        label="商品详情"
+        label="视频详情"
         :labelCol="{span: 2}"
         :wrapperCol="{span: 20}"
         class="stepFormText"

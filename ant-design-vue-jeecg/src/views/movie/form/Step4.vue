@@ -151,6 +151,11 @@
               formData.genericSpec = JSON.stringify(that.tableData);
             }
             formData.spuType = "3"; //spu类型1=视频
+            if(formData.isOnSale){
+              formData.isOnSale = 1;
+            }else{
+              formData.isOnSale = 0;
+            }
             console.log("表单提交数据",formData)
             
             if(!that.model.id){
