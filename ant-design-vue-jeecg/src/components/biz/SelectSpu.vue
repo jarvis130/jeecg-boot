@@ -4,7 +4,7 @@
 
     <!-- 抽屉 -->
     <a-drawer
-      title="规格值列表"
+      title="商品列表"
       :width="screenWidth"
       @close="onClose"
       :visible="visible"
@@ -33,17 +33,6 @@
               <j-input placeholder="输入名称模糊查询" v-model="queryParam.title"></j-input>
             </a-form-item>
           </a-col>
-
-          <a-col :md="6" :sm="8">
-              <a-form-item label="状态">
-                <a-select v-model="queryParam.status" placeholder="请选择">
-                  <a-select-option value="">请选择</a-select-option>
-                  <a-select-option value="1">上架</a-select-option>
-                  <a-select-option value="2">审核中</a-select-option>
-                  <a-select-option value="0">下架</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
 
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -132,6 +121,27 @@
 
     </div>
 
+      <div
+        :style="{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e8e8e8',
+          padding: '10px 16px',
+          textAlign: 'right',
+          left: 0,
+          background: '#fff',
+          borderRadius: '0 0 4px 4px',
+        }"
+      >
+        <a-button style="marginRight: 8px" @click="onClose">
+          关闭
+        </a-button>
+        <a-button type="primary" @click="onSelect">
+          选择
+        </a-button>
+      </div>
+
     </a-drawer>
 
   </a-card>
@@ -198,29 +208,30 @@
             align:"center",
             dataIndex: 'marketPrice'
           },
-          {
-            title:'状态',
-            align:"center",
-            dataIndex: 'isOnSale_dictText',
-            scopedSlots: { customRender: 'isOnSale' }
-          },
-          {
-            title:'更新时间',
-            align:"center",
-            dataIndex: 'updateTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align:"center",
-            fixed:"right",
-            width:147,
-            scopedSlots: { customRender: 'action' }
-          }
+          // {
+          //   title:'状态',
+          //   align:"center",
+          //   dataIndex: 'isOnSale_dictText',
+          //   scopedSlots: { customRender: 'isOnSale' }
+          // },
+          // {
+          //   title:'更新时间',
+          //   align:"center",
+          //   dataIndex: 'updateTime',
+          //   customRender:function (text) {
+          //     return !text?"":(text.length>10?text.substr(0,10):text)
+          //   }
+          // },
+          // {
+          //   title: '操作',
+          //   dataIndex: 'action',
+          //   align:"center",
+          //   fixed:"right",
+          //   width:147,
+          //   scopedSlots: { customRender: 'action' }
+          // }
         ],
+        selectionRows: [],
         url: {
           list: "/commodity/spuInfo/list",
           delete: "/commodity/spuInfo/delete",
@@ -245,6 +256,19 @@
     methods: {
       initDictConfig(){
       },
+      add(params){
+        this.visible = true;
+      },
+      onSelect(){
+        if(this.selectionRows.length == 0){
+          return false;
+        }
+        this.$emit('getSelectData', this.selectionRows);
+        this.visible = false;
+      },
+      onClose(){
+        this.visible = false;
+      }
     }
   }
 </script>

@@ -19,14 +19,14 @@
       
         </a-col>
         <a-col :span="4">
-          <a-button type="primary" icon="search">
+          <a-button type="primary" icon="search"  @click="onSelectSpu">
             搜索商品
           </a-button>
         </a-col>
       </a-row>
 
       <a-form-item label="商品列表" :labelCol="{span: 0}" :wrapperCol="{span: 24}">
-          <a-table :dataSource="tableData" border :pagination="pagination">
+          <a-table :dataSource="tableData" border :pagination="pagination" style="width:300">
           
               <a-table-column  key="spuId" title="商品编号" align="center" width="100">
                 <template slot-scope="scope">
@@ -40,21 +40,9 @@
                 </template>
               </a-table-column>
 
-              <a-table-column  key="skuKey" title="规格" align="center" width="80">
-                <template slot-scope="scope">
-                    <span>{{ scope.skuKey }}</span>
-                </template>
-              </a-table-column>
-
               <a-table-column key="price" title="单价" align="center" width="60">
                 <template slot-scope="scope">
                     <span>{{ scope.price }}</span>
-                </template>
-              </a-table-column>
-
-              <a-table-column key="useNum" title="数量" align="center" width="150">
-                <template slot-scope="scope">
-                    <a-input onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" v-model="scope.useNum" style="width: 100px;"></a-input>
                 </template>
               </a-table-column>
 
@@ -74,6 +62,8 @@
 
     </a-form>
 
+    <select-spu ref="selectSpuForm" @getSelectData="getSelectData"></select-spu>
+
   </div>
 </template>
 
@@ -89,14 +79,14 @@
 
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
-    import JSelectSpu from '@comp/biz/SelectSpu'
+    import SelectSpu from '@comp/biz/SelectSpu'
   import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: 'Step5',
     mixins:[ mixinDevice],
     components: {
-      JSelectSpu
+      SelectSpu
     },
     data () {
       return {
@@ -202,6 +192,7 @@
         // }
       },
       getSelectData (val) {
+        debugger;
         let that = this;
         this.selectionRows = val;
   
@@ -258,6 +249,10 @@
               this.setPrice = this.setPrice.replace(/[^\.\d]/g, "");
               this.setPrice = this.setPrice.replace(".", "");
           }
+      },
+      //
+      onSelectSpu() {
+        this.$refs.selectSpuForm.add('123');
       },
     }
   }
