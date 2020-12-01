@@ -1,28 +1,60 @@
 <template>
+
   <a-card :bordered="false">
+
+    <!-- 抽屉 -->
+    <a-drawer
+      title="规格值列表"
+      :width="screenWidth"
+      @close="onClose"
+      :visible="visible"
+    >
+      <!-- 抽屉内容的border -->
+      <div
+        :style="{
+          padding:'10px',
+          border: '1px solid #e9e9e9',
+          background: '#fff',
+        }">
+
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+
+          <a-col :md="6" :sm="8">
+              <a-form-item label="编号">
+                <a-input placeholder="请输入编号" v-model="queryParam.code"></a-input>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="6" :sm="12">
+            <a-form-item label="名称">
+              <j-input placeholder="输入名称模糊查询" v-model="queryParam.title"></j-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="6" :sm="8">
+              <a-form-item label="状态">
+                <a-select v-model="queryParam.status" placeholder="请选择">
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="1">上架</a-select-option>
+                  <a-select-option value="2">审核中</a-select-option>
+                  <a-select-option value="0">下架</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+
+          <a-col :md="6" :sm="8">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+            </span>
+          </a-col>
         </a-row>
       </a-form>
     </div>
     <!-- 查询区域-END -->
-
-    <!-- 操作按钮区域 -->
-    <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('crm_biz_case')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
-      </a-dropdown>
-    </div>
 
     <!-- table区域-begin -->
     <div>
@@ -35,7 +67,6 @@
         ref="table"
         size="middle"
         :scroll="{x:true}"
-        bordered
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -44,6 +75,18 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
         @change="handleTableChange">
+
+        <template slot="isOnSale" slot-scope="text, record">
+          <a-tag color="#2db7f5" v-if="record.isOnSale == 2">
+            审核中
+          </a-tag>
+          <a-tag color="#87d068" v-if="record.isOnSale == 1">
+            上架
+          </a-tag>
+          <a-tag color="#f50" v-if="record.isOnSale == 0">
+            下架
+          </a-tag>
+        </template>
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
@@ -65,8 +108,8 @@
           </a-button>
         </template>
 
-        <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+        <!-- <span slot="action" slot-scope="text, record">
+          <a @click="handleEdit1(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -82,13 +125,17 @@
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-        </span>
+        </span> -->
 
       </a-table>
     </div>
 
-    <biz-case-modal ref="modalForm" @ok="modalFormOk"></biz-case-modal>
+    </div>
+
+    </a-drawer>
+
   </a-card>
+
 </template>
 
 <script>
@@ -96,17 +143,23 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import BizCaseModal from './modules/BizCaseModal'
+  import { mapGetters, mapActions } from "vuex";
+    import JInput from '@/components/jeecg/JInput'
 
   export default {
-    name: 'BizCaseList',
+    name: 'SelectSpu',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      BizCaseModal
+      JInput
     },
     data () {
       return {
-        description: 'crm_biz_case管理页面',
+        description: '',
+        visible: false,
+        screenWidth: 800,
+        queryParam: {
+          spuType: 1
+        },
         // 表头
         columns: [
           {
@@ -120,32 +173,36 @@
             }
           },
           {
-            title:'商机编号',
+            title:'商品编号',
             align:"center",
-            dataIndex: 'bizOpptId'
+            dataIndex: 'code'
           },
           {
-            title:'内容',
+            title:'商品名称',
             align:"center",
-            dataIndex: 'content'
+            width:150,
+            dataIndex: 'title'
           },
           {
-            title:'创建人',
+            title:'商品分类',
             align:"center",
-            dataIndex: 'createBy'
+            dataIndex: 'cid3_dictText'
           },
           {
-            title:'创建时间',
+            title:'品牌编号',
             align:"center",
-            dataIndex: 'createTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
+            dataIndex: 'brandId'
           },
           {
-            title:'更新人',
+            title:'市场价',
             align:"center",
-            dataIndex: 'updateBy'
+            dataIndex: 'marketPrice'
+          },
+          {
+            title:'状态',
+            align:"center",
+            dataIndex: 'isOnSale_dictText',
+            scopedSlots: { customRender: 'isOnSale' }
           },
           {
             title:'更新时间',
@@ -154,11 +211,6 @@
             customRender:function (text) {
               return !text?"":(text.length>10?text.substr(0,10):text)
             }
-          },
-          {
-            title:'主体编号',
-            align:"center",
-            dataIndex: 'subjectId'
           },
           {
             title: '操作',
@@ -170,11 +222,11 @@
           }
         ],
         url: {
-          list: "/biz/bizCase/list",
-          delete: "/biz/bizCase/delete",
-          deleteBatch: "/biz/bizCase/deleteBatch",
-          exportXlsUrl: "/biz/bizCase/exportXls",
-          importExcelUrl: "biz/bizCase/importExcel",
+          list: "/commodity/spuInfo/list",
+          delete: "/commodity/spuInfo/delete",
+          deleteBatch: "/commodity/spuInfo/deleteBatch",
+          exportXlsUrl: "/commodity/spuInfo/exportXls",
+          importExcelUrl: "commodity/spuInfo/importExcel",
           
         },
         dictOptions:{},
@@ -183,13 +235,16 @@
     created() {
     },
     computed: {
+      title () {
+        return this.$route.meta.title
+      },
       importExcelUrl: function(){
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       },
     },
     methods: {
       initDictConfig(){
-      }
+      },
     }
   }
 </script>

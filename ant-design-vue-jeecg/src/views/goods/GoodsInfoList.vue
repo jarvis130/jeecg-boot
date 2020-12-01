@@ -108,7 +108,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit2(record)">编辑</a>
+          <a @click="handleEdit1(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>

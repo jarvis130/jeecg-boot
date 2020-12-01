@@ -8,13 +8,15 @@
           <a-step title="设置商品详情" />
           <a-step title="设置商品规格" />
           <a-step title="设置商品属性" />
+          <a-step title="设置关联商品" />
         </a-steps>
         <div class="content">
           <step1 v-if="currentTab === 0" ref="step1Form" @nextStep="nextStep"/>
           <step2 v-if="currentTab === 1" ref="step2Form" @nextStep="nextStep" @prevStep="prevStep"/>
           <step3 v-if="currentTab === 2" ref="step3Form" @nextStep="nextStep" @prevStep="prevStep"/>
           <step4 v-if="currentTab === 3" ref="step4Form" @nextStep="nextStep" @prevStep="prevStep"/>
-          <finish v-if="currentTab === 4" ref="step5Form" @nextStep="nextStep" @prevStep="prevStep"></finish>
+          <step5 v-if="currentTab === 4" ref="step5Form" @nextStep="nextStep" @prevStep="prevStep"/>
+          <finish v-if="currentTab === 5" ref="finishForm" @nextStep="nextStep" @prevStep="prevStep"></finish>
         </div>
       </a-card>
 
@@ -22,10 +24,11 @@
 </template>
 
 <script>
-  import Step1 from './Step1';
-  import Step2 from './Step2';
-  import Step3 from './Step3';
-  import Step4 from './Step4';
+  import Step1 from './Step1';//基本信息
+  import Step2 from './Step2';//详情
+  import Step3 from './Step3';//特殊规格
+  import Step4 from './Step4';//通用规格
+  import Step5 from './Step5';//关联物品
   import Finish from './Finish';
   import { mapGetters, mapActions } from "vuex";
 
@@ -36,6 +39,7 @@
       Step2,
       Step3,
       Step4,
+      Step5,
       Finish
     },
     data () {
@@ -111,7 +115,7 @@
         this.$refs.step1Form.edit(record);   
       },
       nextStep () {
-        if (this.currentTab < 4) {
+        if (this.currentTab < 5) {
           this.currentTab += 1
         }
       },
