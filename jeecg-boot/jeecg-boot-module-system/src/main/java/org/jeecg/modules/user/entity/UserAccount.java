@@ -59,7 +59,7 @@ public class UserAccount implements Serializable {
 	/**昵称*/
 	@Excel(name = "昵称", width = 15)
     @ApiModelProperty(value = "昵称")
-    private java.lang.String nickname;
+    private java.lang.String nickName;
 
 	/**手机*/
 	@Excel(name = "手机", width = 15)
