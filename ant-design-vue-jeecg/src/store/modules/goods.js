@@ -152,7 +152,10 @@ const goods = {
     },
     setOldTableData(state, data) {
       state.oldTableData = data
-    }
+    },
+    LinkData(state, data) {
+      state.linkData = data
+    },
   },
   actions: {
     getSpecArr(state, data) {
@@ -160,6 +163,9 @@ const goods = {
     },
     getTableData(state, data) {
       state.commit('getTableData', data)
+    },
+    setLinkData(state, data) {
+      state.commit('LinkData', data)
     },
     setOldTableData(state, data) {
       state.commit('setOldTableData', data)
@@ -197,6 +203,19 @@ const goods = {
     getSpuSkuBySpuId({ commit }, params) {
       return new Promise((resolve, reject) => {
         getAction("/commodity/spuSku/queryBySpuId", params).then(response => {
+          if(response.success){
+            resolve(response)
+          }else{
+            resolve(response)
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetLinkDataBySpuId({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        getAction("/commodity/spuRelation/queryBySpuId", params).then(response => {
           if(response.success){
             resolve(response)
           }else{

@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-form style="margin: 40px auto 0;">
-      <result title="操作成功" :is-success="true" description="">
+      <result title="操作成功" :is-success="true" description="" content="">
         
         <div slot="action">
           <a-button type="primary" @click="toContinue">继续创建</a-button>

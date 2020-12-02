@@ -194,4 +194,9 @@ public class SpuInfoVO implements Serializable {
     @ApiModelProperty(value = "平台价")
     private java.math.BigDecimal salePrice;
 
+    /**关联商品json*/
+    @Excel(name = "关联商品json", width = 15)
+    @ApiModelProperty(value = "关联商品json")
+    private String linkData;
+
 }

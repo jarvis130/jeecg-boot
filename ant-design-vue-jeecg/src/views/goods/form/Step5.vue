@@ -28,7 +28,7 @@
       <a-form-item label="商品列表" :labelCol="{span: 0}" :wrapperCol="{span: 24}">
           <a-table :dataSource="tableData" border :pagination="pagination" style="width:300">
           
-              <a-table-column  key="spuId" title="商品编号" align="center" width="100">
+              <a-table-column  key="spuId" title="商品编号" align="center" width="80">
                 <template slot-scope="scope">
                     <span>{{ scope.spuId }}</span>
                 </template>
@@ -132,7 +132,7 @@
       ...mapGetters(["goods"])
     },
     methods: {
-      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo", "getTableData" ]),
+      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
@@ -181,25 +181,44 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-   
-        // let genericSpec = this.model.genericSpec;
-        // if(genericSpec){
-        //   let that = this;
-        //   let arr = JSON.parse(genericSpec);
-        //   if(arr instanceof Array){
-        //     that.tableData = arr;
-        //   }
-        // }
+  
+        let linkData = this.model.linkData;
+        if(linkData){
+          let that = this;
+          let arr = JSON.parse(linkData);
+          if(arr instanceof Array){
+            that.tableData = arr;
+          }
+          
+          //根据spuId得到关联数据
+          // this.GetLinkGoodsDataBySpuId(param).then((res) => {
+    
+          //   if (res.success) {
+          //     const result = res.result
+          //     let list = this.goods.linkGoodsData;
+          //     for(var i=0; i<list.length; i++){
+          //       let item = list[i];
+          //       for(var j=0; j<result.length; j++){
+          //         if(item.skuKey == result[j].skuKey){
+          //           list[i].id = result[j].id;
+          //           list[i].stock = result[j].stock;
+          //           break;
+          //         }
+          //       }
+          //     }
+          //     that.getTableData(list);
+          //   }
+          // });
+        }
       },
       getSelectData (val) {
-        debugger;
         let that = this;
         this.selectionRows = val;
   
         for(var i=0; i< this.selectionRows.length; i++){
           var isExist = false;
           for(var j=0; j<that.tableData.length; j++){
-            if(that.selectionRows[i].id == that.tableData[j].skuId){
+            if(that.selectionRows[i].id == that.tableData[j].spuId){
               isExist = true;
               break;
             }
@@ -207,18 +226,17 @@
 
           if(isExist == false){
             let dataArr = {
-              skuId: that.selectionRows[i].id,
-              spuId: that.selectionRows[i].spuId,
-              title: that.selectionRows[i].spuId_dictText,
-              skuKey: that.selectionRows[i].skuKey,
-              price: that.selectionRows[i].price,
-              useNum: 0
+              spuId: that.selectionRows[i].id,
+              title: that.selectionRows[i].title,
+              price: that.selectionRows[i].marketPrice,
+              useNum: 0,
+              skuId: 0,
             }
             that.tableData.push(dataArr);
           }
           
         }
-        this.$store.dispatch("getTableData", this.tableData);
+        this.$store.dispatch("setLinkData", this.tableData);
       },
       del(scope){
         // debugger;
