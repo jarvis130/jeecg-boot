@@ -2,17 +2,6 @@
   <div>
     <a-form style="margin: 40px auto 0;">
 
-      <a-form-item
-        label="启用属性"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
-      >
-         <a-switch default-unchecked v-model="model.enableGenericSpec"/>
-      </a-form-item>
-
-      <div v-if="model.enableGenericSpec == true">
-
-
       <a-row>
         <a-col :span="6">
         
@@ -58,9 +47,6 @@
 
           </a-table>
 
-     
-
-      </div>
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
         <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
@@ -112,7 +98,7 @@
         },
         loading: false,
         model: {
-          enableGenericSpec: false
+          
         },
         tableData: [],
         selectedRowIds: [],
@@ -125,8 +111,8 @@
       }
     },
     mounted() {
-      if (this.goods){
-        let record = this.goods;
+      if (this.tech){
+        let record = this.tech;
         this.edit(record);
       }else
         this.loadGenericData();
@@ -135,24 +121,23 @@
     computed: {
     // 用vuex读取数据(读取的是getters.js中的数据)
     // 相当于this.$store.getters.goods(vuex语法糖)
-    ...mapGetters(["goods"])
+    ...mapGetters(["tech"])
 	  },
     methods: {
-      ...mapActions([ "SetGoodsStore4" ]),
+      ...mapActions([ "SetTech" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.goods.id;
+            that.model.id = that.tech.id;
             let formData = Object.assign(that.model, values);
             if(that.model.enableGenericSpec){
               formData.genericSpec = JSON.stringify(that.tableData);
             }
-            formData.spuType = "1"; //spu类型1=商品
-   
-            that.SetGoodsStore4(formData).then((res) => {
+            
+            that.SetTech(formData).then((res) => {
               that.$emit('nextStep');
             }).catch((err) => {
               that.$message.warning(res.message);
@@ -170,9 +155,6 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'enableGenericSpec'))
-        })
     
         let genericSpec = this.model.genericSpec;
         if(genericSpec){
@@ -191,7 +173,7 @@
         let that = this;
         this.loading = true;
         let param = {
-          cateId: this.goods.cid3
+          cateId: this.tech.cid3
         }
         getAction(this.url.list, param).then((res) => {
           if (res.success) {

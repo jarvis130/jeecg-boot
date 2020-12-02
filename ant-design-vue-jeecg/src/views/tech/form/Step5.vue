@@ -129,17 +129,17 @@
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
       // 相当于this.$store.getters.goods(vuex语法糖)
-      ...mapGetters(["goods"])
+      ...mapGetters(["tech"])
     },
     methods: {
-      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
+      ...mapActions([ "SaveTechInfo", "UpdateTechInfo" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.goods.id;
+            that.model.id = that.tech.id;
             let formData = Object.assign(that.model, values);
             if(that.tableData.length > 0){
               formData.linkData = JSON.stringify(that.tableData);
@@ -147,14 +147,14 @@
            
             formData.spuType = "1"; //spu类型1=商品
             console.log("表单提交数据",formData)
-            if(formData.isOnSale){
-              formData.isOnSale = 1;
+            if(formData.status){
+              formData.status = 1;
             }else{
-              formData.isOnSale = 0;
+              formData.status = 0;
             }
             
             if(!that.model.id){
-              that.SaveGoodsInfo(formData).then((res) => {
+              that.SaveTechInfo(formData).then((res) => {
                 that.$emit('nextStep');
               }).catch((err) => {
                 that.$message.warning(err.message);
@@ -162,7 +162,7 @@
                 that.confirmLoading = false;
               });
             }else{
-              that.UpdateGoodsInfo(formData).then((res) => {
+              that.UpdateTechInfo(formData).then((res) => {
                 that.$emit('nextStep');
               }).catch((err) => {
                 that.$message.warning(err.message);
@@ -189,26 +189,7 @@
           if(arr instanceof Array){
             that.tableData = arr;
           }
-          
-          //根据spuId得到关联数据
-          // this.GetLinkGoodsDataBySpuId(param).then((res) => {
-    
-          //   if (res.success) {
-          //     const result = res.result
-          //     let list = this.goods.linkGoodsData;
-          //     for(var i=0; i<list.length; i++){
-          //       let item = list[i];
-          //       for(var j=0; j<result.length; j++){
-          //         if(item.skuKey == result[j].skuKey){
-          //           list[i].id = result[j].id;
-          //           list[i].stock = result[j].stock;
-          //           break;
-          //         }
-          //       }
-          //     }
-          //     that.getTableData(list);
-          //   }
-          // });
+        
         }
       },
       getSelectData (val) {
@@ -236,7 +217,7 @@
           }
           
         }
-        this.$store.dispatch("setLinkData", this.tableData);
+        this.$store.dispatch("SetLinkData", this.tableData);
       },
       del(scope){
         // debugger;

@@ -75,7 +75,7 @@ const tech = {
     SetLinkData(state, data) {
       state.commit('LinkData', data)
     },
-    SaveGoodsInfo({ commit }, params) {
+    SaveTechInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
         postAction("/commodity/spuInfo/add", params).then(response => {
           if(response.success){
@@ -90,7 +90,7 @@ const tech = {
         })
       })
     },
-    UpdateGoodsInfo({ commit }, params) {
+    UpdateTechInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
         putAction("/commodity/spuInfo/edit", params).then(response => {
           if(response.success){
@@ -105,27 +105,13 @@ const tech = {
         })
       })
     },
-    ClearGoodsStore({ commit }) {
-      commit('CLEAR_GOODS');
+    TechClear({ commit }) {
+      commit('TECH_CLEAR');
     },
-    SetGoodsStore({ commit }, params) {
-      commit('SET_GOODS', params);
+    SetTech({ commit }, params) {
+      commit('SET_TECH', params);
     },
-    SetGoodsStore1({ commit }, params) {
-      commit('SET_GOODS1', params);
-    },
-    SetGoodsStore2({ commit }, params) {
-      commit('SET_GOODS2', params);
-    },
-    SetGoodsStore3({ commit }, params) {
-      commit('SET_GOODS3', params);
-    },
-    SetGoodsStore4({ commit }, params) {
-      commit('SET_GOODS4', params);
-    },
-    SetGoodsStore5({ commit }, params) {
-      commit('SET_GOODS5', params);
-    }
+    
   }
 }
 

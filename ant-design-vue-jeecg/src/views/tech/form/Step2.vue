@@ -4,8 +4,8 @@
 
       <a-form-item
         label="上传照片"
-        :labelCol="{span: 5}"
-        :wrapperCol="{span: 19}"
+        :labelCol="{span: 2}"
+        :wrapperCol="{span: 20}"
       >
       
         <j-image-upload v-model="model.thumbs" :isMultiple="isMultiple"></j-image-upload>
@@ -25,7 +25,7 @@
         :wrapperCol="{span: 20}"
         class="stepFormText"
       >
-        <j-editor v-model="model.description"/>
+        <j-editor v-model="model.desc"/>
       </a-form-item>
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
@@ -40,6 +40,7 @@
   import pick from 'lodash.pick'
   import JEditor from '@/components/jeecg/JEditor'
   import JCheckbox from '@/components/jeecg/JCheckbox'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
   import { httpAction, getAction } from '@/api/manage'
   import { mapGetters, mapActions } from "vuex";
 
@@ -47,7 +48,8 @@
     name: "Step2",
     components: {
       JEditor,
-      JCheckbox
+      JCheckbox,
+      JImageUpload
     },
     data () {
       return {
@@ -63,9 +65,8 @@
         confirmLoading: false,
         model: {
           id: '',
-          keywords: '',
           brief: '',
-          description: '',
+          desc: '',
           thumbs: ''
         },
         url: {
@@ -76,26 +77,27 @@
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
       // 相当于this.$store.getters.goods(vuex语法糖)
-      ...mapGetters(["goods"])
+      ...mapGetters(["tech"])
     },
     mounted() {
       if (this.goods){
-        let record = this.goods;
+        let record = this.tech;
         this.edit(record);
       }
     },
     methods: {
-      ...mapActions([ "SetGoodsStore2" ]),
+      ...mapActions([ "SetTech" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
         that.form.validateFields((err, values) => {
+          debugger
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.goods.id;
+            that.model.id = that.tech.id;
             let formData = Object.assign(that.model, values);
             
-            that.SetGoodsStore2(formData).then((res) => {
+            that.SetTech(formData).then((res) => {
               that.$emit('nextStep');
             }).catch((err) => {
               that.$message.warning(res.message);

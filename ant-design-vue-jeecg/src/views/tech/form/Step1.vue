@@ -46,7 +46,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-date-picker v-model="birthday" @change="onChange" />
+         <a-date-picker v-model="model.birthday" @change="onChange" />
       </a-form-item>
 
       <a-form-item
@@ -195,26 +195,26 @@
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
       // 相当于this.$store.getters.goods(vuex语法糖)
-      ...mapGetters(["goods"])
+      ...mapGetters(["tech"])
     },
     mounted() {
       if (this.goods){
-        let record = this.goods;
+        let record = this.tech;
         this.edit(record);
       }
     },
     methods: {
-      ...mapActions([ "SetGoodsStore1", "getSpuSkuBySpuId", "getTableData", "SetGoodsStore", "ClearGoodsStore" ]),
+      ...mapActions([ "SetTech", "TechClear" ]),
       nextStep () {
         const that = this;
-        this.model.id = this.goods.id;
+        this.model.id = this.tech.id;
      
         // 触发表单验证
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
             let formData = Object.assign(that.model, values);
-            that.SetGoodsStore1(formData).then((res) => {
+            that.TechClear(formData).then((res) => {
               that.$emit('nextStep');
             }).catch((err) => {
               that.$message.warning(res.message);
@@ -236,46 +236,17 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'cid1', 'cid2', 'cid3','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','extensionCode','isOnSale'))
+          this.form.setFieldsValue(pick(this.model,'code','brief','desc','status','generalSpec','thumbs','delFlag'))
         })
 
-        if(this.model.isOnSale == 1  || this.model.isOnSale){
-          this.model.isOnSale = true;
+        if(this.model.status == 1  || this.model.status){
+          this.model.status = true;
         }else{
-          this.model.isOnSale = false;
+          this.model.status = false;
         }
 
-        this.SetGoodsStore(record);
-        if(record.enableSpecialSpec){
-          let param = {
-            spuId: record.id
-          }
-          //根据spuId得到最新的sku数据
-          this.getSpuSkuBySpuId(param).then((res) => {
-    
-            if (res.success) {
-              const result = res.result
-              let list = this.goods.tableData;
-              for(var i=0; i<list.length; i++){
-                let item = list[i];
-                for(var j=0; j<result.length; j++){
-                  if(item.skuKey == result[j].skuKey){
-                    list[i].id = result[j].id;
-                    list[i].stock = result[j].stock;
-                    break;
-                  }
-                }
-              }
-              that.getTableData(list);
-            }
-          });
-          
-        }else{
-          that.SetGoodsStore(record); 
-        }
-      },
-      onBrand(){
-        this.brandVisible = true;
+        this.TechClear(record);
+        
       }
     }
   }
