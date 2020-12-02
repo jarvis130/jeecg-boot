@@ -2,10 +2,13 @@ package org.jeecg.modules.goods.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.constant.FillRuleConstant;
 import org.jeecg.common.util.FillRuleUtil;
+import org.jeecg.modules.goods.entity.ApiGoodsVo;
 import org.jeecg.modules.goods.entity.GoodsInfo;
 import org.jeecg.modules.goods.entity.GoodsSku;
 import org.jeecg.modules.goods.entity.SkuDataEntity;
@@ -19,12 +22,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -186,5 +186,14 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public IPage<GoodsInfo> queryGoodsList(ApiGoodsVo goodsVo) {
+        Page<GoodsInfo> page = new Page<>(goodsVo.getPageNum(), goodsVo.getPageSize());
+        QueryWrapper<GoodsInfo> queryWrapper = new QueryWrapper<GoodsInfo>()
+                .eq("", goodsVo.getAppId())
+                .eq("", goodsVo.getType());
+        return this.baseMapper.selectPage(page, queryWrapper);
     }
 }

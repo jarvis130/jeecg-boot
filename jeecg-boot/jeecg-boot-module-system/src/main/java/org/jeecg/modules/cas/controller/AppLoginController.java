@@ -6,7 +6,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.util.JwtUtils;
 import org.jeecg.common.util.RedisUtil;
-import org.jeecg.common.util.ValidatorUtils;
 import org.jeecg.modules.cas.entity.MobileLoginVo;
 import org.jeecg.modules.cas.entity.UserInfoDto;
 import org.jeecg.modules.cas.entity.UserLoginVo;
@@ -21,16 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-/**
- * Copyright (C), 2019-2020, XXX有限公司
- * FileName: AppLoginController
- * Author:   kehaojian
- * Date:     2020/11/26 15:10
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 @RestController
 @RequestMapping("/api")
 @Api("API登录接口")
@@ -52,7 +41,6 @@ public class AppLoginController {
     @PostMapping("userLogin")
     @ApiOperation("账号登录")
     public Result<?> login(@RequestBody UserLoginVo userLoginVo){
-        ValidatorUtils.validateEntity(userLoginVo);
         UserAccount userAccount = loginService.loginByUserName(userLoginVo);
         if (userAccount != null) {
             if (userAccount.getStatus() != 1) {
@@ -70,7 +58,6 @@ public class AppLoginController {
     @PostMapping("mobileLogin")
     @ApiOperation("手机登录")
     public Result<?> login(@RequestBody MobileLoginVo mobileLoginVo){
-        ValidatorUtils.validateEntity(mobileLoginVo);
         UserAccount userAccount = accountService.getUserAccountByMobile(mobileLoginVo.getMobile());
         Object temp = redisUtil.get(mobileLoginVo.getMobile());
         if (temp != null && StringUtils.isNotBlank(temp.toString())) {

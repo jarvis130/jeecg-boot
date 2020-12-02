@@ -7,7 +7,6 @@ import org.jeecg.modules.cas.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,7 @@ public class SmsController {
      */
     @PostMapping("sendSms")
     @ApiOperation("短信发送")
-    public Result<?> sendSms(@RequestBody String mobile) {
+    public Result<?> sendSms(String mobile) {
         try {
             if ( smsService.sendSms(mobile)){
                 return Result.OK("短信已经发送");

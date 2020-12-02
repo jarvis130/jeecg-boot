@@ -1,7 +1,9 @@
 package org.jeecg.modules.goods.service;
 
-import org.jeecg.modules.goods.entity.GoodsInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.goods.entity.ApiGoodsVo;
+import org.jeecg.modules.goods.entity.GoodsInfo;
 
 /**
  * @Description: goods_info
@@ -24,4 +26,6 @@ public interface IGoodsInfoService extends IService<GoodsInfo> {
      * @return
      */
     public void updateGoodsInfo(GoodsInfo goodsInfo);
+
+    IPage<GoodsInfo> queryGoodsList(ApiGoodsVo goodsVo);
 }
