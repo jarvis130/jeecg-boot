@@ -46,7 +46,7 @@ public class TechInfo implements Serializable {
 	/**详情*/
 	@Excel(name = "详情", width = 15)
     @ApiModelProperty(value = "详情")
-    private java.lang.String desc;
+    private java.lang.String description;
 	/**状态*/
 	@Excel(name = "状态", width = 15)
     @ApiModelProperty(value = "状态")
@@ -58,7 +58,7 @@ public class TechInfo implements Serializable {
 	/**照片*/
 	@Excel(name = "照片", width = 15)
     @ApiModelProperty(value = "照片")
-    private java.lang.String images;
+    private java.lang.String thumbs;
 	/**删除标识*/
 	@Excel(name = "删除标识", width = 15)
     @ApiModelProperty(value = "删除标识")
@@ -83,4 +83,16 @@ public class TechInfo implements Serializable {
     /**创建者*/
     @ApiModelProperty(value = "创建者")
     private java.lang.String createBy;
+
+    /**紧急联系人*/
+    @Excel(name = "紧急联系人", width = 15)
+    @ApiModelProperty(value = "紧急联系人")
+    private java.lang.String linkName;
+
+    /**紧急联系人电话*/
+    @Excel(name = "紧急联系人电话", width = 15)
+    @ApiModelProperty(value = "紧急联系人电话")
+    private java.lang.String linkMobile;
+
+    private java.lang.String linkData;
 }

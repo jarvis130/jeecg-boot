@@ -13,6 +13,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.tech.entity.TechInfo;
+import org.jeecg.modules.tech.entity.TechInfoVO;
 import org.jeecg.modules.tech.service.ITechInfoService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -75,28 +76,28 @@ public class TechInfoController extends JeecgController<TechInfo, ITechInfoServi
 	/**
 	 *   添加
 	 *
-	 * @param techInfo
+	 * @param techInfoVO
 	 * @return
 	 */
 	@AutoLog(value = "tech_info-添加")
 	@ApiOperation(value="tech_info-添加", notes="tech_info-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody TechInfo techInfo) {
-		techInfoService.save(techInfo);
+	public Result<?> add(@RequestBody TechInfoVO techInfoVO) {
+		techInfoService.updateTechInfo(techInfoVO);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 *  编辑
 	 *
-	 * @param techInfo
+	 * @param techInfoVO
 	 * @return
 	 */
 	@AutoLog(value = "tech_info-编辑")
 	@ApiOperation(value="tech_info-编辑", notes="tech_info-编辑")
 	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody TechInfo techInfo) {
-		techInfoService.updateById(techInfo);
+	public Result<?> edit(@RequestBody TechInfoVO techInfoVO) {
+		techInfoService.updateTechInfo(techInfoVO);
 		return Result.OK("编辑成功!");
 	}
 	

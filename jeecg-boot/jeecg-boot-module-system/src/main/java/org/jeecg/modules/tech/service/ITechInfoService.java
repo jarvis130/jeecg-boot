@@ -2,6 +2,7 @@ package org.jeecg.modules.tech.service;
 
 import org.jeecg.modules.tech.entity.TechInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.tech.entity.TechInfoVO;
 
 /**
  * @Description: tech_info
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITechInfoService extends IService<TechInfo> {
 
+    public void updateTechInfo(TechInfoVO techInfoVO);
 }

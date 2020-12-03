@@ -30,7 +30,7 @@ public class TechInfoVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**主键,user_account编号*/
-	@TableId(type = IdType.ASSIGN_ID)
+//	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键,user_account编号")
     private String id;
 	/**工号*/
@@ -44,7 +44,7 @@ public class TechInfoVO implements Serializable {
 	/**详情*/
 	@Excel(name = "详情", width = 15)
     @ApiModelProperty(value = "详情")
-    private String desc;
+    private String description;
 	/**状态*/
 	@Excel(name = "状态", width = 15)
     @ApiModelProperty(value = "状态")
@@ -56,7 +56,7 @@ public class TechInfoVO implements Serializable {
 	/**照片*/
 	@Excel(name = "照片", width = 15)
     @ApiModelProperty(value = "照片")
-    private String images;
+    private String thumbs;
 	/**删除标识*/
 	@Excel(name = "删除标识", width = 15)
     @ApiModelProperty(value = "删除标识")
@@ -116,6 +116,8 @@ public class TechInfoVO implements Serializable {
     @Excel(name = "紧急联系人电话", width = 15)
     @ApiModelProperty(value = "紧急联系人电话")
     private java.lang.String linkMobile;
+
+    private java.lang.String linkData;
 
 
 }
