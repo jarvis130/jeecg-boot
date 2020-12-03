@@ -1,8 +1,10 @@
 package org.jeecg.modules.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.catalina.User;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.commodity.entity.SpuDetail;
 import org.jeecg.modules.user.entity.UserAccount;
 import org.jeecg.modules.user.mapper.UserAccountMapper;
 import org.jeecg.modules.user.service.IUserAccountService;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: user_account
@@ -67,5 +72,17 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     @Override
     public UserAccount getUserAccountByUserName(String userName) {
         return userAccountMapper.selectOne(new QueryWrapper<UserAccount>().eq("user_name", userName));
+    }
+
+    @Override
+    public Map<String, UserAccount> getUserAccountByIds(List<String> ids){
+        List<UserAccount> list = userAccountMapper.selectBatchIds(ids);
+
+        Map<String, UserAccount> res = new HashMap<String, UserAccount>();
+
+        list.forEach(item -> {
+            res.put(item.getId(), item);
+        });
+        return res;
     }
 }
