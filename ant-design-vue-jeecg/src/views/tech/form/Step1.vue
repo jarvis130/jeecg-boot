@@ -3,6 +3,15 @@
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
+        label="用户名"
+        :labelCol="{span: 5}"
+        :wrapperCol="{span: 19}"
+      >
+        <a-input v-decorator="['id']" placeholder=""></a-input>
+         <a-input-search v-decorator="['userName', validatorRules.userName]" placeholder="请输入用户名" enter-button @search="onSelectAccount"/>
+      </a-form-item>
+
+      <a-form-item
         label="工号"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
@@ -31,7 +40,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-         <a-radio-group name="sex" :default-value="1">
+         <a-radio-group name="model.sex" :default-value="1">
           <a-radio :value="1">
             男
           </a-radio>
@@ -71,7 +80,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <j-select-brand  v-model="model.address" />
+        <a-input v-decorator="['address']" placeholder="请输入住址"></a-input>
       </a-form-item>
 
       <a-form-item
@@ -104,8 +113,11 @@
         <a-button type="primary" @click="nextStep">下一步</a-button>
       </a-form-item>
 
+      
+
     </a-form>
   
+  <j-select-account ref="selectAccountForm" @getSelectData="getSelectData"></j-select-account>
 
   </div>
 </template>
@@ -118,13 +130,15 @@
   import { mapGetters, mapActions } from "vuex"; 
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
   import JSelectBrand from '@comp/jeecgbiz/JSelectBrand'
+  import JSelectAccount from '@comp/biz/SelectAccountWithDrawer'
 
   export default {
     name: "Step1",
     components: {
       JImageUpload,
       JCategorySelect,
-        JSelectBrand
+        JSelectBrand,
+        JSelectAccount
     },
     props: {
       //流程表单data
@@ -150,9 +164,9 @@
       return {
         form: this.$form.createForm(this),
         brandVisible: false,
+        selectMultiple: false,
         model: {
-          thumbs: [],
-          isOnSale: false
+          status: false
         },
         labelCol: {
           xs: { span: 24 },
@@ -165,6 +179,11 @@
         confirmLoading: false,
         isMultiple: true,
         validatorRules: {
+          userName: {
+            rules: [
+              { required: true, message: '请输入用户名!'},
+            ]
+          },
           nickName: {
             rules: [
               { required: true, message: '请输入花名!'},
@@ -198,7 +217,7 @@
       ...mapGetters(["tech"])
     },
     mounted() {
-      if (this.goods){
+      if (this.tech){
         let record = this.tech;
         this.edit(record);
       }
@@ -207,14 +226,14 @@
       ...mapActions([ "SetTech", "TechClear" ]),
       nextStep () {
         const that = this;
-        this.model.id = this.tech.id;
-     
+        
         // 触发表单验证
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
+       
             let formData = Object.assign(that.model, values);
-            that.TechClear(formData).then((res) => {
+            that.SetTech(formData).then((res) => {
               that.$emit('nextStep');
             }).catch((err) => {
               that.$message.warning(res.message);
@@ -236,7 +255,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'code','brief','desc','status','generalSpec','thumbs','delFlag'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'code','brief','desc','status','generalSpec','thumbs','delFlag'))
         })
 
         if(this.model.status == 1  || this.model.status){
@@ -247,6 +266,23 @@
 
         this.TechClear(record);
         
+      },
+      onSelectAccount(){
+        this.$refs.selectAccountForm.openModel();
+      },
+      getSelectData(val){
+        // this.model.id = val[0].id;
+        // this.model.userName = val[0].userName;
+        // this.model.realName = val[0].realName;
+        // this.model.model = val[0].mobile;
+        // this.model.sex = val[0].sex;
+        // this.model.birthday = val[0].birthday;
+        // this.model.nickName = val[0].nickName;
+      
+        this.model = Object.assign({}, val[0]);
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'id','userName','realName','mobile','sex','birthday','nickName'))
+        })
       }
     }
   }

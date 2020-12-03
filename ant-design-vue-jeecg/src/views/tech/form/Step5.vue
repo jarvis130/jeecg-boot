@@ -139,13 +139,12 @@
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.tech.id;
-            let formData = Object.assign(that.model, values);
+        
+            let formData = Object.assign(that.tech, values);
             if(that.tableData.length > 0){
               formData.linkData = JSON.stringify(that.tableData);
             }
-           
-            formData.spuType = "1"; //spu类型1=商品
+      
             console.log("表单提交数据",formData)
             if(formData.status){
               formData.status = 1;

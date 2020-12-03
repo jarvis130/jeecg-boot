@@ -131,7 +131,7 @@
         that.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.tech.id;
+          
             let formData = Object.assign(that.model, values);
             if(that.model.enableGenericSpec){
               formData.genericSpec = JSON.stringify(that.tableData);

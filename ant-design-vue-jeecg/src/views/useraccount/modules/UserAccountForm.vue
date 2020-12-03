@@ -35,24 +35,24 @@
           
           <a-col :span="12">
             <a-form-item label="证件类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag placeholder="请输入证件类型" dictCode="id_type" :triggerChange="true"  style="width: 100%"/>
+              <j-dict-select-tag v-decorator="['idType']" placeholder="请输入证件类型" dictCode="id_type" :triggerChange="true"  style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="证件号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input placeholder="请输入证件号"></a-input>
+              <a-input v-decorator="['idCode']" placeholder="请输入证件号"></a-input>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item label="出生日期" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-date placeholder="请选择出生日期" :trigger-change="true" style="width: 100%"/>
+              <j-date v-decorator="['birthday']" placeholder="请选择出生日期" :trigger-change="true" style="width: 100%"/>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item label="会员邮箱" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input placeholder="请输入会员邮箱"></a-input>
+              <a-input v-decorator="['email']"  placeholder="请输入会员邮箱"></a-input>
             </a-form-item>
           </a-col>
           

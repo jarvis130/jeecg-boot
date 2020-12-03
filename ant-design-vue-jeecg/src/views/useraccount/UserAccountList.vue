@@ -35,7 +35,7 @@
         ref="table"
         size="middle"
         :scroll="{x:true}"
-        bordered
+     
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"

@@ -25,7 +25,7 @@
         :wrapperCol="{span: 20}"
         class="stepFormText"
       >
-        <j-editor v-model="model.desc"/>
+        <j-editor v-model="model.description"/>
       </a-form-item>
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
@@ -64,11 +64,11 @@
         },
         confirmLoading: false,
         model: {
-          id: '',
           brief: '',
           desc: '',
           thumbs: ''
         },
+        isMultiple: true,
         url: {
 
         }
@@ -80,7 +80,7 @@
       ...mapGetters(["tech"])
     },
     mounted() {
-      if (this.goods){
+      if (this.tech){
         let record = this.tech;
         this.edit(record);
       }
@@ -91,10 +91,10 @@
         const that = this;
         // 触发表单验证
         that.form.validateFields((err, values) => {
-          debugger
+    
           if (!err) {
             that.confirmLoading = true;
-            that.model.id = that.tech.id;
+      
             let formData = Object.assign(that.model, values);
             
             that.SetTech(formData).then((res) => {
@@ -117,7 +117,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'cId','code','title','brandId','marketPrice', 'salePrice','keywords','thumbs','brief','description','extensionCode','isOnSale','isNew','isHot','isRecommend'))
+          this.form.setFieldsValue(pick(this.model, 'thumbs','brief','desc'))
         })
       },
     }

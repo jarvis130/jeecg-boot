@@ -17,7 +17,7 @@ const tech = {
     linkMobile: '',
     thumbs: '',
     brief: '',
-    desc: '',
+    description: '',
     status: '',
     tableData: [],
     linkData: ''
@@ -37,7 +37,7 @@ const tech = {
       state.linkMobile = params.linkMobile = '' ? '' : params.linkMobile;
       state.thumbs = params.thumbs = '' ? '' : params.thumbs;
       state.brief = params.brief = '' ? '' : params.brief;
-      state.desc = params.desc = '' ? '' : params.desc;
+      state.description = params.description = '' ? '' : params.description;
       state.status = params.status = '' ? '' : params.status;
       state.tableData = params.tableData = '' ? '' : params.tableData;
       state.linkData = params.linkData = '' ? '' : params.linkData;
@@ -77,10 +77,10 @@ const tech = {
     },
     SaveTechInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
-        postAction("/commodity/spuInfo/add", params).then(response => {
+        putAction("/tech/techInfo/edit", params).then(response => {
           if(response.success){
             const result = response.result
-            commit('SET_GOODS', result);
+            // commit('SET_TECH', result);
             resolve(response)
           }else{
             resolve(response)
@@ -92,10 +92,10 @@ const tech = {
     },
     UpdateTechInfo({ commit }, params) {
       return new Promise((resolve, reject) => {
-        putAction("/commodity/spuInfo/edit", params).then(response => {
+        putAction("/tech/techInfo/edit", params).then(response => {
           if(response.success){
             const result = response.result
-            commit('SET_GOODS', result);
+            // commit('SET_TECH', result);
             resolve(response)
           }else{
             resolve(response)
