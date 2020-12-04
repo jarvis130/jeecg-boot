@@ -121,8 +121,8 @@
 
     },
     mounted() {
-      if (this.goods){
-        let record = this.goods;
+      if (this.tech){
+        let record = this.tech;
         this.edit(record);
       }
     },
@@ -180,7 +180,7 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-  
+        
         let linkData = this.model.linkData;
         if(linkData){
           let that = this;

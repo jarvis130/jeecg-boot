@@ -143,7 +143,7 @@
             that.confirmLoading = true;
           
             let formData = Object.assign(that.model, values);
-            if(that.model.enableGenericSpec){
+            if(that.tableData.length > 0){
               formData.genericSpec = JSON.stringify(that.tableData);
             }
             
@@ -165,7 +165,7 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-    
+        
         let genericSpec = this.model.genericSpec;
         if(genericSpec){
           let that = this;
