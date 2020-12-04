@@ -3,12 +3,12 @@
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
 
       <a-form-item
-        label="用户名"
+        label="手机号码"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
         <a-input hidden v-decorator="['id']" placeholder=""></a-input>
-         <a-input-search v-decorator="['userName', validatorRules.userName]" placeholder="请输入用户名" enter-button @search="onSelectAccount"/>
+         <a-input-search v-decorator="['mobile', validatorRules.mobile]" placeholder="请输入手机号码" enter-button @search="onSelectAccount"/>
       </a-form-item>
 
       <a-form-item
@@ -67,13 +67,13 @@
         <j-image-upload v-model="model.id_code" :isMultiple="isMultiple"></j-image-upload>
       </a-form-item>
 
-      <a-form-item
+      <!-- <a-form-item
         label="手机号码"
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
         <a-input v-decorator="['mobile', validatorRules.mobile]" placeholder="请输入手机号码"></a-input>
-      </a-form-item>
+      </a-form-item> -->
 
       <a-form-item
         label="住址"
@@ -261,13 +261,13 @@
         // this.edit({});
       },
       edit (record) {
-
+        
         let that = this;
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'id', 'code','brief','desc','status','generalSpec','thumbs','delFlag'))
+          this.form.setFieldsValue(pick(this.model, 'id', 'realName', 'nickName', 'birthday', 'sex', 'idCode', 'cid', 'code','status', 'mobile', 'userName', 'linkName', 'linkMobile', 'address'))
         })
 
         if(this.model.status == 1  || this.model.status){

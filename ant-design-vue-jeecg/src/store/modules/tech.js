@@ -14,6 +14,7 @@ const tech = {
     idCode: '',
     sex: '',
     birthday: '',
+    address:'',
     linkName: '',
     linkMobile: '',
     thumbs: '',
@@ -21,7 +22,8 @@ const tech = {
     description: '',
     status: '',
     tableData: [],
-    linkData: ''
+    linkData: '',
+    genericSpec: ''
   },
   mutations: {
     SET_TECH: (state, params) => {
@@ -35,6 +37,7 @@ const tech = {
       state.idCode = params.idCode = '' ? '' : params.idCode;
       state.sex = params.sex = '' ? '' : params.sex;
       state.birthday = params.birthday = '' ? '' : params.birthday;
+      state.address = params.address = '' ? '' : params.address;
       state.linkName = params.linkName = '' ? '' : params.linkName;
       state.linkMobile = params.linkMobile = '' ? '' : params.linkMobile;
       state.thumbs = params.thumbs = '' ? '' : params.thumbs;
@@ -43,6 +46,7 @@ const tech = {
       state.status = params.status = '' ? '' : params.status;
       state.tableData = params.tableData = '' ? '' : params.tableData;
       state.linkData = params.linkData = '' ? '' : params.linkData;
+      state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
     },
     TECH_CLEAR: (state) => {
       state.id = '';
@@ -55,6 +59,7 @@ const tech = {
       state.idCode = '';
       state.sex = '';
       state.birthday = '';
+      state.address = '';
       state.linkName = '';
       state.linkMobile = '';
       state.thumbs = '';
@@ -63,6 +68,7 @@ const tech = {
       state.status = '';
       state.tableData = '';
       state.linkData = '';
+      state.genericSpec = '';
     },
     SetTableData(state, data) {
       state.tableData = data

@@ -54,7 +54,7 @@ public class TechInfo implements Serializable {
 	/**通用属性*/
 	@Excel(name = "通用属性", width = 15)
     @ApiModelProperty(value = "通用属性")
-    private java.lang.String generalSpec;
+    private java.lang.String genericSpec;
 	/**照片*/
 	@Excel(name = "照片", width = 15)
     @ApiModelProperty(value = "照片")
@@ -95,4 +95,6 @@ public class TechInfo implements Serializable {
     private java.lang.String linkMobile;
 
     private java.lang.String linkData;
+
+    private java.lang.String cid;
 }

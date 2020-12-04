@@ -100,21 +100,21 @@
     computed: {
       // 用vuex读取数据(读取的是getters.js中的数据)
       // 相当于this.$store.getters.goods(vuex语法糖)
-      ...mapGetters(["goods"])
+      ...mapGetters(["tech"])
     },
     methods: {
-      ...mapActions([ "ClearGoodsStore", "SetGoodsStore"]),
+      ...mapActions([ "SetTech", "TechClear" ]),
       add () {
-        this.ClearGoodsStore();
+        this.TechClear();
         this.$refs.step1Form.add();
       },
       edit (record) {
         this.currentTab = 0;
-        this.SetGoodsStore(record);
+        this.SetTech(record);
         this.$refs.step1Form.edit(record);   
       },
       nextStep () {
-        if (this.currentTab < 5) {
+        if (this.currentTab < 4) {
           this.currentTab += 1
         }
       },

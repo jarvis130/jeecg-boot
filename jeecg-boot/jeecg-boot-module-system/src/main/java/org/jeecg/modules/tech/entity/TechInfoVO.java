@@ -53,7 +53,7 @@ public class TechInfoVO implements Serializable {
 	/**通用属性*/
 	@Excel(name = "通用属性", width = 15)
     @ApiModelProperty(value = "通用属性")
-    private String generalSpec;
+    private String genericSpec;
 	/**照片*/
 	@Excel(name = "照片", width = 15)
     @ApiModelProperty(value = "照片")
@@ -120,5 +120,7 @@ public class TechInfoVO implements Serializable {
 
     private java.lang.String linkData;
 
+    private java.lang.String cid;
 
+    private java.lang.String address;
 }

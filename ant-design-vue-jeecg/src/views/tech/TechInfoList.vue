@@ -96,6 +96,7 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import TechInfoModal from './modules/TechInfoModal'
+    import { mapGetters, mapActions } from "vuex";
 
   export default {
     name: 'TechInfoList',
@@ -171,13 +172,14 @@
       },
     },
     methods: {
+      ...mapActions([ "SetTech", "TechClear" ]),
       initDictConfig(){
       },
       handleAdd1(){
         this.$router.push('/tech/form/Index');
       },
       handleEdit1(record){
-        this.SetGoodsStore(record);
+        this.SetTech(record);
         this.$router.push('/tech/form/index?flag=edit');
       },
     }

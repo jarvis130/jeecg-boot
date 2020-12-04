@@ -53,6 +53,7 @@ public class TechInfoServiceImpl extends ServiceImpl<TechInfoMapper, TechInfo> i
         userAccount.setBirthday(techInfoVO.getBirthday());
         userAccount.setIdCode(techInfoVO.getIdCode());
         userAccount.setNickName(techInfoVO.getNickName());
+        userAccount.setAddress(techInfoVO.getAddress());
         userAccountMapper.updateById(userAccount);
 
         TechInfo t =  techInfoMapper.selectById(techInfoVO.getId());
@@ -62,12 +63,12 @@ public class TechInfoServiceImpl extends ServiceImpl<TechInfoMapper, TechInfo> i
             techInfo.setLinkMobile(techInfoVO.getLinkMobile());
             techInfo.setLinkName(techInfoVO.getLinkName());
             techInfo.setId(techInfoVO.getId());
-            techInfo.setGeneralSpec(techInfoVO.getGeneralSpec());
+            techInfo.setGenericSpec(techInfoVO.getGenericSpec());
             techInfo.setThumbs(techInfoVO.getThumbs());
             techInfo.setDescription(techInfoVO.getDescription());
             techInfo.setBrief(techInfoVO.getBrief());
             techInfo.setLinkData(techInfoVO.getLinkData());
-            techInfo.setGeneralSpec(techInfoVO.getGeneralSpec());
+            techInfo.setCid(techInfoVO.getCid());
             techInfoMapper.updateById(techInfo);
         }else{
             //新增技师表
@@ -75,12 +76,12 @@ public class TechInfoServiceImpl extends ServiceImpl<TechInfoMapper, TechInfo> i
             techInfo.setLinkMobile(techInfoVO.getLinkMobile());
             techInfo.setLinkName(techInfoVO.getLinkName());
             techInfo.setId(techInfoVO.getId());
-            techInfo.setGeneralSpec(techInfoVO.getGeneralSpec());
+            techInfo.setGenericSpec(techInfoVO.getGenericSpec());
             techInfo.setThumbs(techInfoVO.getThumbs());
             techInfo.setDescription(techInfoVO.getDescription());
             techInfo.setBrief(techInfoVO.getBrief());
             techInfo.setLinkData(techInfoVO.getLinkData());
-            techInfo.setGeneralSpec(techInfoVO.getGeneralSpec());
+            techInfo.setCid(techInfoVO.getCid());
             techInfoMapper.insert(techInfo);
         }
 
