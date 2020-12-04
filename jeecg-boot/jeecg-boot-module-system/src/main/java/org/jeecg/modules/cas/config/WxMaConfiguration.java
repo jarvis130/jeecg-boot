@@ -50,8 +50,8 @@ public class WxMaConfiguration implements InitializingBean {
     public void init() {
         QueryWrapper<ThirdConfig> queryWrapper = new QueryWrapper<ThirdConfig>().eq("type", 1).eq("state", 1);
         int total = thirdConfigService.count();
-        if (total > 5000 || total == 0) {
-            throw new JeecgBootException("微信多账号配置数量不能超过5000个或者没配置");
+        if (total > 5000) {
+            throw new JeecgBootException("微信多账号配置数量不能超过5000个");
         }
         List<ThirdConfig> thirdConfigs = thirdConfigService.list(queryWrapper);
         thirdConfigs.stream()
