@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void createUserThird(UserAccount userAccount, ThirdAuth thirdAuth) {
-        accountService.createUserAccount(userAccount);
+        accountService.save(userAccount);
         thirdAuth.setUserId(userAccount.getId());
         authService.save(thirdAuth);
     }
@@ -43,7 +43,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean updateUser(WxMaUserInfo wxMaUserInfo, String userId) {
         UserAccount userAccount = new UserAccount();
-        userAccount.setNickname(wxMaUserInfo.getNickName());
+        userAccount.setNickName(wxMaUserInfo.getNickName());
         userAccount.setSex(StringUtils.isNotBlank(wxMaUserInfo.getGender()) ? Integer.parseInt(wxMaUserInfo.getGender()) : 2);
         return accountService.update(userAccount, new UpdateWrapper<UserAccount>().eq("id", userId));
     }
