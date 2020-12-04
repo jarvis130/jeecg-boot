@@ -9002,7 +9002,6 @@ CREATE TABLE `user_account` (
   `last_ip` varchar(15) DEFAULT NULL COMMENT '最后一次登录ip',
   `login_count` int(5) DEFAULT NULL COMMENT '登录次数',
   `user_rank` int(3) DEFAULT NULL COMMENT '会员等级id，取值user_rank',
-  `tenant_id` int(11) DEFAULT NULL COMMENT '租户id',
   `status` tinyint(1) DEFAULT NULL COMMENT '状态（0停用 1正常）',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',

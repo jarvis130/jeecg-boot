@@ -143,12 +143,6 @@ public class UserAccount implements Serializable {
     @ApiModelProperty(value = "会员等级id，取值user_rank")
     private java.lang.Integer userRank;
 
-    /**
-     * 租户ID
-     */
-    @Excel(name = "租户ID", width = 15)
-    @ApiModelProperty(value = "租户ID")
-    private java.lang.Integer tenantId;
 
     /**
      * 状态(1：正常  2：冻结 ）
