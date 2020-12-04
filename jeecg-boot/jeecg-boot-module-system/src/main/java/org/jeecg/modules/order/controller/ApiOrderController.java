@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.Login;
 import org.jeecg.modules.order.entity.ApiOrderVo;
 import org.jeecg.modules.order.entity.ApiQueryOrderVo;
 import org.jeecg.modules.order.entity.ApiUpdateOrderVo;
@@ -42,6 +43,7 @@ public class ApiOrderController {
     /**
      * 创建订单
      */
+    @Login
     @PostMapping("queryOrderList")
     @ApiOperation("查询订单列表")
     public Result<?> queryOrder(@RequestBody ApiQueryOrderVo queryOrderVo){
@@ -52,6 +54,7 @@ public class ApiOrderController {
     /**
      * 更新订单
      */
+    @Login
     @PostMapping("updateOrder")
     @ApiOperation("更新订单")
     public Result<?> update(@RequestBody ApiUpdateOrderVo updateOrderVo){
