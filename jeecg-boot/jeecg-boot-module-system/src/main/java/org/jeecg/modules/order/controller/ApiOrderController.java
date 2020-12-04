@@ -50,16 +50,16 @@ public class ApiOrderController {
     }
 
     /**
-     * 创建订单
+     * 更新订单
      */
     @PostMapping("updateOrder")
-    @ApiOperation("创建订单")
+    @ApiOperation("更新订单")
     public Result<?> update(@RequestBody ApiUpdateOrderVo updateOrderVo){
         boolean result = orderService.updateOrder(updateOrderVo);
         if (result) {
-            return Result.OK("订单创建成功！");
+            return Result.OK("订单更新成功！");
         }
-        return Result.error(500, "订单创建失败");
+        return Result.error(500, "订单更新失败");
     }
 
 }

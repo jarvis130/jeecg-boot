@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
+import java.util.List;
+
 /**
  * Copyright (C), 2019-2020, XXX有限公司
  * FileName: ApiOrderVo
@@ -17,31 +19,22 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Data
 public class ApiOrderVo {
     /**卖家店铺id*/
-    @Excel(name = "卖家店铺id", width = 15)
     @ApiModelProperty(value = "卖家店铺id")
     private java.lang.String tenantId;
     /**卖家店铺名称*/
-    @Excel(name = "卖家店铺名称", width = 15)
     @ApiModelProperty(value = "卖家店铺名称")
     private java.lang.String tenantName;
     /**买家id*/
-    @Excel(name = "买家id", width = 15)
     @ApiModelProperty(value = "买家id")
     private java.lang.String buyerId;
     /**买家姓名*/
-    @Excel(name = "买家姓名", width = 15)
     @ApiModelProperty(value = "买家姓名")
     private java.lang.String buyerName;
-    /**商品数量*/
-    @Excel(name = "商品数量", width = 15)
-    @ApiModelProperty(value = "商品数量")
-    private java.lang.Integer goodsCount;
+
     /**商品价格*/
-    @Excel(name = "商品价格", width = 15)
     @ApiModelProperty(value = "商品价格")
     private java.math.BigDecimal goodsAmount;
     /**订单总价格*/
-    @Excel(name = "订单总价格", width = 15)
     @ApiModelProperty(value = "订单总价格")
     private java.math.BigDecimal orderAmount;
     /**实际支付金额*/
@@ -77,6 +70,7 @@ public class ApiOrderVo {
     @ApiModelProperty(value = "物流单号")
     private java.lang.String shippingCode;
 
-    @ApiModelProperty(value = "商品id")
-    private java.lang.String goodsId;
+    @ApiModelProperty(value = "商品信息")
+    private List<GoodsVo> goodsVos;
+
 }

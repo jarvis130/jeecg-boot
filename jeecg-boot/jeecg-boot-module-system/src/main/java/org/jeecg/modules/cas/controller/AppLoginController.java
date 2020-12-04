@@ -1,11 +1,14 @@
 package org.jeecg.modules.cas.controller;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.util.JwtUtils;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.cas.config.WxMaConfiguration;
 import org.jeecg.modules.cas.entity.MobileLoginVo;
 import org.jeecg.modules.cas.entity.UserInfoDto;
 import org.jeecg.modules.cas.entity.UserLoginVo;
@@ -35,12 +38,13 @@ public class AppLoginController {
     @Resource
     private LoginService loginService;
 
+
     /**
      * 登录
      */
     @PostMapping("userLogin")
     @ApiOperation("账号登录")
-    public Result<?> login(@RequestBody UserLoginVo userLoginVo){
+    public Result<?> login(@RequestBody UserLoginVo userLoginVo) {
         UserAccount userAccount = loginService.loginByUserName(userLoginVo);
         if (userAccount != null) {
             if (userAccount.getStatus() != 1) {
@@ -57,7 +61,7 @@ public class AppLoginController {
      */
     @PostMapping("mobileLogin")
     @ApiOperation("手机登录")
-    public Result<?> login(@RequestBody MobileLoginVo mobileLoginVo){
+    public Result<?> login(@RequestBody MobileLoginVo mobileLoginVo) {
         UserAccount userAccount = accountService.getUserAccountByMobile(mobileLoginVo.getMobile());
         Object temp = redisUtil.get(mobileLoginVo.getMobile());
         if (temp != null && StringUtils.isNotBlank(temp.toString())) {
@@ -71,9 +75,26 @@ public class AppLoginController {
                 return Result.OK(userInfo);
             }
         }
+        return Result.error(500, "手机登录失败");
+    }
 
-        return Result.error(500, "验证码有误");
-
+    /**
+     * 登录
+     */
+    @PostMapping("miniLogin")
+    @ApiOperation("小程序登录")
+    public Result<?> miniLogin(String tanentId, String code) throws Exception {
+        UserAccount userAccount;
+        WxMaService wxService = WxMaConfiguration.getMaService(tanentId);
+        WxMaJscode2SessionResult sessionResult = wxService.jsCode2SessionInfo(code);
+        if (sessionResult != null ) {
+            userAccount =  loginService.loginByMini(sessionResult, tanentId);
+            if (userAccount != null) {
+                UserInfoDto userInfoDto = getUserInfo(userAccount);
+                return Result.OK(userInfoDto);
+            }
+        }
+        return Result.error("登录失败！");
     }
 
     private UserInfoDto getUserInfo(UserAccount userAccount) {
@@ -84,7 +105,6 @@ public class AppLoginController {
         userInfo.setExpireTime(jwtUtils.getExpire());
         return userInfo;
     }
-
 
 
 }
