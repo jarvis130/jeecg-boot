@@ -1,12 +1,12 @@
 <template>
   <div>
     <a-form style="margin: 40px auto 0;">
-      <result title="操作成功" :is-success="true" description="">
+      <result title="操作成功" :is-success="true" description="" content="">
         
-        <!-- <div slot="action">
-          <a-button type="primary" @click="finish">继续创建</a-button>
-          <a-button style="margin-left: 8px" @click="toOrderList">返回列表</a-button>
-        </div> -->
+        <div slot="action">
+          <a-button type="primary" @click="toContinue">继续创建</a-button>
+          <a-button style="margin-left: 8px" @click="toList">返回列表</a-button>
+        </div>
       </result>
     </a-form>
   </div>
@@ -26,11 +26,11 @@
       }
     },
     methods: {
-      finish () {
-        this.$emit('finish')
+      toContinue () {
+        this.$router.push('/goods/form/Index')
       },
-      toOrderList () {
-        this.$router.push('/list/query-list')
+      toList () {
+        this.$router.push('/goods/GoodsInfoList')
       }
     }
   }

@@ -32,8 +32,8 @@
         default: ''
       },
       content: {
-        type: Boolean,
-        default: true
+        type: String,
+        default: ''
       }
     }
   }

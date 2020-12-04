@@ -63,7 +63,7 @@
       </div>
      
       <a-form-item :wrapperCol="{span: 14, offset: 10}">
-        <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
+        <a-button :loading="loading" type="primary" @click="nextStep">下一步</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
     </a-form>
@@ -138,7 +138,7 @@
     ...mapGetters(["goods"])
 	  },
     methods: {
-      ...mapActions([ "SaveGoodsInfo", "UpdateGoodsInfo" ]),
+      ...mapActions([ "SetGoodsStore4" ]),
       nextStep () {
         const that = this;
         // 触发表单验证
@@ -151,25 +151,14 @@
               formData.genericSpec = JSON.stringify(that.tableData);
             }
             formData.spuType = "1"; //spu类型1=商品
-            console.log("表单提交数据",formData)
-            
-            if(!that.model.id){
-              that.SaveGoodsInfo(formData).then((res) => {
-                that.$emit('nextStep');
-              }).catch((err) => {
-                that.$message.warning(err.message);
-              }).finally(() => {
-                that.confirmLoading = false;
-              });
-            }else{
-              that.UpdateGoodsInfo(formData).then((res) => {
-                that.$emit('nextStep');
-              }).catch((err) => {
-                that.$message.warning(err.message);
-              }).finally(() => {
-                that.confirmLoading = false;
-              });
-            }
+   
+            that.SetGoodsStore4(formData).then((res) => {
+              that.$emit('nextStep');
+            }).catch((err) => {
+              that.$message.warning(res.message);
+            }).finally(() => {
+              that.confirmLoading = false;
+            });  
 
           }
          

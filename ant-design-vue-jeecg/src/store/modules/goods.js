@@ -31,7 +31,8 @@ const goods = {
     genericSpec: '',
     specArr: [],
     tableData: [],
-    oldTableData: []
+    oldTableData: [],
+    linkData: ''
   },
   mutations: {
     SET_GOODS: (state, params) => {
@@ -60,6 +61,7 @@ const goods = {
       state.specialSpec = params.specialSpec = '' ? '' : params.specialSpec;
       state.enableGenericSpec = params.enableGenericSpec = '' ? false : params.enableGenericSpec;
       state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
+      state.linkData = params.linkData = '' ? '' : params.linkData;
       // if(params.enableSpecialSpec){
       //   if(params.specialSpec){
       //     let arr = JSON.parse(params.specialSpec);
@@ -112,6 +114,9 @@ const goods = {
       state.enableGenericSpec = params.enableGenericSpec = '' ? false : params.enableGenericSpec;
       state.genericSpec = params.genericSpec = '' ? '' : params.genericSpec;
     },
+    SET_GOODS5: (state, params) => {
+      state.linkData = params.linkData = '' ? '' : params.linkData;
+    },
     CLEAR_GOODS: (state) => {
       state.id = '';
       state.spuType = '';
@@ -137,6 +142,7 @@ const goods = {
       state.enableGenericSpec = false;
       state.genericSpec = '';
       state.tableData = '';
+      state.linkData = '';
     },
     getSpecArr(state, data) {
       state.specArr = data
@@ -146,7 +152,10 @@ const goods = {
     },
     setOldTableData(state, data) {
       state.oldTableData = data
-    }
+    },
+    LinkData(state, data) {
+      state.linkData = data
+    },
   },
   actions: {
     getSpecArr(state, data) {
@@ -154,6 +163,9 @@ const goods = {
     },
     getTableData(state, data) {
       state.commit('getTableData', data)
+    },
+    setLinkData(state, data) {
+      state.commit('LinkData', data)
     },
     setOldTableData(state, data) {
       state.commit('setOldTableData', data)
@@ -201,6 +213,19 @@ const goods = {
         })
       })
     },
+    GetLinkDataBySpuId({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        getAction("/commodity/spuRelation/queryBySpuId", params).then(response => {
+          if(response.success){
+            resolve(response)
+          }else{
+            resolve(response)
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     ClearGoodsStore({ commit }) {
       commit('CLEAR_GOODS');
     },
@@ -218,6 +243,9 @@ const goods = {
     },
     SetGoodsStore4({ commit }, params) {
       commit('SET_GOODS4', params);
+    },
+    SetGoodsStore5({ commit }, params) {
+      commit('SET_GOODS5', params);
     }
   }
 }

@@ -109,7 +109,10 @@
     },
     data () {
       return {
-        description: 'spec_group管理页面',
+        description: '',
+        queryParam: {
+          type: 1
+        },
         // 表头
         columns: [
           {

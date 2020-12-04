@@ -13,6 +13,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.commodity.entity.SpuRelation;
+import org.jeecg.modules.commodity.entity.SpuSku;
+import org.jeecg.modules.commodity.mapper.SpuRelationMapper;
 import org.jeecg.modules.commodity.service.ISpuRelationService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -49,7 +51,9 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 public class SpuRelationController extends JeecgController<SpuRelation, ISpuRelationService> {
 	@Autowired
 	private ISpuRelationService spuRelationService;
-	
+
+	 @Autowired
+	 private SpuRelationMapper spuRelationMapper;
 	/**
 	 * 分页列表查询
 	 *
@@ -167,5 +171,23 @@ public class SpuRelationController extends JeecgController<SpuRelation, ISpuRela
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, SpuRelation.class);
     }
+
+	 /**
+	  * 通过spuId查询
+	  *
+	  * @param spuId
+	  * @return
+	  */
+	 @AutoLog(value = "spu_relation-通过spuId查询")
+	 @ApiOperation(value="spu_relation-通过spuId查询", notes="spu_relation-通过spuId查询")
+	 @GetMapping(value = "/queryBySpuId")
+	 public Result<?> queryBySpuId(@RequestParam(name="spuId",required=true) String spuId) {
+
+		 QueryWrapper<SpuRelation> queryWrapper = new QueryWrapper<>();
+		 queryWrapper.eq("spu_id", spuId);
+		 List<SpuRelation> list = spuRelationMapper.selectList(queryWrapper);
+
+		 return Result.OK(list);
+	 }
 
 }

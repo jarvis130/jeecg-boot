@@ -55,4 +55,6 @@ public class SpuDetail implements Serializable {
 	@Excel(name = "售后服务", width = 15)
     @ApiModelProperty(value = "售后服务")
     private java.lang.String afterService;
+
+    private java.lang.String linkData;
 }

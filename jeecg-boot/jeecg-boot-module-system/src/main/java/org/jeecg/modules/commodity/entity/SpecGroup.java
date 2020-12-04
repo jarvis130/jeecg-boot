@@ -89,4 +89,7 @@ public class SpecGroup implements Serializable {
     @Excel(name = "排序", width = 15)
     @ApiModelProperty(value = "排序")
     private java.lang.Integer sortNo;
+
+    /**用来区分业务;1商品；2技师*/
+    private java.lang.Integer type;
 }

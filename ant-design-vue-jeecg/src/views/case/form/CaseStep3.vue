@@ -147,7 +147,7 @@
             that.confirmLoading = true;
             that.model.id = that.goods.id;
             let formData = Object.assign(that.model, values);
-            formData.genericSpec = JSON.stringify(that.tableData);
+            formData.linkData = JSON.stringify(that.tableData);
             formData.spuType = "2"; //spu类型2=方案
             console.log("表单提交数据",formData)
             

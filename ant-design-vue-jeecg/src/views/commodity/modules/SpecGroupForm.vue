@@ -167,6 +167,7 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
+            formData.type = 1;
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

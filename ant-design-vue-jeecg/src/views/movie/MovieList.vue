@@ -42,7 +42,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd2" type="primary" icon="plus">新增</a-button>
+      <a-button @click="handleAdd1" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('goods_info')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -150,7 +150,7 @@
     },
     data () {
       return {
-        description: 'goods_info管理页面',
+        description: '',
         queryParam: {
           spuType: 3
         },
@@ -233,11 +233,11 @@
       initDictConfig(){
       },
       handleAdd1(){
-        this.$router.push('/goods/form/index');
+        this.$router.push('/movie/form/Index');
       },
       handleEdit1(record){
         this.SetGoodsStore(record);
-        this.$router.push('/goods/form/index?flag=edit');
+        this.$router.push('/movie/form/Index?flag=edit');
       },
       handleAdd2(){
         this.ClearGoodsStore();//清空store数据

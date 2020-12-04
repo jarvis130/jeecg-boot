@@ -91,15 +91,16 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         spuDetailMapper.updateById(spuDetail);
         spuInfoVO.setId(id);
 
-        if(spuInfoVO.getSpuType().equals(1)){
-            //商品，处理特殊规格
-            if(spuInfoVO.getEnableSpecialSpec()){
-                updateSku(id, spuInfoVO.getSpecialSpec());
-            }
-        }else if(spuInfoVO.getSpuType().equals(2)){
-            //方案，处理关联物品
-            updateSpuRelation(id, spuInfoVO.getGenericSpec());
+        //处理特殊规格
+        if(spuInfoVO.getEnableSpecialSpec() && spuInfoVO.getSpecialSpec() != null){
+            updateSku(id, spuInfoVO.getSpecialSpec());
         }
+
+        //处理关联物品
+        if(spuInfoVO.getLinkData() != null){
+            updateSpuRelation(id, spuInfoVO.getLinkData());
+        }
+
 
         return spuInfoVO;
     }
@@ -147,9 +148,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
     }
 
     //方案-关联物品
-    private void updateSpuRelation(String spuId, String generidSpec){
+    private void updateSpuRelation(String spuId, String linkData){
         //将字符串转化给Json对象
-        List<JsonSpuRelation> list = JSON.parseArray(generidSpec, JsonSpuRelation.class);
+        List<JsonSpuRelation> list = JSON.parseArray(linkData, JsonSpuRelation.class);
         //清空
         QueryWrapper<SpuRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("spu_id", spuId);

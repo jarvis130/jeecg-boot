@@ -116,10 +116,10 @@ public class UserAccount implements Serializable {
     @ApiModelProperty(value = "会员等级积分")
     private java.lang.Integer rankPoints;
 
-	/**收货信息id，取值表user_address */
-	@Excel(name = "收货信息id，取值表user_address ", width = 15)
-    @ApiModelProperty(value = "收货信息id，取值表user_address ")
-    private java.lang.Integer addressId;
+	/**地址*/
+	@Excel(name = "地址", width = 15)
+    @ApiModelProperty(value = "地址")
+    private java.lang.String address;
 
 	/**最后一次登录时间*/
 	@Excel(name = "最后一次登录时间", width = 15, format = "yyyy-MM-dd")

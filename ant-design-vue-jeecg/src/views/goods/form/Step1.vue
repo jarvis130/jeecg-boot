@@ -323,7 +323,6 @@
               that.getTableData(list);
             }
           });
-
           
         }else{
           that.SetGoodsStore(record); 

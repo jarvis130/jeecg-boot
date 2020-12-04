@@ -1,7 +1,11 @@
 package org.jeecg.modules.user.service;
 
+import org.jeecg.modules.commodity.entity.SpuDetail;
 import org.jeecg.modules.user.entity.UserAccount;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: user_account
@@ -24,5 +28,7 @@ public interface IUserAccountService extends IService<UserAccount> {
     UserAccount getUserAccountByMobile(String mobile);
 
     UserAccount getUserAccountByUserName(String userName);
+
+    public Map<String, UserAccount> getUserAccountByIds(List<String> ids);
 
 }
