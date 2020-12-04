@@ -27,10 +27,10 @@
     },
     methods: {
       toContinue () {
-        this.$router.push('/goods/form/Index')
+        this.$router.push('/tech/form/Index')
       },
       toList () {
-        this.$router.push('/goods/GoodsInfoList')
+        this.$router.push('/tech/TechInfoList')
       }
     }
   }

@@ -48,6 +48,7 @@ public class TechInfoVO implements Serializable {
 	/**状态*/
 	@Excel(name = "状态", width = 15)
     @ApiModelProperty(value = "状态")
+    @Dict(dicCode = "user_status")
     private Integer status;
 	/**通用属性*/
 	@Excel(name = "通用属性", width = 15)

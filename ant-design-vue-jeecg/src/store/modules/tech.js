@@ -4,6 +4,7 @@ import { putAction, postAction, getAction } from '@/api/manage'
 const tech = {
   state: {
     id: '',
+    cid: '',
     code: '',
     realName: '',
     nickName: '',
@@ -25,6 +26,7 @@ const tech = {
   mutations: {
     SET_TECH: (state, params) => {
       state.id = params.id = '' ? '' : params.id;
+      state.cid = params.cid = '' ? '' : params.cid;
       state.code = params.code = '' ? '' : params.code;
       state.realName = params.realName = '' ? '' : params.realName;
       state.nickName = params.nickName = '' ? '' : params.nickName;
@@ -44,6 +46,7 @@ const tech = {
     },
     TECH_CLEAR: (state) => {
       state.id = '';
+      state.cid = '';
       state.code = '';
       state.realName = '';
       state.nickName = '';
@@ -56,7 +59,7 @@ const tech = {
       state.linkMobile = '';
       state.thumbs = '';
       state.brief = '';
-      state.desc = '';
+      state.description = '';
       state.status = '';
       state.tableData = '';
       state.linkData = '';

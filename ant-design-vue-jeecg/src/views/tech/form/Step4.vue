@@ -70,9 +70,12 @@
   import { randomUUID, randomNumber } from '@/utils/util'
   import { mapGetters, mapActions } from "vuex";
   import { httpAction, getAction } from '@/api/manage'
+    import JCategorySelect from '@/components/jeecg/JCategorySelect'
+
   export default {
     name: "Step4",
     components: {
+      JCategorySelect
     },
     data () {
       return {
@@ -99,6 +102,13 @@
         loading: false,
         model: {
           
+        },
+        validatorRules: {
+          cid: {
+            rules: [
+              { required: true, message: '请输入分类!'},
+            ]
+          },
         },
         tableData: [],
         selectedRowIds: [],
@@ -173,11 +183,12 @@
         let that = this;
         this.loading = true;
         let param = {
-          cateId: this.tech.cid3
+          cateId: this.tech.cid
         }
         getAction(this.url.list, param).then((res) => {
           if (res.success) {
             //渲染组件
+   
             that.tableData = res.result;
             //
           }

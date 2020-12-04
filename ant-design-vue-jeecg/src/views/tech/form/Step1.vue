@@ -7,7 +7,7 @@
         :labelCol="{span: 5}"
         :wrapperCol="{span: 19}"
       >
-        <a-input v-decorator="['id']" placeholder=""></a-input>
+        <a-input hidden v-decorator="['id']" placeholder=""></a-input>
          <a-input-search v-decorator="['userName', validatorRules.userName]" placeholder="请输入用户名" enter-button @search="onSelectAccount"/>
       </a-form-item>
 
@@ -81,6 +81,14 @@
         :wrapperCol="{span: 19}"
       >
         <a-input v-decorator="['address']" placeholder="请输入住址"></a-input>
+      </a-form-item>
+
+      <a-form-item
+        label="服务分类"
+        :labelCol="{span: 5}"
+        :wrapperCol="{span: 8}"
+      >
+          <j-category-select v-decorator="['cid', validatorRules.cid]" pcode="B04" placeholder="请输入服务分类"/>
       </a-form-item>
 
       <a-form-item
@@ -204,7 +212,11 @@
               { required: true, message: '请输入手机号码!'},
             ]
           },
-          
+          cid: {
+            rules: [
+              { required: true, message: '请输入服务分类!'},
+            ]
+          },
         },
         url: {
 

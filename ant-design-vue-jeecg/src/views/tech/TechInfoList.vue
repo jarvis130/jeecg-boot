@@ -124,34 +124,24 @@
             dataIndex: 'code'
           },
           {
-            title:'简介',
+            title:'姓名',
             align:"center",
-            dataIndex: 'brief'
+            dataIndex: 'realName'
           },
           {
-            title:'详情',
+            title:'花名',
             align:"center",
-            dataIndex: 'desc'
+            dataIndex: 'nickName'
+          },
+          {
+            title:'电话',
+            align:"center",
+            dataIndex: 'mobile'
           },
           {
             title:'状态',
             align:"center",
-            dataIndex: 'status'
-          },
-          {
-            title:'通用属性',
-            align:"center",
-            dataIndex: 'generalSpec'
-          },
-          {
-            title:'照片',
-            align:"center",
-            dataIndex: 'images'
-          },
-          {
-            title:'删除标识',
-            align:"center",
-            dataIndex: 'delFlag'
+            dataIndex: 'status_dictText'
           },
           {
             title: '操作',

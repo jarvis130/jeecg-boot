@@ -4,18 +4,38 @@
       <a-form :form="form" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-item label="规格组名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['name', validatorRules.name]" placeholder="请输入规格组名称"></a-input>
+            <a-form-item label="参数名" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['name', validatorRules.name]" placeholder="请输入参数名"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
             <a-form-item label="商品分类" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-category-select v-decorator="['cid', validatorRules.cid]" pcode="A01" placeholder="请输入商品分类,一个分类下有多个规格组"/>
+              <j-category-select v-decorator="['cid', validatorRules.cid]" pcode="B04" placeholder="请输入商品分类,一个分类下有多个规格组"/>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['remark']" placeholder="请输入备注"></a-input>
+            <a-form-item label="是否数字型参数" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['isNumeric', validatorRules.isNumeric]" placeholder="请输入是否数字型参数，true或false" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="单位" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['unit']" placeholder="请输入数字类型参数的单位，非数字可以为空"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="是否是sku通用属性" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['generic', validatorRules.generic]" placeholder="是否是sku通用属性，true或false" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="是否用于搜索过滤" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-decorator="['searching']" placeholder="请输入是否用于搜索过滤，true或false" dictCode="sf_status"  :triggerChange="true" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="数值类型参数" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['segments']" placeholder="请输入数值类型参数，如果需要搜索，则添加分段间隔值，如CPU频率间隔:0.5-1.0"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
@@ -41,7 +61,7 @@
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
-    name: 'SpecGroupForm',
+    name: 'SpecParamForm',
     components: {
       JFormContainer,
       JCategorySelect
@@ -69,9 +89,8 @@
     data () {
       return {
         form: this.$form.createForm(this),
-        model: {
-          status: true
-        },
+        groupId: '',
+        model: {},
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -84,24 +103,59 @@
         validatorRules: {
           cid: {
             rules: [
-              { required: true, message: '请输入商品分类id,一个分类下有多个规格组!'},
+              { required: true, message: '请输入商品分类ID!'},
+            ]
+          },
+          groupId: {
+            rules: [
+              { required: true, message: '请输入groupId!'},
             ]
           },
           name: {
             rules: [
-              { required: true, message: '请输入规格组的名称!'},
+              { required: true, message: '请输入参数名!'},
+            ]
+          },
+          isNumeric: {
+            rules: [
+              { required: true, message: '请输入是否数字型参数，true或false!'},
+            ]
+          },
+          unit: {
+            rules: [
+              { required: true, message: '请输入数字类型参数的单位，非数字可以为空!'},
+            ]
+          },
+          generic: {
+            rules: [
+              { required: true, message: '请输入是否是sku通用属性，true或false!'},
+            ]
+          },
+          searching: {
+            rules: [
+              { required: true, message: '请输入是否用于搜索过滤，true或false!'},
+            ]
+          },
+          segments: {
+            rules: [
+              { required: true, message: '请输入数值类型参数，如果需要搜索，则添加分段间隔值，如CPU频率间隔:0.5-1.0!'},
+            ]
+          },
+          tennantId: {
+            rules: [
+              { required: true, message: '请输入租户编号!'},
             ]
           },
           status: {
             rules: [
-              { required: true, message: '请输入状态!'},
+              { required: true, message: '请输入删除标志（1代表存在 0表删除）!'},
             ]
           },
         },
         url: {
-          add: "/commodity/specGroup/add",
-          edit: "/commodity/specGroup/edit",
-          queryById: "/commodity/specGroup/queryById"
+          add: "/commodity/specParam/add",
+          edit: "/commodity/specParam/edit",
+          queryById: "/commodity/specParam/queryById"
         }
       }
     },
@@ -129,15 +183,20 @@
       this.showFlowData();
     },
     methods: {
-      add () {
+      add (groupId) {
+        this.groupId = groupId;
         this.edit({});
       },
       edit (record) {
+        if (record.id) {
+          this.groupId = record.groupId;
+        }
         this.form.resetFields();
         this.model = Object.assign({}, record);
+        this.model.groupId = this.groupId;
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'cid','name', 'remark','status'))
+          this.form.setFieldsValue(pick(this.model,'cid','groupId','name','isNumeric','unit','generic','searching','segments', 'status'))
         })
       },
       //渲染流程表单数据
@@ -167,7 +226,6 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            formData.type = 1;
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -184,7 +242,7 @@
         })
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'cid','name','tennantId','delFlag'))
+        this.form.setFieldsValue(pick(row,'cid','groupId','name','isNumeric','unit','generic','searching','segments','status'))
       },
     }
   }

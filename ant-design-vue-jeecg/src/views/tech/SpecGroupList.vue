@@ -111,7 +111,7 @@
       return {
         description: '',
         queryParam: {
-          type: 1
+          type: 2
         },
         // 表头
         columns: [

@@ -10,7 +10,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-item label="商品分类" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-category-select v-decorator="['cid', validatorRules.cid]" pcode="A01" placeholder="请输入商品分类,一个分类下有多个规格组"/>
+              <j-category-select v-decorator="['cid', validatorRules.cid]" pcode="B04" placeholder="请输入商品分类,一个分类下有多个规格组"/>
             </a-form-item>
           </a-col>
           <a-col :span="24">
@@ -70,7 +70,7 @@
       return {
         form: this.$form.createForm(this),
         model: {
-          status: true
+          status: true,
         },
         labelCol: {
           xs: { span: 24 },
@@ -167,7 +167,7 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            formData.type = 1;
+            formData.type = 2;
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
