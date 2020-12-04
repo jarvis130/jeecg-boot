@@ -1,21 +1,16 @@
 package org.jeecg.modules.order.entity;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.jeecgframework.poi.excel.annotation.Excel;
-import org.jeecg.common.aspect.annotation.Dict;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.jeecgframework.poi.excel.annotation.Excel;
+
+import java.io.Serializable;
 
 /**
  * @Description: order_info
@@ -35,10 +30,6 @@ public class OrderInfo implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "订单索引id")
     private java.lang.Integer id;
-	/**订单编号*/
-	@Excel(name = "订单编号", width = 15)
-    @ApiModelProperty(value = "订单编号")
-    private java.lang.Integer orderNo;
 	/**支付单号*/
 	@Excel(name = "支付单号", width = 15)
     @ApiModelProperty(value = "支付单号")
@@ -86,11 +77,11 @@ public class OrderInfo implements Serializable {
 	/**评价状态 0未评价，1已评价*/
 	@Excel(name = "评价状态 0未评价，1已评价", width = 15)
     @ApiModelProperty(value = "评价状态 0未评价，1已评价")
-    private java.lang.Object evaluationState;
+    private java.lang.Integer evaluationState;
 	/**订单状态：0(已取消)1 未付款;2：付款中;3已付款4:已发货;5:已收货;*/
 	@Excel(name = "订单状态：0(已取消)1 未付款;2：付款中;3已付款4:已发货;5:已收货;", width = 15)
     @ApiModelProperty(value = "订单状态：0(已取消)1 未付款;2：付款中;3已付款4:已发货;5:已收货;")
-    private java.lang.Object orderState;
+    private java.lang.Integer orderState;
 	/**退款状态:0是无退款,1是部分退款,2是全部退款*/
 	@Excel(name = "退款状态:0是无退款,1是部分退款,2是全部退款", width = 15)
     @ApiModelProperty(value = "退款状态:0是无退款,1是部分退款,2是全部退款")
@@ -106,11 +97,11 @@ public class OrderInfo implements Serializable {
 	/**1WEB2mobile*/
 	@Excel(name = "1WEB2mobile", width = 15)
     @ApiModelProperty(value = "1WEB2mobile")
-    private java.lang.Object orderFrom;
+    private java.lang.Integer orderFrom;
 	/**物流单号*/
 	@Excel(name = "物流单号", width = 15)
     @ApiModelProperty(value = "物流单号")
-    private java.lang.String shippingCode;
+    private java.lang.Integer shippingCode;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
     private java.util.Date createTime;
