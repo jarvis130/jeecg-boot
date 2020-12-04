@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
@@ -66,7 +67,7 @@ public class WxMaConfiguration implements InitializingBean {
                 maServices.put(x.getTanentaId(), service);
                 routers.put(x.getTanentaId(), this.newRouter(service));
                 return service;
-            });
+            }).collect(Collectors.toList());
     }
 
     private WxMaMessageRouter newRouter(WxMaService service) {

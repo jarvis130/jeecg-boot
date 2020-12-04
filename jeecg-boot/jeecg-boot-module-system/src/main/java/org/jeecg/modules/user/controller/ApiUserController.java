@@ -54,7 +54,7 @@ public class ApiUserController {
     @Login
     @AutoLog(value = "更新手机信息到user_account表")
     @ApiOperation(value="更新手机信息到user_account表", notes="更新手机信息到user_account表")
-    @PutMapping(value = "/updateUser")
+    @PutMapping(value = "/updateMobile")
     public Result<?> update(HttpServletRequest request, String mobile) {
         String userId = request.getParameter(CommonConstant.USER_KEY);
         boolean result = userService.updateMobileToUser(mobile, userId);

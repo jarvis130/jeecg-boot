@@ -8,6 +8,7 @@ import org.jeecg.modules.user.entity.UserAccount;
 import org.jeecg.modules.user.service.IThirdAuthService;
 import org.jeecg.modules.user.service.IUserAccountService;
 import org.jeecg.modules.user.service.IUserService;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
+@Service
 public class UserServiceImpl implements IUserService {
 
     @Resource
